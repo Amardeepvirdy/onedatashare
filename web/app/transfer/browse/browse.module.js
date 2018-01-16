@@ -185,8 +185,10 @@ angular.module('stork.transfer.browse', [
     u = u._string+name+"/";
     //u = new URI(u);
     if (!u) return;
+    var ep = angular.copy($scope.end);
+    ep.uri = u;
     //u.segment(name);
-    return stork.mkdir(u).then(
+    return stork.mkdir(ep).then(
       function (m) {
         $scope.refresh();
       }, function (e) {
@@ -209,7 +211,9 @@ angular.module('stork.transfer.browse', [
   $scope.rm = function (uris) {
     _.each(uris, function (u) {
       if (confirm("Delete "+u+"?")) {
-        return stork.delete(u).then(
+        var ep = angular.copy($scope.end);
+        ep.uri = u;
+        return stork.delete(ep).then(
           function () {
             $scope.refresh();
           }, function (e) {

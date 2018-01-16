@@ -80,19 +80,34 @@ angular.module('stork.transfer', [
     var job = angular.copy($scope.job);
     job.src = src;
     job.dest = dest;
-    var su = job.src.uri  = _.keys(src.$selected)[0];
-    var du = job.dest.uri = _.keys(dest.$selected)[0];
-
-    // If src is a file and dest a directory, add file name.
-    if (src.$selected[su].file && dest.$selected[du].dir) {
-      var n = new URI(su).segment(-1);
-      job.dest.uri = du = new URI(du).segment(n).toString();
+    var su = _.keys(src.$selected);//[0];
+    var du = _.keys(dest.$selected)[0];
+    var dest_uris = "";
+    var src_uris = "";
+    for (var i = 0; i < _.keys(src.$selected).length; i++) {
+        console.log("key: " + _.keys(src.$selected)[i]);
+        if (src.$selected[su[i]].file && dest.$selected[du].dir) {
+            var n = new URI(su[i]).segment(-1);
+            dest_uris += new URI(du).segment(n).toString().trim();
+        }
+        src_uris += su[i].trim();
+        if (i + 1 != _.keys(src.$selected).length) {
+            dest_uris += ",";
+            src_uris += ",";
+        }
     }
+    job.dest.uri = du = dest_uris;
+    job.src.uri = su = src_uris;
+    console.log("new dest_uris: "+job.dest.uri);
+    console.log("new src_uris: "+job.src.uri);
 
     var modal = $modal({
-      title: 'Transfer',
-      contentTemplate: 'transfer-modal.html'
+        title: 'Transfer',
+        contentTemplate: 'transfer-modal.html'
     });
+
+    console.log("job.src.uri: " + job.src.uri);
+    console.log("job.dest.uri: " + job.dest.uri);
 
     console.log(job);
     modal.$scope.job = job;

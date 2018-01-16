@@ -28,6 +28,28 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     return emitter;
   }
 
+  public synchronized Bell<DbxResource> mkdir() {
+    return new ThreadBell<DbxResource>() {
+      @Override
+      public DbxResource run() throws Exception {
+        CreateFolderResult cfr = session.client.files().createFolderV2(path.toString());
+        return new DbxResource(session, path);
+      }
+    }.startOn(initialize());
+  }
+
+  public synchronized Bell<DbxResource> delete() {
+    final Bell<DbxResource> dbxResourceBell = new Bell<>();
+    new ThreadBell() {
+      @Override
+      public Object run() throws Exception {
+        DeleteResult dr = session.client.files().deleteV2(path.toString());
+        return null;
+      }
+    }.startOn(initialize());
+    return dbxResourceBell;
+  }
+
   public synchronized Bell<Stat> stat() {
     return new ThreadBell<Stat>() {
       public Stat run() throws Exception {
@@ -53,14 +75,17 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
           throw new NotFound();
         //End changes for Issue #21
 
-        Stat stat;
+        Stat stat = new Stat();
         if (data == null)
           stat = mDataToStat(mData);
         else {
-          stat = mDataToStat(data.getEntries().iterator().next());
+          if (!data.getEntries().isEmpty()) {
+            stat = mDataToStat(data.getEntries().iterator().next());
           /*Issue #25
 		  	Modified by: Dhruva Kumar Srinivasa
 		  	Comment: Fixed listing of folders. Set the selected directory as a directory due to Dropbox v2 API change.*/
+//            stat.dir = true;
+          }
           stat.dir = true;
           //End changes for Issue #25
         }
