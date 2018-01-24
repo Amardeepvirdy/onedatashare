@@ -86,7 +86,7 @@ angular.module('stork.transfer', [
     var src_uris = "";
     for (var i = 0; i < _.keys(src.$selected).length; i++) {
         console.log("key: " + _.keys(src.$selected)[i]);
-        if (src.$selected[su[i]].file && dest.$selected[du].dir) {
+        if (dest.$selected[du].dir) {
             var n = new URI(su[i]).segment(-1);
             dest_uris += new URI(du).segment(n).toString().trim();
         }

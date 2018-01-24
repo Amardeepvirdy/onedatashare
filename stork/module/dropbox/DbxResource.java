@@ -18,7 +18,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     final Emitter<String> emitter = new Emitter<>();
     new ThreadBell() {
       public Object run() throws Exception {
-        ListFolderResult listing = session.client.files().listFolderContinue(path.toString());
+        ListFolderResult listing = session.client.files().listFolder(path.toString());
         for (Metadata child : listing.getEntries())
           emitter.emit(child.getName());
         emitter.ring();
@@ -39,15 +39,13 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
   }
 
   public synchronized Bell<DbxResource> delete() {
-    final Bell<DbxResource> dbxResourceBell = new Bell<>();
-    new ThreadBell() {
+    return new ThreadBell<DbxResource>() {
       @Override
-      public Object run() throws Exception {
+      public DbxResource run() throws Exception {
         DeleteResult dr = session.client.files().deleteV2(path.toString());
         return null;
       }
     }.startOn(initialize());
-    return dbxResourceBell;
   }
 
   public synchronized Bell<Stat> stat() {
@@ -87,6 +85,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
 //            stat.dir = true;
           }
           stat.dir = true;
+          stat.file = false;
           //End changes for Issue #25
         }
 

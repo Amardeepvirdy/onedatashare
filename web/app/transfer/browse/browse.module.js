@@ -190,6 +190,7 @@ angular.module('stork.transfer.browse', [
     //u.segment(name);
     return stork.mkdir(ep).then(
       function (m) {
+        $modal.$hide;
         $scope.refresh();
       }, function (e) {
            alert('Could not create folder: '+e.error);
