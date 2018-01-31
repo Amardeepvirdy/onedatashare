@@ -158,48 +158,7 @@ angular.module('stork.transfer.browse', [
   };
 
   // Open the mkdir dialog.
-  $scope.mkdir = function () {
-    var modal = $modal({
-      title: 'Create Directory',
-      contentTemplate: 'new-folder.html',
-      //controller : 'Transfer',
-      scope: $scope
-
-    });
-
-    modal.$scope.uri.parsed = $scope.uri.parsed;
-    $scope.modal = modal;
-
-
-      /*modalInstance.result.then(function (pn) {
-        var u = new URI(pn[0]).segment(pn[1]);
-        return stork.mkdir(u.href()).then(
-          function (m) {
-            $scope.refresh();
-          }, function (e) {
-            alert('Could not create folder: '+e.error);
-          }
-        );
-      });*/
-  };
-
-  $scope.mk_dir = function (name) {
-    var u = $scope.uri.parsed;
-    u = u._string+name+"/";
-    //u = new URI(u);
-    if (!u) return;
-    var ep = angular.copy($scope.end);
-    ep.uri = u;
-    //u.segment(name);
-    return stork.mkdir(ep).then(
-      function (m) {
-        $scope.modal.$hide;
-        $scope.refresh();
-      }, function (e) {
-           alert('Could not create folder: '+e.error);
-      }
-   );
- };
+  
 
 
   /* Open cred modal. */
@@ -413,5 +372,52 @@ angular.module('stork.transfer.browse', [
   }
   /*Issue 10 changes ends here - Ahmad*/
    
+})
+/** Controller forclosing the browse modal. */
+.controller('BrowseModal', function ($scope, $modal, stork) {
+
+$scope.mkdir = function () {
+    var modal = $modal({
+      title: 'Create Directory',
+      contentTemplate: 'new-folder.html',
+      //controller : 'Transfer',
+      scope: $scope
+
+    });
+
+    modal.$scope.uri.parsed = $scope.uri.parsed;
+    // $scope.modal = modal;
+
+
+      /*modalInstance.result.then(function (pn) {
+        var u = new URI(pn[0]).segment(pn[1]);
+        return stork.mkdir(u.href()).then(
+          function (m) {
+            $scope.refresh();
+          }, function (e) {
+            alert('Could not create folder: '+e.error);
+          }
+        );
+      });*/
+  };
+
+  $scope.mk_dir = function (name) {
+    var u = $scope.uri.parsed;
+    u = u._string+name+"/";
+    //u = new URI(u);
+    if (!u) return;
+    var ep = angular.copy($scope.end);
+    ep.uri = u;
+    //u.segment(name);
+    return stork.mkdir(ep).then(
+      function (m) {
+        $scope.$hide();
+        $scope.refresh();
+      }, function (e) {
+           alert('Could not create folder: '+e.error);
+      }
+   );
+ };
+
 });
 
