@@ -1,63 +1,466 @@
 {
-  "anonymous": {
-    "registerMoment": 0,
-    "jobs": {
+  "scheduler": [
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
+        "credential": {
+          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
+        "credential": {
+          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
+        }
+      },
+      "uuid": "91cb0059-c433-4920-9663-3537e280d4e5",
+      "times": {
+        "started": 1498243740201,
+        "completed": 1498243742023
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 0.0,
+        "inst": 23.0,
+        "done": 23
+      },
+      "job_id": 3,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
     },
-    "validated": false,
-    "history": {
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "http://google.com/services"
+      },
+      "dest": {
+        "uri": "http://google.com/services"
+      },
+      "message": "The mkdir operation is unsupported.",
+      "uuid": "ae149979-475c-4eb0-a433-0f3319b08313",
+      "times": {
+        "scheduled": 1488922354647,
+        "started": 1488922354649,
+        "completed": 1488922354951
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 0.0,
+        "inst": 0.0,
+        "done": 0
+      },
+      "job_id": 1,
+      "max_attempts": 10,
+      "status": "failed",
+      "attempts": 10
     },
-    "credentials": {
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "dropbox:///Hack%20To%20Help/CMAI/Membership%20Software/Documentation%20of%20current%20website/Membeship%20Form%20-%20Data%20Structure.xlsx",
+        "credential": {
+          "uuid": "ff4098c5-9cae-4817-9973-5704429fb969"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Hack%20To%20Help/CMAI/Membeship%20Form%20-%20Data%20Structure.xlsx",
+        "credential": {
+          "uuid": "6c36daca-1443-4b3f-b7e3-bac03835ee14"
+        }
+      },
+      "uuid": "cdc21e04-8dd2-4abe-a8b4-c071c23c6a01",
+      "times": {
+        "started": 1490967817851,
+        "completed": 1490967820377
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 10907.0,
+        "inst": 10907.0,
+        "done": 10907
+      },
+      "job_id": 2,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
+    },
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
+        "credential": {
+          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
+        "credential": {
+          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
+        }
+      },
+      "uuid": "d991e705-6d30-43fa-b83f-107c1a73ca58",
+      "times": {
+        "started": 1498498598856,
+        "completed": 1498498601275
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 23.0,
+        "inst": 23.0,
+        "done": 23
+      },
+      "job_id": 5,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
+    },
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
+        "credential": {
+          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
+        "credential": {
+          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
+        }
+      },
+      "uuid": "26f1f261-2c5f-4242-aec0-6e8aba0ed77e",
+      "times": {
+        "started": 1498246468395,
+        "completed": 1498246469355
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 0.0,
+        "inst": 23.0,
+        "done": 23
+      },
+      "job_id": 4,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
     }
-  },
+  ],
   "shares": {
   },
-  "mailList": "tevfikkosar@gmail.com tkosar@buffalo.edu zhangxinyun91@gmail.com lzhang34@buffalo.edu ",
+  "authTokens": {
+    "274fa804240e8b11dce62442bcc3e1edef6687985cea39601948219513784635": "zhangxinyun91@gmail.com"
+  },
+  "anonymous": {
+    "credentials": {
+    },
+    "jobs": {
+    },
+    "history": {
+    },
+    "registerMoment": 0,
+    "validated": false
+  },
+  "mailList": "tevfikkosar@gmail.com zhangxinyun91@gmail.com lzhang34@buffalo.edu tkosar@buffalo.edu ",
   "users": {
-    "vandit.samuel@gmail.com": {
-      "registerMoment": 0,
-      "jobs": {
-      },
-      "hash": "4e8615239ccaeac4c193d0052c3bfeffaed8ed3cd6b7a200e42754cb583cafbd",
-      "validationToken": "3acf6de9ffc664f9ecadcb97",
-      "validated": false,
-      "history": {
-      },
-      "email": "vandit.samuel@gmail.com",
+    "zhangxinyun91@gmail.com": {
+      "salt": "07809acf4d8a23ead3e9c8ce9bcc72ceff837c29fb8057fa",
       "credentials": {
       },
-      "salt": "583559d8c6a9113eec4fcfdfa1be493c805978476e0a0d27"
+      "authToken": "274fa804240e8b11dce62442bcc3e1edef6687985cea39601948219513784635",
+      "jobs": {
+      },
+      "history": {
+      },
+      "registerMoment": 1487934178814,
+      "validationToken": "7010fad55d57048aff2e12b8",
+      "validated": false,
+      "email": "zhangxinyun91@gmail.com",
+      "hash": "260cbe8672ef3ad0c1012f5c4b5857891d0a0953f68f99f5ee85e71478db34b9"
+    },
+    "lzhang34@buffalo.edu": {
+      "salt": "8856474c9df18764a500210e4e92ce26df66fe92da778713",
+      "credentials": {
+      },
+      "jobs": {
+      },
+      "history": {
+      },
+      "registerMoment": 0,
+      "validationToken": "9e154850e78f3124914454bd",
+      "validated": false,
+      "email": "lzhang34@buffalo.edu",
+      "hash": "f2a5647a4b46d2239f568f125a499ae77202959eee4bd824d37a014e02f47a16"
     },
     "dummy@gmail.com": {
-      "registerMoment": 0,
+      "salt": "a736250e0c66b3ad32d2473ac956f877a88d30155b545310",
+      "credentials": {
+      },
       "jobs": {
       },
-      "hash": "f1107e71835205cc6c8665f12d0f021cae8d4735fb72caf02d56dfb205dc2241",
+      "history": {
+      },
+      "registerMoment": 0,
       "validationToken": "74bc91ba9311bd1b05db80f5",
       "validated": false,
-      "history": {
-      },
       "email": "dummy@gmail.com",
-      "credentials": {
-      },
-      "salt": "a736250e0c66b3ad32d2473ac956f877a88d30155b545310"
-    },
-    "zhangxinyun91@gmail.com": {
-      "registerMoment": 1487934178814,
-      "jobs": {
-      },
-      "hash": "260cbe8672ef3ad0c1012f5c4b5857891d0a0953f68f99f5ee85e71478db34b9",
-      "validationToken": "7010fad55d57048aff2e12b8",
-      "authToken": "274fa804240e8b11dce62442bcc3e1edef6687985cea39601948219513784635",
-      "validated": false,
-      "history": {
-      },
-      "email": "zhangxinyun91@gmail.com",
-      "credentials": {
-      },
-      "salt": "07809acf4d8a23ead3e9c8ce9bcc72ceff837c29fb8057fa"
+      "hash": "f1107e71835205cc6c8665f12d0f021cae8d4735fb72caf02d56dfb205dc2241"
     },
     "vanditsa@buffalo.edu": {
-      "registerMoment": 0,
+      "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10",
+      "credentials": {
+        "57f8bb0c-564f-4277-a0c1-c30a90cb9a4c": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBUG9RfXdhzPtEvG9cEFJJacqKsnnyFdQlNYGJTWtVMtkhQXIUmEW8NmWb5o43XKA35dlZLjS_g5Q47J57jD-YDaCu_Gn8kADzwBwnnyLyq4FNVRdce_V22cw"
+        },
+        "03947fa9-cd5a-4d65-8ee5-76092c5f6933": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltYBWyDn5YDaLGijpgZTB6rRd-ierpo5ZlZC5ibkxs3IW4kejOCrVxVaBk-22XhC6rnYqUehkI1pIdIfKP-4ljCJ-rspPyBZEzwVQxFUXNpbdqHQr2mWx6jF4-q"
+        },
+        "9fa51b62-9231-48af-bf93-36b9648b6e7b": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBXR74yG2hNBWlF-1ZZt4YYBK1vnBeR87cfsKqw5Xq1B3s65xYA3ZRWJwDhbnC8g1bo2k4Ijh8ImBZJrJxnfyihlBLiTjQ437dcIKysCJmNYWW93u3c1O1HP-nQ"
+        },
+        "9d53fe44-0a84-42eb-9b20-2eca35b07127": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBQHil6SurSm2ytH4vOxR0VMDJhCXPEc3usRxZH6pQYO5bOlLDuFK3wzNOPd_3jDohe9Bb1qxNvVFDxA2he4m9256mgc6aF5gkw86wTJWzASHudeJr-5j2svZ3A"
+        },
+        "e4f3cbfd-b19a-479e-961c-c24f896ed930": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltYBfVuAc-3P7i1Y9jif3gOR4GB_OscZaTQPpDDoGuNeyXo_Wx5EU27doGHp5eK4-8F9A6xwKDXoEOsefQN-ER4gb1eT2sRy1ZyJupRtb6m6OAvWPR1m9JYZyxh"
+        },
+        "60e76b5e-76be-40e6-9c37-4c78c17b6c5d": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEhqIFpZXhqIttXC_EttV4x4pcaWFmug74JZb3SE7H0R_m"
+        },
+        "89d3cfd9-e55a-4dba-b9fd-c30a8f38e6ac": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBSNxN6MdIZZP5utKC03Bx6ttC2Irm5cqxTwMPkTd7afpv3aIBvOYS0Ay1QuUIo4_RaKM5jdw_tqMiWhOH4rmX5r23m5t4GmUE06wiMsDRhsZHWMmwmV3-A9gjQ"
+        },
+        "e07cbbeb-ac98-4bc0-85ff-27cbc3803af1": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBTdznJVa6CFm3cYDQy05Cnk7cWprpqAszNauaAHuVVVSehqP21N7TxSSDiBenVh2G_kYmHwwuth6B66zHW9HqZSLzYUCNkPWwCkuZ3NF2Jtk6txLSEyleG5ECg"
+        },
+        "827c9076-6532-4d42-97f6-5cb49ad08c63": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBWQHvTRwO73OEVb8yrEPaHrUHjYwo1htPsld7LYyy3M2xpyzMAX4KTyu1Et7UFm3gMHnV_PkVg5H65LW-WpPTbVDP9-_bQYM8b-EMRC4ZdP3wJCK2NbfM7vM7w"
+        },
+        "8f414b34-a59c-4389-b421-c41350671c39": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltcBVVTsUa1aX5p_DVQoaIel1essOHLNkSjUI-w1drw0Xbvh-eG7idyouM4b4vNZHAagaE5xNqjiwsPcOLlfh5oRhJF01XEBYwh_ywskHlzz6ko0alnE5CZp-nI"
+        },
+        "fbd2d572-27ff-4e85-b633-7238fe104ad4": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEgqS77ae_qaobsAAW0O4XpLRraZD1UIbKV9GzdjJCSuNz"
+        },
+        "78f3d6b6-ebc1-4c94-87f5-eb200b31a76d": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBbnAWs_AnUvVdWQTZFvjs-HyMy09nfWmPA0i8XP8Sx956bzaaz5qVdnPwjUucKluiMFwjbCgw3YFrmw9GdmNbWvGZdXN5vRm3fzk9RVsc-iw1XVH7Lv3wL8c"
+        },
+        "487dde36-0c12-4078-8064-34b44452b7bf": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBQJ4BI4tUzUKyK6T_7LLWiYPB7Z06pknCOUb-6vdSW3R33JwfPINurvA2n00uqfx3LM--aNjjh5blndFgpHpHU2uSV5WcE_3AKMvA5QjCh4-Dp8cdOn5uZqXGg"
+        },
+        "75eb97c6-797d-4daf-8e53-a8257a791e50": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBbzz37TQxybCDmP166jmTjnR8QDDwB8-w7472ORUrl_-3Mw_pygGAHpesY7U-Fh5AF0UHsRbMdNf6rB4UE6buxIzIeIFeV6I858RNtPMOoS3GVkNfwnHOaqf"
+        },
+        "a8eb753f-e1c1-4925-b862-6f6b485c8646": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBQcVO7OeFDNwRElqF-W4EViAitfWtsC88NE_rRdmq2YRpZcBvaqvJRERYAphwffj3-RqK8UuU-ReIF6tJLx6d9tT51AaGGD_ParPoaNTMILTJeAdJfxcVqJC"
+        },
+        "5a242846-9dcd-42b1-9243-36d5eeca1be1": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBSYvGKjjjzfuSINVnBLAJqrCKgy19tCR8Cvanl5Z28cP94enSA6I_C-X8qrw4jxzM8WKh-3pBRytXMHKgHmckze-qaxC2SGqEskT2FB29YAhEvtjosNDP7QWfA"
+        },
+        "1d8b7e38-9ae6-42fb-91e3-4244983ff993": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBeiIkG2RkWD-ZnYYeo4iBrDzSWyeMUVWR9KDPy7LviuPK56YCqOS18WUPq7BQvg48jIX1GCMQA2QZaWSZAtaMHTkmTuABtznD4WgwEqFiGgtyPATJcUfxyQIvw"
+        },
+        "d9219e0c-55b4-48de-bb30-ea13104fe199": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEbpvl_U6rk56uDeSZoGAIb40CLJjaPpLCVejnowvlyqSv"
+        },
+        "ba065276-e6a4-496b-a3a5-2e601403034b": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBcnzcK_F1D7ZUu7WByQFhp_bhcTCTJphVqvEdfVaIrffsgBAYDPANtqig9ycU9xutKmcTtNjMxTYfOSc_OILvEnreuPxWPtW-t_0Gkze-FROwZPYB7ujvnfzmg"
+        },
+        "ed0cf4da-9a6e-4ea0-b573-8ac0a002d59f": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEfoPW-SxFJNpG6LP4OKCLc4lecleXEULxrapfsT0unOq2"
+        },
+        "c2933836-f84c-4eab-a8c6-48ae9ff615ea": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBQdclr2RmG4O3-IaHkDDr4-Xvk31uurur3vVJtB_L6s176szrK-XrZmfxBOVolzh8vsYgdHI64Chf0bVHKG9Kg9SkC8b9yNxoKjkH67WOXjHXA1pj6ao6LdMpw"
+        },
+        "8a9d4074-fac5-4b4c-aded-509806af0782": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBViq2u983j5Ffxt5ZEkU9yMDgZdCFCtTdvKPEFWct2ySCFg2X4h0_ZB4DMbggPFNog3YUdXHGCvumXGgk39A0TnPiE--zb4y_siczmj9I73t4AnSwhlh7xr8JA"
+        },
+        "5c536822-0f12-405c-93ce-dacfe5bc04b8": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEbCvcC48RKOxwTYckDUKAaIQ9TsuvSPEJXEqna5QAohH6"
+        },
+        "6bd392e0-b5c8-48aa-9e71-1dfc28ca3d2d": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEaDxCIY-ymYVmyHSpTkQJpJaS4M6yDmf930FgEhB6E_oV"
+        },
+        "133a8262-27c6-4462-9aab-f86e63251b27": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEgMmtqJF4mFWiM02TGoA5VMKoYiw7mRlTetccOiP4UBUR"
+        },
+        "d82b686e-12f6-4b2b-b8b1-4203e2435629": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBTCJ6Gs5pMa2Mp_MCYYIc_4l7ha_AgwK1yVxOhZ5-l5aNGpYzrvvQtxQ_DZrs2gwOagvu4DvS1D_SC9QGwDdhlM2djPQkIJV1qmYbY1o4pV8Yin6-78Ft-4J"
+        },
+        "96ab8776-0f55-49a4-830b-925e70ae9515": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEhHRmzS0P5Fscysg_PjH5chZhqd0vMmZufhceX6Gfd7Vt"
+        },
+        "b42d61f1-bbe5-40e0-979b-52c6c9093049": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBYDKUdvRWbj8SAOi5p4ZsJMDR7wgI7jFDKWwPTFxY1TDLMlI_1FYTAHStaNwI7lFRHM1f3Fmsefw3FXBmEMpCPuk4_fTH0xKw_ehUTgN-ezW6tus0OkUMvau7A"
+        },
+        "40355b99-455e-4a91-b0fa-a48412eabf3c": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBZLI9KFYQ4iWEFE5S4r4Jr3bv0xNaw-VwHYIEKZ3QPX-leCGutf-duaYiLhGPgfNamBqAE2Kdduas1t3cun5BqD-Jb79-aZdtWBji0P2xOG8mZ3RojoyHAr6bg"
+        },
+        "5e1ba8c3-ded4-4740-a84c-b01bf72c227a": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBRd0L56h8WjvRyHE0iz7H5rNoSdAXeOtfaCSAJ-GllFjcJKPELVA_Mb7s5_rSpnU8rPo_NH6jvmxDbUJAd1tEkRdlBJ3utWiIo7o2tl2ess7taZSOkCEo0oI"
+        },
+        "701b58b0-3f14-4cc8-bd05-32e20e152155": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBXOODWQYsDTytzrVj-bZGaGyt0P9zEQWq4hOE1lQNJVmMZT45UOgfaEkgy3Puk02g8DkeN4_Hs9YMmsbiimJK68x3Piu1Yf9m6MK9pO6rlN11CehqVzTjRpX_g"
+        },
+        "3a7435f5-60be-44b4-a710-9c72513f7704": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltZBRBHe2xI0KZOlFt-D238AsdOz3WQLT55sTcwabuAETKHcGR0_M7e_W6gKUfqsCby3whZKgcLxn-Ji92KPufT0J1Tu3hjbItH0tRMJ1nLAbT0Behcbq60ylFh"
+        },
+        "9b5542af-c9a2-4934-98ea-c02ecdf0330a": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBWiJzdhtpFaaBKcWEr7xmdUwl9lCkQPWsQfC55nZMXUPhNmaPnWKjGGw_lNQw-V4i_Or3VPjCXGiMAO2OD9dPE5qyWVbxN5N9XUV-iHLhgBKAjE9xSiQPdYgdQ"
+        },
+        "de005147-9cba-47d8-b7d5-d423a51da19a": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEjH7LnWnR6uXL72azu0MOxXlHj9agtIW24kqIwaVfi-co"
+        },
+        "c908da29-ece2-4fa4-82a7-ac2704da1263": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEipGVzxqiwtzEXB4hCTHdY_0vJ6VLBR9Fmw0bQYK7jVQ0"
+        },
+        "da825d05-8dbd-4053-9b88-c326cbe2e0c4": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltYBQg7rIWjrNjJOSqVjCIcbDbTdO5aN8nt8qOMEdE-lQxd8JbfDQWCdKFJgjMQuVGnrytZIKcvkFlLAOz1F2NyRQut3guKYL7iHeHCl_NTFL1Ias9nzWRBSrXR"
+        },
+        "c77624f9-f692-4aa1-8e6b-2fcd8c0e2675": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBbxtq0IlMsoAXGQTjvAaHYsKMdt3d24G6i68ARIC0OM3UIAIfl-Ic3XBQv779cbuX9gOYOyZvV96iJqEhFaY2Ky7bdwgBXUhClipco3kbho2hsUGdrFkOjo5lA"
+        },
+        "856c1aee-b100-4f30-9ee5-e15e69e1c50b": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBUovlI8y8ZKNrg1TEw6q_2UNljC8bcxfHzA5dGD4dIGGPYElYN8dJVk8pWntwpzPo6XCD_Yn2LWViAmgoZOXfsbFjX4rmiEAxYf72lkRBqqqWXf5YyoDdRzjWg"
+        },
+        "7c366020-0ec4-49fb-a52d-163761aa4e7e": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEiEYM49x-KXK9gV5qa0i_4CN5B_dzXWyyb9ikUjmkVu_Y"
+        },
+        "2df93249-0401-45f2-aa0b-7da62533c936": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBcKdTar1EeenlxJ1Qfk4dEnE12YeGIJ6WTvV4DioLsspFQTVIGmGWovNhf54GQJyGaxDmI7W74M1Jg2Xb8uA2rJfSMFi-XMFJK7VHOBthwmBANc3kU-nV98o0w"
+        },
+        "bb2c8553-095f-47c6-b86f-03b2af71ef26": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltcBd-6-dUwRmlhIz1NmQsdxGw2MmQy9SNfgoJZh1RgX1t-BjZfv88J63gprpX0jyScihIRjBlYVWleie_gnQ04dMFQWxW7AtlAIkOUxF9L9YpJnZW4nAh5Bk1z"
+        },
+        "da970b84-c0a9-4116-bc8a-72d58c6a37e9": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxcBQsQBeDTdfIIeyCj9BwR6dKoHEmrxyXDIoKmeor99WDF0STidBzToS1NPna04GNRGLJ6XByiNr8xmvjLlVoOI1al403LHOPrgkagLanGsqf4t1nPfCwbt9UsmA"
+        },
+        "12eeb912-0912-4055-aaf7-1804601a1f21": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEcLsFVDi1zNUl6A0an06_alLnyaqDHDFxX-IIbGz8g9gD"
+        },
+        "e29e6f40-59ee-4256-8c16-ce2d3375f3dd": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "zrVQfP1O_mUAAAAAAAAEdBjD2xve-q780_1z41H5EC2NnnMrxEYVufxYviesLErF"
+        },
+        "9bd50620-8a68-41b3-8681-74105deef724": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBZ9f1KfnNasl8-VAfmW17YJsdqp7x9MVPne0eF2y4VWUx_Y9Zd2UMm6M6qFh9xirOmiyfg6J8NIvDdWnkXb5eAUmyaGpG5sRFXIPoUIZsbUwP6rsT4LXjztKbQ"
+        },
+        "3b64c613-fc1e-4e0e-8baa-9c932f6e2a45": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxaBTNAj8wYILmLBF9Z6IoyiV6gU_SRPPBClN6iL9_yIumax8fV93iEQQcW7omkuzTbh9GV5PQw3dXvZAFKDRbYAfkTre6m8qewz5w2ogujgVQ6akzsJ76S-CPDeg"
+        },
+        "f926044a-10a2-400e-ac49-7a920aed0f81": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltYBaOD8PaeZVX9hLiAGbtcqECmaRMmufP3VEwzZNapRm22TUyk87OQ4pcxwlVeP90oB9fIInoXxGklsrFPGFZbZXs_XaHvdHk5VynGyvMbYPNgUwZe8CVaDDrj"
+        },
+        "3cd66d37-909a-4d6f-9b32-b52da911a2e6": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GltYBZwMaDEx5elTOGdtbT7dXq8TvPy-r3gozgwvjo0-FqY-ojf8uhHP1TWz6dztfWaFjh5hgcYwnjIw32YCDT9B4-AR-1s2ojkeQwm3kCHLJom5XUuI4XISVRA6"
+        },
+        "da01044b-7024-40db-80a9-54ec5477a4fa": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBaj8ekGNBCM89C3GNlbfqSoPz4F_r-gMqKXjQel1uvTNftrP4BfpMIhcEYxvSeMZLclTxF292nQQUTegW74UmlALDHkIBIRhSU_JFyvQnbbqo7w7gYo-7vLYgQ"
+        },
+        "d1bdcdb3-21a8-410b-8561-3e71bd737b31": {
+          "name": "GoogleDrive",
+          "type": "oauth",
+          "token": "ya29.GlxZBUbTjKg_y3DMU1npn6X2YebViDbS7-vRDQF4Rpef7ESNXx60nyOWq8U6IBoAgrZVl3O1zNIqCZgUptmnVixMRdAhL2KTqCq0gB-98vsBAFxwG8Fj4z1Q6c5sgA"
+        }
+      },
       "jobs": [
         "ae149979-475c-4eb0-a433-0f3319b08313",
         "cdc21e04-8dd2-4abe-a8b4-c071c23c6a01",
@@ -65,192 +468,41 @@
         "26f1f261-2c5f-4242-aec0-6e8aba0ed77e",
         "d991e705-6d30-43fa-b83f-107c1a73ca58"
       ],
-      "hash": "9d8e549a368861794eb2f99d7a07f0aff6830cd9677a5f5ae9fb65b76fbf96de",
-      "validated": true,
       "history": [
+        "googledrive:/",
         "dropbox:/",
-        "http://google.com/services",
-        "http://google.com/",
+        "google-drive:/",
         "gsiftp://oasis-dm.sdsc.xsede.org/",
         "ftp://ftp.mozilla.org/",
+        "http://google.com/",
+        "http://google.com/services",
         "scp:/",
         "gsiftp:/"
       ],
-      "email": "vanditsa@buffalo.edu",
-      "credentials": {
-	  },
-      "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10"
-    },
-    "lzhang34@buffalo.edu": {
       "registerMoment": 0,
+      "validated": true,
+      "email": "vanditsa@buffalo.edu",
+      "hash": "9d8e549a368861794eb2f99d7a07f0aff6830cd9677a5f5ae9fb65b76fbf96de"
+    },
+    "vandit.samuel@gmail.com": {
+      "salt": "583559d8c6a9113eec4fcfdfa1be493c805978476e0a0d27",
+      "credentials": {
+      },
       "jobs": {
       },
-      "hash": "f2a5647a4b46d2239f568f125a499ae77202959eee4bd824d37a014e02f47a16",
-      "validationToken": "9e154850e78f3124914454bd",
-      "validated": false,
       "history": {
       },
-      "email": "lzhang34@buffalo.edu",
-      "credentials": {
-      },
-      "salt": "8856474c9df18764a500210e4e92ce26df66fe92da778713"
+      "registerMoment": 0,
+      "validationToken": "3acf6de9ffc664f9ecadcb97",
+      "validated": false,
+      "email": "vandit.samuel@gmail.com",
+      "hash": "4e8615239ccaeac4c193d0052c3bfeffaed8ed3cd6b7a200e42754cb583cafbd"
     }
   },
-  "scheduler": [
-    {
-      "bytes": {
-        "total": 0,
-        "done": 0,
-        "inst": 0.0,
-        "avg": 0.0
-      },
-      "status": "failed",
-      "max_attempts": 10,
-      "message": "The mkdir operation is unsupported.",
-      "dest": {
-        "uri": "http://google.com/services"
-      },
-      "times": {
-        "scheduled": 1488922354647,
-        "started": 1488922354649,
-        "completed": 1488922354951
-      },
-      "attempts": 10,
-      "owner": "vanditsa@buffalo.edu",
-      "uuid": "ae149979-475c-4eb0-a433-0f3319b08313",
-      "src": {
-        "uri": "http://google.com/services"
-      },
-      "job_id": 1
-    },
-    {
-      "bytes": {
-        "total": 0,
-        "done": 23,
-        "inst": 23.0,
-        "avg": 23.0
-      },
-      "status": "complete",
-      "max_attempts": 10,
-      "dest": {
-        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
-        "credential": {
-          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
-        }
-      },
-      "times": {
-        "started": 1498498598856,
-        "completed": 1498498601275
-      },
-      "attempts": 1,
-      "owner": "vanditsa@buffalo.edu",
-      "uuid": "d991e705-6d30-43fa-b83f-107c1a73ca58",
-      "src": {
-        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
-        "credential": {
-          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
-        }
-      },
-      "job_id": 5
-    },
-    {
-      "bytes": {
-        "total": 0,
-        "done": 23,
-        "inst": 23.0,
-        "avg": 0
-      },
-      "status": "complete",
-      "max_attempts": 10,
-      "dest": {
-        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
-        "credential": {
-          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
-        }
-      },
-      "times": {
-        "started": 1498243740201,
-        "completed": 1498243742023
-      },
-      "attempts": 1,
-      "owner": "vanditsa@buffalo.edu",
-      "uuid": "91cb0059-c433-4920-9663-3537e280d4e5",
-      "src": {
-        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
-        "credential": {
-          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
-        }
-      },
-      "job_id": 3
-    },
-    {
-      "bytes": {
-        "total": 0,
-        "done": 10907,
-        "inst": 10907.0,
-        "avg": 10907.0
-      },
-      "status": "complete",
-      "max_attempts": 10,
-      "dest": {
-        "uri": "dropbox:///Hack%20To%20Help/CMAI/Membeship%20Form%20-%20Data%20Structure.xlsx",
-        "credential": {
-          "uuid": "6c36daca-1443-4b3f-b7e3-bac03835ee14"
-        }
-      },
-      "times": {
-        "started": 1490967817851,
-        "completed": 1490967820377
-      },
-      "attempts": 1,
-      "owner": "vanditsa@buffalo.edu",
-      "uuid": "cdc21e04-8dd2-4abe-a8b4-c071c23c6a01",
-      "src": {
-        "uri": "dropbox:///Hack%20To%20Help/CMAI/Membership%20Software/Documentation%20of%20current%20website/Membeship%20Form%20-%20Data%20Structure.xlsx",
-        "credential": {
-          "uuid": "ff4098c5-9cae-4817-9973-5704429fb969"
-        }
-      },
-      "job_id": 2
-    },
-    {
-      "bytes": {
-        "total": 0,
-        "done": 23,
-        "inst": 23.0,
-        "avg": 0
-      },
-      "status": "complete",
-      "max_attempts": 10,
-      "dest": {
-        "uri": "dropbox:///Test%20Receive/OneDataShare.txt",
-        "credential": {
-          "uuid": "8cc435c9-4b2a-426a-a8bd-dd03ebc2201b"
-        }
-      },
-      "times": {
-        "started": 1498246468395,
-        "completed": 1498246469355
-      },
-      "attempts": 1,
-      "owner": "vanditsa@buffalo.edu",
-      "uuid": "26f1f261-2c5f-4242-aec0-6e8aba0ed77e",
-      "src": {
-        "uri": "dropbox:///Test%20Send/OneDataShare.txt",
-        "credential": {
-          "uuid": "76741f20-f061-4802-9997-2e0ce3ef8916"
-        }
-      },
-      "job_id": 4
-    }
-  ],
   "administrators": [
     "tevfikkosar@gmail.com",
-    "tkosar@buffalo.edu",
     "zhangxinyun91@gmail.com",
-    "lzhang34@buffalo.edu"
-  ],
-  "authTokens": {
-    "274fa804240e8b11dce62442bcc3e1edef6687985cea39601948219513784635": "zhangxinyun91@gmail.com"
-  }
+    "lzhang34@buffalo.edu",
+    "tkosar@buffalo.edu"
+  ]
 }

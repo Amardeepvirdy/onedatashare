@@ -20,6 +20,7 @@ public class DbxSession extends Session<DbxSession, DbxResource> {
 
   public Bell<DbxSession> initialize() {
     // If an OAuth token is provided, use it.
+    System.out.println("dbx session initialize");
     if (credential instanceof StorkOAuthCred) {
       StorkOAuthCred oauth = (StorkOAuthCred) credential;
       DbxRequestConfig config =
