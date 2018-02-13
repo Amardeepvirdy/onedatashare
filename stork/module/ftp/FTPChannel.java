@@ -1174,7 +1174,7 @@ public class FTPChannel {
         public void done(SocketChannel ch) {
           ch.writeAndFlush(slice.asByteBuf());
         }
-      }.and(writeBell);
+      };//.and(writeBell); Commented out to fix FTP transfers. writeBell was never initialized, resulting in a NPE always.
     }
   }
 
