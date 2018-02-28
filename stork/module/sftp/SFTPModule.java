@@ -63,7 +63,8 @@ class SFTPSession extends Session<SFTPSession, SFTPResource> {
 
     username = ui[0];
     password = ui[1];
-
+    if(username == null || password == null)
+        throw new AuthenticationRequired("userinfo");
     // Do the actual connection on a new thread.
     return new ThreadBell<Void>() {
       public Void run() throws Exception {
@@ -193,6 +194,7 @@ class SFTPResource extends Resource<SFTPSession, SFTPResource> {
         return new ThreadBell<Void>() {
           public Void run() throws Exception {
             os.write(slice.asBytes());
+            os.flush();
             return null;
           }
         }.start();

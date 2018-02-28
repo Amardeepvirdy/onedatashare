@@ -10,3 +10,5 @@ build
 .classpath
 .idea
 stork.json
+lib\stork-3.0a.jar
+out\*
