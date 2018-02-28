@@ -136,7 +136,8 @@ angular.module('stork.transfer.browse', [
 
     var ep = angular.copy($scope.end);
     ep.uri = uri.href();
-
+    ep.folder_id = scope.folder_id;
+    console.log("folder_id", ep.folder_id);
     return stork.ls(ep, 1).then(
       function (d) {
         if (scope.root)
@@ -276,6 +277,7 @@ angular.module('stork.transfer.browse', [
   $scope.toggle = function () {
     var scope = this;
     var root = scope.root;
+    // console.log(scope.folder_id);
     if (root && root.dir && (scope.open = !scope.open) && !root.files) {
       scope.fetch(scope.path());
     }
@@ -332,12 +334,18 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.selectedUris = function () {
+    console.log($scope.end.$selected);
     if (!$scope.end.$selected)
       return [];
     return _.keys($scope.end.$selected);
   };
 
   /* Supported protocol to show in the dropdown box.ex.ftp://ftp.mozilla.org/,gsiftp://oasis-dm.sdsc.xsede.org/ */
+  
+  $scope.dropdownGoogleDrive = [
+    ["fa-google", "Google Drive", "googledrive://"],
+  ];
+
   $scope.dropdownDbx = [
     ["fa-dropbox", "Dropbox", "dropbox://"],
   ];
@@ -373,7 +381,6 @@ angular.module('stork.transfer.browse', [
     /** or e.target.style.opacity = '.8';*/
     this.style.opacity='.8';
     e.dataTransfer.setData('text', e.target.root);
-    ;
   };
   $scope.storkDragEnd = function (e) {
     this.style.opacity='1';

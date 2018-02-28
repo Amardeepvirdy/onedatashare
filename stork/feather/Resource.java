@@ -176,6 +176,7 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
    * supported.
    */
   public Bell<Stat> stat() { throw unsupported("stat"); }
+  public Bell<Stat> stat(String folderId) { throw unsupported("stat"); }
 
   /**
    * Get a listing of names of sub-{@code Resource}s under this {@code

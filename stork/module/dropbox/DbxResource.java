@@ -18,7 +18,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     final Emitter<String> emitter = new Emitter<>();
     new ThreadBell() {
       public Object run() throws Exception {
-        ListFolderResult listing = session.client.files().listFolderContinue(path.toString());
+        ListFolderResult listing = session.client.files().listFolder(path.toString());
         for (Metadata child : listing.getEntries())
           emitter.emit(child.getName());
         emitter.ring();
@@ -26,6 +26,26 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
       }
     }.startOn(initialize());
     return emitter;
+  }
+
+  public synchronized Bell<DbxResource> mkdir() {
+    return new ThreadBell<DbxResource>() {
+      @Override
+      public DbxResource run() throws Exception {
+        CreateFolderResult cfr = session.client.files().createFolderV2(path.toString());
+        return new DbxResource(session, path);
+      }
+    }.startOn(initialize());
+  }
+
+  public synchronized Bell<DbxResource> delete() {
+    return new ThreadBell<DbxResource>() {
+      @Override
+      public DbxResource run() throws Exception {
+        DeleteResult dr = session.client.files().deleteV2(path.toString());
+        return null;
+      }
+    }.startOn(initialize());
   }
 
   public synchronized Bell<Stat> stat() {
@@ -53,15 +73,19 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
           throw new NotFound();
         //End changes for Issue #21
 
-        Stat stat;
+        Stat stat = new Stat();
         if (data == null)
           stat = mDataToStat(mData);
         else {
-          stat = mDataToStat(data.getEntries().iterator().next());
+          if (!data.getEntries().isEmpty()) {
+            stat = mDataToStat(data.getEntries().iterator().next());
           /*Issue #25
 		  	Modified by: Dhruva Kumar Srinivasa
 		  	Comment: Fixed listing of folders. Set the selected directory as a directory due to Dropbox v2 API change.*/
+//            stat.dir = true;
+          }
           stat.dir = true;
+          stat.file = false;
           //End changes for Issue #25
         }
 
@@ -180,3 +204,4 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     }
   }
 }
+

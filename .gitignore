@@ -8,3 +8,7 @@ doc
 build
 .project
 .classpath
+.idea
+classes/
+stork.json
+stork.conf
