@@ -104,7 +104,7 @@ extends Transfer<S,D> {
       public Bell<Object> convert(Stat stat) {
         Bell b = Bell.rungBell();
         if (stat.dir)
-          b = b.and(dest.mkdir()).and(transferList(path));
+          b = b.and(dest.mkdir()).and(transferList(stat, path));
         if (stat.file)
           b = b.and(transferData(path));
         else
@@ -152,17 +152,27 @@ extends Transfer<S,D> {
   }
 
   // Transfer directory listing.
-  private synchronized Bell transferList(final Path path) {
-    Emitter<String> emitter = source.select(path).list();
-    final Bell bell = new Bell();
+//  private synchronized Bell transferList(final Path path) {
+//    Emitter<String> emitter = source.select(path).list();
+//    final Bell bell = new Bell();
+//    listingStarted(path);
+//    emitter.new ForEach() {
+//      public void each(String name) {
+//        enqueueTransfer(path.appendLiteral(name), true);
+//      } public void always() {
+//        listingEnded(path);
+//      }
+//    };
+//    return Bell.rungBell();
+//  }
+
+  // Transfer directory listing.
+  private synchronized Bell transferList(final Stat stat, final Path path){
     listingStarted(path);
-    emitter.new ForEach() {
-      public void each(String name) {
-        enqueueTransfer(path.appendLiteral(name), true);
-      } public void always() {
-        listingEnded(path);
-      }
-    };
+    for(Stat file: stat.files){
+      enqueueTransfer(path.appendLiteral(file.name), true);
+    }
+    listingEnded(path);
     return Bell.rungBell();
   }
 

@@ -12,19 +12,35 @@ public class SubmitHandler extends Handler<JobRequest> {
     req.assertMayChangeState();
 
     req.validate();
-
-    Job job = req.createJob();
-    req.user().saveJob(job);
-    req.server.schedule(job);
-
+    String[] srcUriArr = req.getSrcUri().trim().split(",");
+    String[] destUriArr = req.getDestUri().trim().split(",");
+    for(int i = 0; i < srcUriArr.length; i++) {
+      req.setSrcUri(srcUriArr[i]);
+      req.setDestUri(destUriArr[i]);
+      Job job = req.createJob();
+      req.user().saveJob(job);
+      req.server.schedule(job);
+      req.ring(job);
+    }
     server.dumpState();
-
-    req.ring(job);
   }
 }
 
 class JobRequest extends Request {
   private JobEndpointRequest src, dest;
+
+  public String getDestUri() {
+    return dest.uri;
+  }
+  public String getSrcUri(){
+    return src.uri;
+  }
+  public void setDestUri(String s) {
+    dest.uri = s;
+  }
+  public void setSrcUri(String s){
+    src.uri = s;
+  }
 
   // Hack to get around marshalling limitations.
   private class JobEndpointRequest extends EndpointRequest {

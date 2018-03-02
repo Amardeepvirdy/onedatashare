@@ -83,8 +83,9 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
                     .setDataStoreFactory(DATA_STORE_FACTORY)
                     .build();
 
-    com.google.api.client.auth.oauth2.Credential credential = new AuthorizationCodeInstalledApp(
-            flow, new LocalServerReceiver()).authorize("user");
+    com.google.api.client.auth.oauth2.Credential credential = flow.loadCredential("user");
+//            new AuthorizationCodeInstalledApp(
+//            flow, new LocalServerReceiver()).authorize("user");
     System.out.println(
             "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 

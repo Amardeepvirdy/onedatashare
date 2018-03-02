@@ -137,7 +137,7 @@ angular.module('stork.transfer.browse', [
     var ep = angular.copy($scope.end);
     ep.uri = uri.href();
     ep.folder_id = scope.folder_id;
-    console.log("folder_id", ep.folder_id);
+
     return stork.ls(ep, 1).then(
       function (d) {
         if (scope.root)
@@ -159,42 +159,7 @@ angular.module('stork.transfer.browse', [
   };
 
   // Open the mkdir dialog.
-  $scope.mkdir = function () {
-    var modal = $modal({
-      title: 'Create Directory',
-      contentTemplate: 'new-folder.html',
-      //controller : 'Transfer',
-      scope: $scope
-    });
-
-    modal.$scope.uri.parsed = $scope.uri.parsed;
-
-    /*modalInstance.result.then(function (pn) {
-      var u = new URI(pn[0]).segment(pn[1]);
-      return stork.mkdir(u.href()).then(
-        function (m) {
-          $scope.refresh();
-        }, function (e) {
-          alert('Could not create folder: '+e.error);
-        }
-      );
-    });*/
-  };
-
-  $scope.mk_dir = function (name) {
-    var u = $scope.uri.parsed;
-    u = u._string+name+"/";
-    //u = new URI(u);
-    if (!u) return;
-    //u.segment(name);
-    return stork.mkdir(u).then(
-      function (m) {
-        $scope.refresh();
-      }, function (e) {
-           alert('Could not create folder: '+e.error);
-      }
-   );
- };
+  
 
 
   /* Open cred modal. */
@@ -210,7 +175,9 @@ angular.module('stork.transfer.browse', [
   $scope.rm = function (uris) {
     _.each(uris, function (u) {
       if (confirm("Delete "+u+"?")) {
-        return stork.delete(u).then(
+        var ep = angular.copy($scope.end);
+        ep.uri = u;
+        return stork.delete(ep).then(
           function () {
             $scope.refresh();
           }, function (e) {
@@ -277,7 +244,6 @@ angular.module('stork.transfer.browse', [
   $scope.toggle = function () {
     var scope = this;
     var root = scope.root;
-    // console.log(scope.folder_id);
     if (root && root.dir && (scope.open = !scope.open) && !root.files) {
       scope.fetch(scope.path());
     }
@@ -334,7 +300,6 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.selectedUris = function () {
-    console.log($scope.end.$selected);
     if (!$scope.end.$selected)
       return [];
     return _.keys($scope.end.$selected);
@@ -412,5 +377,52 @@ angular.module('stork.transfer.browse', [
   }
   /*Issue 10 changes ends here - Ahmad*/
    
+})
+/** Controller forclosing the browse modal. */
+.controller('BrowseModal', function ($scope, $modal, stork) {
+
+$scope.mkdir = function () {
+    var modal = $modal({
+      title: 'Create Directory',
+      contentTemplate: 'new-folder.html',
+      //controller : 'Transfer',
+      scope: $scope
+
+    });
+
+    modal.$scope.uri.parsed = $scope.uri.parsed;
+    // $scope.modal = modal;
+
+
+      /*modalInstance.result.then(function (pn) {
+        var u = new URI(pn[0]).segment(pn[1]);
+        return stork.mkdir(u.href()).then(
+          function (m) {
+            $scope.refresh();
+          }, function (e) {
+            alert('Could not create folder: '+e.error);
+          }
+        );
+      });*/
+  };
+
+  $scope.mk_dir = function (name) {
+    var u = $scope.uri.parsed;
+    u = u._string+name+"/";
+    //u = new URI(u);
+    if (!u) return;
+    var ep = angular.copy($scope.end);
+    ep.uri = u;
+    //u.segment(name);
+    return stork.mkdir(ep).then(
+      function (m) {
+        $scope.$hide();
+        $scope.refresh();
+      }, function (e) {
+           alert('Could not create folder: '+e.error);
+      }
+   );
+ };
+
 });
 

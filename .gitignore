@@ -10,5 +10,5 @@ build
 .classpath
 .idea
 classes/
-stork.json
 stork.conf
+stork.json

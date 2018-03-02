@@ -33,7 +33,8 @@ public class ListHandler extends Handler<ListRequest> {
       listing.promise(req);
       return;
     }
-    if (req.uri.startsWith("googledrive:///")) {
+
+    if (req.uri != null && req.uri.startsWith("googledrive:///")) {
       String folderId = req.asAd().get("folder_id");
       listing = resource.stat(folderId);
     }

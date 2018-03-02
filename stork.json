@@ -210,16 +210,6 @@
     "vanditsa@buffalo.edu": {
       "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10",
       "credentials": {
-        "91d5527d-8f5f-4838-8e22-7df2112037ff": {
-          "name": "Dropbox",
-          "type": "oauth",
-          "token": "zrVQfP1O_mUAAAAAAAAEj-Rviss1feSGHuZD9wiwws3OQxSnDrPMTNMfhRMo2N1T"
-        },
-        "9f62725a-46c0-4ac0-ac34-f70f4edd92b0": {
-          "name": "GoogleDrive",
-          "type": "oauth",
-          "token": "ya29.GlxwBfRZVE-Zvb1nO8dHkQXWvl6KNZp33MaMGA9WPnQFPXVOnSIYU2Fr9bpGKNFyAh6ad0hksmdVnRrTp3KBdp2PDDpm0HiPkfSVm8jZBUGMYWBu2JwLGtaWC6VtFw"
-        }
       },
       "jobs": [
         "ae149979-475c-4eb0-a433-0f3319b08313",
@@ -230,7 +220,6 @@
       ],
       "history": [
         "dropbox:/",
-        "googledrive:/",
         "http://google.com/services",
         "http://google.com/",
         "gsiftp://oasis-dm.sdsc.xsede.org/",
