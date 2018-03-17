@@ -23,7 +23,7 @@ public class DbxSession extends Session<DbxSession, DbxResource> {
     if (credential instanceof StorkOAuthCred) {
       StorkOAuthCred oauth = (StorkOAuthCred) credential;
       DbxRequestConfig config =
-        DbxRequestConfig.newBuilder("StorkCloud").build();
+        DbxRequestConfig.newBuilder("OneDataShare-DIDCLab").build();
       client = new DbxClientV2(config, oauth.data());
       return Bell.wrap(this);
     }

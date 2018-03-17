@@ -35,7 +35,7 @@ public class DbxOAuthSession extends OAuthSession {
   private DbxWebAuth auth;
   /** Used by Dropbox SDK. Should be set to user's locale, not ours. */
   private DbxRequestConfig config =
-          DbxRequestConfig.newBuilder("StorkCloud").build();
+          DbxRequestConfig.newBuilder("OneDataShare-DIDCLab").build();
   /**
    * Used by Dropbox SDK to store the session key. The "key" member is part of
    * the OAuthSession base class.
