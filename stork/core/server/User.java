@@ -287,7 +287,7 @@ public abstract class User {
 
   /** Call this to send the user a validation mail. */
   public synchronized Bell<?> sendValidationMail() {
-    String base = "https://storkcloud.org/api/stork/user";
+    String base = "https://www.onedatashare.org/api/stork/user";
     //String token = validationToken();
    //server().cacheToken(token, )
     final String url = String.format(
@@ -296,9 +296,9 @@ public abstract class User {
     return new Mail() {{
       from = Config.global.email;
       to = User.this.email;
-      subject = "Complete your registration with StorkCloud";
+      subject = "Complete your registration with OneDataShare";
       body =
-        "Thank you for registering with StorkCloud!\n\n"+
+        "Thank you for registering with OneDataShare!\n\n"+
         "Please go here to complete your registration:\n\n"+url;
     }}.send();
   }
@@ -310,7 +310,7 @@ public abstract class User {
    
   /** ZL: TODO: call to send user mail to reset password. */
   public synchronized Bell<?> sendResetPasswordMail() {
-    String base = "https://storkcloud.org/api/stork/user";
+    String base = "https://onedatashare.org/api/stork/user";
     String authToken = authToken();
     server().cacheToken(authToken, normalizedEmail());
     final String url = String.format(
@@ -319,13 +319,13 @@ public abstract class User {
     return new Mail() {{
       from = Config.global.email;
       to = User.this.email;
-      subject = "Reset your stork password";
+      subject = "Reset your OneDataShare password";
       body =
         "Hi\n\n"+
         "Welcome to reset your password.\n\n"+
         "Please click: "+url+"\n\n"+
         "Sincerely,\n"+
-        "Stork";
+        "OneDataShare";
     }}.send();
   }
 
@@ -340,12 +340,12 @@ public abstract class User {
      return new Mail() {{
       from = Config.global.email;
       to = server().mailList; 
-      subject = "New user registered stork";
+      subject = "New user registered OneDataShare";
       body = 
          "Hi Admin,\n\n"+
-         User.this.email+" become a user of stork.\n\n"+
+         User.this.email+" become a user of OneDataShare.\n\n"+
          "Sincerely,\n"+
-         "Stork";          
+         "OneDataShare";
      }}.send();
   }
 

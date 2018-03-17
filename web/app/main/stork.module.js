@@ -267,7 +267,7 @@ angular.module('stork', [
         return;
       if (current.$$route.requireLogin)
         user.checkAccess();
-      $document[0].title = 'StorkCloud - '+current.$$route.title;
+      $document[0].title = 'OneDataShare - '+current.$$route.title;
     }
   );
 });

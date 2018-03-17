@@ -38,7 +38,7 @@ public class Config {
 
   public double request_timeout = 5.0;
 
-  public String email = "StorkCloud <noreply@storkcloud.org>";
+  public String email = "OneDataShare <noreply@onedatashare.org>";
   public String smtp_server = "localhost";
 
   /** Dropbox configuration. */

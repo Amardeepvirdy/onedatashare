@@ -361,7 +361,7 @@ angular.module('stork.user', [
     return stork.register(u).then(function (d) {
       $modal({
         title: "Welcome!",
-        content: "Thank for you registering with StorkCloud! "+
+        content: "Thank for you registering with OneDataShare! "+
                  "Please check your email for further instructions.",
         show: true
       });
