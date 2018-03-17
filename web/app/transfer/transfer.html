@@ -203,38 +203,60 @@
 
 <!-- Create new credential username/password credential. -->
 <script type="text/ng-template" id="new-userinfo-cred.html">
-  <div class="form-group col-md-6">
-    <label>Username</label>
-    <input type="text" class="form-control" ng-model="cred.username" required>
-  </div>
+  <form ng-controller="EnterCredential" ng-submit="saveCredential(cred)">
+    <div class="form-group col-md-6">
+      <label>Username</label>
+      <input type="text" class="form-control" ng-model="cred.username" required>
+    </div>
 
-  <div class="form-group col-md-6">
-    <label>Password</label>
-    <input type="password" class="form-control" ng-model="cred.password">
-  </div>
+    <div class="form-group col-md-6">
+      <label>Password</label>
+      <input type="password" class="form-control" ng-model="cred.password">
+    </div>
 
-  <div ng-if="false" ng-include="'password-warning.html'"></div>
+    <div ng-if="false" ng-include="'password-warning.html'"></div>
+    <div class="text-center modal-footer">
+      <button type="submit" class="btn btn-primary"
+              ng-disabled="cred.$agreed === false">
+        OK
+      </button>
+      <button ng-click="$hide()" type="button" class="btn btn-default">
+        Cancel
+      </button>
+    </div>
+  </form>
 </script>
 
 <!-- Create new credential MyProxy credential. -->
 <script type="text/ng-template" id="new-myproxy-cred.html">
-  <div class="form-group col-md-12">
-    <label>MyProxy server</label>
-    <input type="text" class="form-control" ng-model="cred.myproxy_host"
-           placeholder="e.g., myproxy.example.com" required>
-  </div>
+  <form ng-controller="EnterCredential" ng-submit="saveCredential(cred)">
+    <div class="form-group col-md-12">
+      <label>MyProxy server</label>
+      <input type="text" class="form-control" ng-model="cred.myproxy_host"
+             placeholder="e.g., myproxy.example.com" required>
+    </div>
 
-  <div class="form-group col-md-6">
-    <label>MyProxy username</label>
-    <input type="text" class="form-control" ng-model="cred.myproxy_user" required>
-  </div>
+    <div class="form-group col-md-6">
+      <label>MyProxy username</label>
+      <input type="text" class="form-control" ng-model="cred.myproxy_user" required>
+    </div>
 
-  <div class="form-group col-md-6">
-    <label>MyProxy password</label>
-    <input type="password" class="form-control" ng-model="cred.myproxy_pass" required>
-  </div>
+    <div class="form-group col-md-6">
+      <label>MyProxy password</label>
+      <input type="password" class="form-control" ng-model="cred.myproxy_pass" required>
+    </div>
 
-  <div ng-if="false" ng-include="'password-warning.html'"></div>
+    <div ng-if="false" ng-include="'password-warning.html'"></div>
+    <div class="text-center modal-footer">
+      <button type="submit" class="btn btn-primary"
+              ng-disabled="cred.$agreed === false">
+        OK
+      </button>
+      <button ng-click="$hide()" type="button" class="btn btn-default">
+        Cancel
+      </button>
+    </div>
+  </form>
 </script>
 
 <!-- Show this message for password-based credential types. -->

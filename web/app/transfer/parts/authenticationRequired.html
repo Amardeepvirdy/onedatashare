@@ -10,12 +10,12 @@
       Authenticate with Dropbox
     </a>
     <a ng-switch-when="gss" class="btn btn-lg btn-info"
-       ng-click="end.credential = {type: 'gss'}; credModal()">
+       ng-click="end.credential = {type: 'gss'}; credModal('gss')">
       <i class="large fa fa-key"></i>
       Authenticate with MyProxy
     </a>
     <a ng-switch-when="userinfo" class="btn btn-lg btn-warning"
-       ng-click="end.credential = {type: 'userinfo'}; credModal()">
+       ng-click="end.credential = {type: 'userinfo'}; credModal('userinfo')">
       <i class="large fa fa-key"></i>
       Authenticate with password
     </a>
@@ -23,7 +23,7 @@
 
   <!-- Always suggest using an existing credential. -->
   <h4>
-    <a class="btn btn-lg btn-info" ng-click="credModal()">
+    <a class="btn btn-lg btn-info" ng-click="credModal('savedCred')">
       <i class="large fa fa-key"></i> Use saved credential
     </a>
   </h4>

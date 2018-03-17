@@ -41,6 +41,20 @@ angular.module('stork.credentials', [])
   };
 })
 
+/** Controller for entering credentials. */
+.controller('EnterCredential', function ($scope) {
+  $scope.cred = angular.copy($scope.end.credential);
+
+  if ($scope.cred)
+    $scope.selected = $scope.cred.uuid || $scope.cred.type;
+
+  $scope.saveCredential = function (cred) {
+    $scope.end.credential = cred;
+    $scope.$hide();
+    $scope.refresh();
+  };
+})
+
 .controller('OAuth', function ($routeParams, $window) {
   var uuid = $routeParams.uuid;
 

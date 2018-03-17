@@ -162,12 +162,28 @@ angular.module('stork.transfer.browse', [
 
 
   /* Open cred modal. */
-  $scope.credModal = function () {
-    $modal({
-      title: 'Select Credential',
-      contentTemplate: 'select-credential.html',
-      scope: $scope
-    });
+  $scope.credModal = function (type = 'savedCred') {
+    if(type == 'userinfo'){
+      $modal({
+        title: 'Enter Credentials',
+        contentTemplate: 'new-userinfo-cred.html',
+        scope: $scope
+      });
+    }
+    else if(type == 'gss'){
+      $modal({
+        title: 'Enter Credentials',
+        contentTemplate: 'new-myproxy-cred.html',
+        scope: $scope
+      });
+    }
+    else if(type == 'savedCred'){
+      $modal({
+        title: 'Select Credential',
+        contentTemplate: 'select-credential.html',
+        scope: $scope
+      });
+    }
   };
 
   // Delete the selected files.
