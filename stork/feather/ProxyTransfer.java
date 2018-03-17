@@ -170,7 +170,9 @@ extends Transfer<S,D> {
   private synchronized Bell transferList(final Stat stat, final Path path){
     listingStarted(path);
     for(Stat file: stat.files){
-      enqueueTransfer(path.appendLiteral(file.name), true);
+      //Ignore current (".") and parent ("..") directories present in stat.files
+      if(!(".".equals(file.name) || "..".equals(file.name)))
+        enqueueTransfer(path.appendLiteral(file.name), true);
     }
     listingEnded(path);
     return Bell.rungBell();
