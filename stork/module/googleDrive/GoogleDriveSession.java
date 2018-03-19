@@ -86,8 +86,8 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
     com.google.api.client.auth.oauth2.Credential credential = flow.loadCredential("user");
 //            new AuthorizationCodeInstalledApp(
 //            flow, new LocalServerReceiver()).authorize("user");
-    System.out.println(
-            "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+//    System.out.println(
+//            "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 
     return credential;
   }
@@ -111,6 +111,6 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
       return Bell.wrap(this);
     }
 
-    throw new AuthenticationRequired("oauth");
+    throw new AuthenticationRequired("googledrive");
   }
 }

@@ -8,6 +8,8 @@ import stork.feather.util.ThreadBell;
 import com.google.api.services.drive.model.*;
 import com.google.api.services.drive.Drive;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +32,26 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
       }
     }.startOn(initialize());
     return emitter;
+  }
+
+  public synchronized Bell<GoogleDriveResource> mkdir() {
+    return new ThreadBell<GoogleDriveResource>() {
+      @Override
+      public GoogleDriveResource run() throws Exception {
+
+        File fileMetadata = new File();
+        fileMetadata.setName("Invoices");
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        File file = session.service.files().create(fileMetadata)
+                .setFields("id")
+                .execute();
+//        path.
+        System.out.println("Folder ID: " + file.getId());
+        return new GoogleDriveResource(session, path);
+
+      }
+    }.startOn(initialize());
   }
 
   public synchronized Bell<Stat> stat(String folderId) {
@@ -103,6 +125,7 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
       stat.time = file.getModifiedTime().getValue()/1000;
       if (file.getMimeType().equals("application/vnd.google-apps.folder")) {
         stat.dir = true;
+        stat.file = false;
       }
       else
         stat.size = file.getSize();

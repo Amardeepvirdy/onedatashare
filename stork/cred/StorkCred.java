@@ -25,7 +25,7 @@ public abstract class StorkCred<O> extends Credential<O> {
       return new StorkGSSCred();
     if (type.equals("oauth"))
       return new StorkOAuthCred(null);
-    if (type.equals("googledriveauth"))
+    if (type.equals("googledrive"))
       return new StorkOAuthCred(null);
     throw new RuntimeException("Unknown credential type.");
   }
