@@ -54,9 +54,9 @@ public class UserHandler extends Handler<UserRequest> {
     }
 
     else if (req.action.equals("login")) try {
-      server.administrators.add("tkosar@buffalo.edu");
+      /*server.administrators.add("tkosar@buffalo.edu");
       server.administrators.add("tevfikkosar@gmail.com");
-      server.administrators.add("zhangxinyun91@gmail.com");
+      server.administrators.add("zhangxinyun91@gmail.com");*/
       UserLogin log = req.marshalInto(new UserLogin());
       User user = log.login();
       req.ring(user.getLoginCookie());

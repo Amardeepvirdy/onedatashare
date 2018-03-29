@@ -362,7 +362,7 @@ angular.module('stork.user', [
       $modal({
         title: "Welcome!",
         content: "Thank for you registering with OneDataShare! "+
-                 "Please check your email for further instructions.",
+                 "Please check your email inbox/spam for further instructions.",
         show: true
       });
       delete $scope.user;

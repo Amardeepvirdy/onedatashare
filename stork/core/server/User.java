@@ -310,7 +310,7 @@ public abstract class User {
    
   /** ZL: TODO: call to send user mail to reset password. */
   public synchronized Bell<?> sendResetPasswordMail() {
-    String base = "https://onedatashare.org/api/stork/user";
+    String base = "https://www.onedatashare.org/api/stork/user";
     String authToken = authToken();
     server().cacheToken(authToken, normalizedEmail());
     final String url = String.format(
