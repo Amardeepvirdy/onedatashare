@@ -31,9 +31,7 @@ angular.module('stork', [
       controller: 'OAuth',
       templateUrl: '/app/credentials/oauth.html',
       requireLogin: true
-    })
-    
-    .when('/validate', {
+    }).when('/validate', {
       title: 'Validation',
       templateUrl: '/app/user/validate.html',
     }).when('/validateError', {
@@ -60,9 +58,7 @@ angular.module('stork', [
       templateUrl: '/app/user/admin.html',
     }).when('/userLs',{
       templateUrl: 'app/admin/userLs.html',
-    })
-    
-    .when('/terms', {
+    }).when('/terms', {
       title: 'Terms of Service',
       templateUrl: '/app/legal/terms.html'
     }).when('/privacy', {

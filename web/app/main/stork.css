@@ -18,6 +18,56 @@ a {
   cursor: pointer;
 }
 
+#banner-content.row {
+    padding-top: 170px;
+    padding-bottom: 100px;
+}
+
+#banner h1 {
+    padding-top: 5%;
+}
+
+#banner .section-heading:before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 5px;
+    margin-top: 30px;
+}
+
+.col-38 {
+    width: 38.2%;
+}
+
+#banner-content.row {
+        padding-top: 85px !important;
+    }
+
+.frontrow {
+    max-width: 1245px;
+    margin: 0 auto;
+    padding: 75px 0;
+    position: relative;
+}
+
+.banner-space {
+    padding: 40px 0;
+}
+
+.colored-block {
+        width: 100%;
+        padding: 30px 0px;
+        color: #fff;
+    }
+.blue { background: #607084; }
+.gray { background: #646970; }
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -205,6 +255,7 @@ tr.min-cell {
 
 .welcome {
   text-align: left;
+    padding-left: 13.8%;
 } .welcome h1 {
   font-size: 45px;
 }
@@ -463,6 +514,18 @@ body.logged-out .logged-in {
 .whitespace {
   white-space: nowrap;
 }
+
+/*Ins Begin of ++ spu*/
+.overlay { 
+  color:#fff;
+  position:absolute;
+  z-index:20;
+  top:1%;
+  left:0;
+  width:100%;
+  text-align:center;
+}
+/*Ins End of ++ spu*/
 
 
 
