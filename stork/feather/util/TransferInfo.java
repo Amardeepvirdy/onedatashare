@@ -16,7 +16,7 @@ public class TransferInfo {
   /** Update based on the given information. */
   public void update(Time time, Progress p, Throughput tp) {
     done = p.done();
-    total = p.total();
+//    total = p.total();
     avg = p.rate(time).value();
     inst = tp.value();
   }

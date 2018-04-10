@@ -103,10 +103,18 @@ extends Transfer<S,D> {
     return src.stat().new AsBell<Object>() {
       public Bell<Object> convert(Stat stat) {
         Bell b = Bell.rungBell();
-        if (stat.dir)
+        if (stat.dir) {
+          int totalSize = 0;
+          for(int fileIndex = 0 ; fileIndex < stat.files.length; fileIndex++){
+            totalSize += stat.files[fileIndex].size;
+          }
+          info.total = totalSize;
           b = b.and(dest.mkdir()).and(transferList(stat, path));
-        if (stat.file)
+        }
+        if (stat.file) {
+          info.total = stat.size;
           b = b.and(transferData(path));
+        }
         else
           transferEnded(path);
         return b;

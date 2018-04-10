@@ -83,7 +83,7 @@ div .endpoints {
             &nbspAverage Speed
           </div>
           <div class="col-xs-7 col-sm-2 text-center" ng-init="p = j.bytes">
-            <span>{{p.avg|size:2}}B/s</span>
+            <span>{{j.bytes.avg|size:2}}B/s</span>
             <!--<span ng-show="!p || p.avg <= 0">&nbsp</span>
             <span ng-hide="!p || p.inst <= 0">({{p.inst|size:2}}B/s)</span>-->
           </div>
