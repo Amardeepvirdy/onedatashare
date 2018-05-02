@@ -43,7 +43,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
       @Override
       public DbxResource run() throws Exception {
         DeleteResult dr = session.client.files().deleteV2(path.toString());
-        return null;
+        return new DbxResource(session, path);
       }
     }.startOn(initialize());
   }

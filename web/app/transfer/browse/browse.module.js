@@ -349,8 +349,33 @@ angular.module('stork.transfer.browse', [
     return false;
   };
 
-  if ($scope.end.uri)
-    $scope.go($scope.end.uri);
+  if ($scope.end.uri) {
+    if($scope.end.$selected) {
+      var fileUri = _.keys($scope.end.$selected)[0];
+      var ep = {uri: fileUri, credential: $scope.end.credential};
+      stork.ls(ep, 1).then(
+        function(d) {
+          if(d.dir === true) {
+              $scope.go(fileUri);
+          }
+          else {
+            var uri = new URI(fileUri).normalize();
+            var readable = uri.readable();
+
+            // Make sure the input box matches the URI we're dealing with.
+            if (readable != $scope.uri.text) {
+                $scope.uri.text = readable;
+                uri = new URI(readable).normalize();
+            }
+
+            $scope.uri.parsed = uri;
+            $scope.uri.text = readable;
+            $scope.up_dir();
+          }
+        }
+      );
+    }
+  }
 
   $scope.storkDragStart = function (e) {
     /** or e.target.style.opacity = '.8';*/
