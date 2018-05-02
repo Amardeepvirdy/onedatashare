@@ -16,9 +16,9 @@ public class CancelHandler extends Handler<CancelRequest> {
     if (req.job_id <= 0)
       throw new RuntimeException("No job specified.");
 
-    Job job = req.user().getJob(req.job_id);
+    Job job = req.user().getJob(req.job_id-1);
     job.remove("Job canceled by user.");
-    req.ring();
+    req.ring(job);
   }
 }
 

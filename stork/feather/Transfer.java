@@ -48,6 +48,8 @@ public abstract class Transfer<S extends Resource, D extends Resource> {
     }
   };
 
+  Bell cancelBell = null;
+
   /**
    * Create a {@code Transfer} from {@code source} to {@code destination}.
    *
@@ -119,6 +121,7 @@ public abstract class Transfer<S extends Resource, D extends Resource> {
    * @return This {@code Transfer}.
    */
   public final Transfer<S,D> cancel() {
+    cancelBell.cancel();
     return stop(new CancellationException());
   }
 
