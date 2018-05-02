@@ -8,12 +8,14 @@ endef
 JGLOBUS=myproxy-2.1.0.jar gss-2.1.0.jar ssl-proxies-2.1.0.jar \
 	jsse-2.1.0.jar
 
+DROPBOX=dropbox-core-sdk-3.0.4.jar jackson-core-2.7.4.jar
+
 .PHONY: all clean distclean
 
 # Add libraries here to cause them to be fetched.
 all: netty-all-5.0.0.Alpha1.jar jargon-core-3.3.1.1.jar \
 	junit-4.12-beta-1.jar $(JGLOBUS) jsch-0.1.51.jar \
-	jsoup-1.8.1.jar javax.mail-1.5.2.jar
+	jsoup-1.8.1.jar javax.mail-1.5.2.jar $(DROPBOX)
 
 # Add libraries below to specify their download location and dependencies.
 netty-all-5.0.0.Alpha1.jar: commons-logging-1.2.jar log4j-1.2.17.jar
@@ -36,10 +38,11 @@ javax.mail-1.5.2.jar:
 	$g https://maven.java.net/content/repositories/releases/com/sun/mail/javax.mail/1.5.2/javax.mail-1.5.2.jar
 
 # Dropbox dependencies.
-dropbox-core-sdk-3.0.4.jar: jackson-core-2.7.4.jar
+dropbox-core-sdk-3.0.4.jar:
 	$g https://search.maven.org/remotecontent?filepath=com/dropbox/core/dropbox-core-sdk/3.0.4/dropbox-core-sdk-3.0.4.jar
 jackson-core-2.7.4.jar:
 	$g https://search.maven.org/remotecontent?filepath=com/fasterxml/jackson/core/jackson-core/2.7.4/jackson-core-2.7.4.jar
+
 # JGlobus dependencies.
 gss-2.1.0.jar:
 	$g https://search.maven.org/remotecontent?filepath=org/jglobus/gss/2.1.0/gss-2.1.0.jar

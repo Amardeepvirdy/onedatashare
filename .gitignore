@@ -12,3 +12,7 @@ build
 stork.json
 lib\stork-3.0a.jar
 out\*
+
+lib/stork-3\.0a\.jar
+
+*.iml
