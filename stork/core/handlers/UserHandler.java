@@ -5,6 +5,7 @@ import java.util.*;
 import stork.core.server.*;
 import stork.feather.*;
 import stork.feather.errors.*;
+import stork.feather.util.MethodLogs;
 import stork.util.*;
 
 import static stork.core.server.User.PASS_LEN;
@@ -12,6 +13,7 @@ import static stork.core.server.User.PASS_LEN;
 /** Handle user registration, login, and settings. */
 public class UserHandler extends Handler<UserRequest> {
   public void handle(final UserRequest req) {
+    MethodLogs.logMessage("Info","User Handler was invoked");
     Bell bell = new Bell();
     if (req.action == null) {
       throw new RuntimeException("No action provided.");

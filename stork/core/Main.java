@@ -1,7 +1,21 @@
 package stork.core;
 
+import java.net.UnknownHostException;
+import java.time.LocalDateTime;
 import java.util.*;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
+import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.*;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 import stork.ad.*;
 import stork.core.commands.*;
 import stork.feather.*;
@@ -18,7 +32,7 @@ import stork.util.*;
 public class Main extends Command {
   private static String version = null;
 
-  static {
+    static {
     // Register a handler to marshal strings in ads into Feather URIs.
     new Ad.Marshaller<URI>(URI.class) {
       public String marshal(URI uri) {

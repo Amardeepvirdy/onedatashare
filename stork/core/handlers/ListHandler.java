@@ -2,18 +2,22 @@ package stork.core.handlers;
 
 import java.util.*;
 import java.util.concurrent.*;
-
+import java.lang.*;
 import stork.core.server.*;
 import stork.feather.*;
+import stork.feather.util.*;
 import stork.util.*;
 
 /** A handler for performing listings. */
 public class ListHandler extends Handler<ListRequest> {
+
+
   // Map of ongoing listings, for request aggregation.
   private static Map<Resource, Bell<Stat>> aggregator =
     new ConcurrentHashMap<Resource, Bell<Stat>>();
 
   public void handle(final ListRequest req) {
+    MethodLogs.logMessage("Info","List Handler was invoked");
     req.assertLoggedIn();
 
     final Resource resource;

@@ -2,6 +2,7 @@ package stork.core.handlers;
 
 import stork.core.server.*;
 import stork.feather.*;
+import stork.feather.util.MethodLogs;
 
 /** Request common to many commands that operate on endpoints. */
 public class EndpointRequest extends Request {
@@ -30,6 +31,7 @@ public class EndpointRequest extends Request {
 
   /** Validate the request using {@code name} in error messages. */
   public EndpointRequest validateAs(String name) {
+    MethodLogs.logMessage("Info","End point request was invoked");
     validateAndResolve(name);
     return this;
   }

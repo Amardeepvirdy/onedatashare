@@ -3,6 +3,7 @@ package stork.core.handlers;
 import stork.ad.*;
 import stork.core.server.*;
 import stork.feather.*;
+import stork.feather.util.MethodLogs;
 import stork.scheduler.*;
 
 /** Handles scheduling jobs. */
@@ -41,6 +42,7 @@ class JobRequest extends Request {
 
   /** Create a {@code Job} from this request. */
   public Job createJob() {
+      MethodLogs.logMessage("Info","Submit Handler was invoked");
     Job job = Ad.marshal(this).unmarshal(new Job());
     return job;
   }

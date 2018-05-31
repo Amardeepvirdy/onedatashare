@@ -4,6 +4,7 @@ import java.util.*;
 
 import stork.core.server.*;
 import stork.core.*;
+import stork.feather.util.MethodLogs;
 
 /** Send information about the server. */
 public class InfoHandler extends Handler<InfoRequest> {
@@ -34,6 +35,7 @@ public class InfoHandler extends Handler<InfoRequest> {
   }
 
   public void handle(InfoRequest req) {
+    MethodLogs.logMessage("Info","Info Handler was invoked");
     if (req.action.equals("module"))
       sendModuleInfo(req);
     else if (req.action.equals("server"))

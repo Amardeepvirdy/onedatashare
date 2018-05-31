@@ -4,10 +4,12 @@ import java.util.*;
 
 import stork.core.server.*;
 import stork.feather.*;
+import stork.feather.util.MethodLogs;
 
 /** A handler for creating shared endpoints. */
 public class ShareHandler extends Handler<ShareRequest> {
   public void handle(final ShareRequest req) {
+    MethodLogs.logMessage("Info","Share Handler was invoked");
     req.assertLoggedIn();
     req.assertMayChangeState();
 
