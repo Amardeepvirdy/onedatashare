@@ -82,18 +82,24 @@
 <script type="text/ng-template" id="transfer-modal.html">
   <form ng-submit="submit(job, $hide)">
     <div class="text-center">
-      This will perform a transfer from
-      <div class="large" bindonce bo-bind="job.src.uri"></div>
-      to
-      <div class="large" bindonce bo-bind="job.dest.uri"></div>
+      <span class="bold">This will perform a transfer from</span>
+      <div class="large html-editor-italic" bindonce bo-bind="srcUris"></div>
+      <span class="bold">to</span>
+      <div class="large html-editor-italic" bindonce bo-bind="destUris"></div>
       <div class="text-left col-xs-12" ng-if="debugMode">
         <h4>Raw Job Info</h4>
         <pre>{{job|json}}</pre>
       </div>
+      <div ng-if="duplicates != null">
+        <hr />
+        <span class="bold">Do you want to overwrite the following files?</span>
+        <div class="large html-editor-italic" bindonce bo-bind="duplicates"></div>
+      </div>
     </div>
     <div class="modal-footer text-center">
       <button class="btn btn-warning" ng-click="$hide()">Cancel</button>
-      <button class="btn btn-primary" ng-click="$close(job)">Submit</button>
+      <button class="btn btn-primary" ng-click="$close(job)" ng-hide="duplicates == null">OverWrite</button>
+      <button class="btn btn-primary" ng-click="$close(job)" ng-hide="duplicates != null">Submit</button>
     </div>
     <div cg-busy="promise"></div>
   </form>
