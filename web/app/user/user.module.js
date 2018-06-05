@@ -75,11 +75,8 @@ angular.module('stork.user', [
     return user.login(info).then(function (v) {
       if (then)
         then(v);
-      $modal({
-        title: "Welcome!",
-        content: "You have successfully logged in.",
-        show: true
-      });
+        $location.path("/transfer");
+
     }, function (error) {
       $scope.error = error;
     });
@@ -119,7 +116,7 @@ angular.module('stork.user', [
       });      
     },function(e) {
        $modal({
-        title: 'We could not find your accout with that information',
+        title: 'We could not find your account with that information',
         content: e.error,
         show: true
        });
