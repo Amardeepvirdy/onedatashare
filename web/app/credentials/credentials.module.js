@@ -18,10 +18,8 @@ angular.module('stork.credentials', [])
   };
 })
 
-/** Controller for selecting credentials. */
 .controller('SelectCredential', function ($scope) {
   $scope.cred = angular.copy($scope.end.credential);
-
   if ($scope.cred)
     $scope.selected = $scope.cred.uuid || $scope.cred.type;
 
