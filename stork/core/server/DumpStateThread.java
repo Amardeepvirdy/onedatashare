@@ -81,6 +81,7 @@ public class DumpStateThread extends Thread {
       pw.print(Ad.marshal(object).toJSON());
       pw.close();
       pw = null;
+      state_file.delete();
 
       if (!temp_file.renameTo(state_file))
         throw new RuntimeException("Could not rename temp dump file.");

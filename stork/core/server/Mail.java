@@ -3,7 +3,6 @@ package stork.core.server;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
 
 import stork.core.*;
 import stork.feather.Bell;
