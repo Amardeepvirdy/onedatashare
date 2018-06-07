@@ -74,7 +74,8 @@ public class DbxOAuthSession extends OAuthSession {
       DbxAuthFinish finish = auth.finishFromRedirect(finishURI, sessionStore, map);
       StorkOAuthCred cred = new StorkOAuthCred(finish.getAccessToken());
 
-      cred.name = finish.getUserId();
+      cred.userID = finish.getUserId();
+      cred.name = "Dropbox";
       return cred;
     } catch (Exception e) {
       e.printStackTrace();

@@ -299,10 +299,11 @@
     "vanditsa@buffalo.edu": {
       "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10",
       "credentials": {
-        "6d792895-249c-4141-bc22-8a78554caceb": {
-          "name": "297932535",
+        "aff704e6-8dc0-446f-acb3-4a5681d9af05": {
+          "name": "Dropbox",
           "type": "oauth",
-          "token": "xrNqXEY0jrYAAAAAAAAAXjQTtvGLUmOkDh4YihJNyATpdo8ABuklcNJ_rFzFvs0I"
+          "userID": "297932535",
+          "token": "xrNqXEY0jrYAAAAAAAAAcMK7ndiMFyEBt7PhIqz0uYb1FG7-FnvpNM_FUS9wn2A5"
         }
       },
       "jobs": [
