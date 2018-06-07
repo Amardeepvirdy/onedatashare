@@ -80,9 +80,9 @@ angular.module('stork.transfer.queue', [])
   };
 
   $scope.cancel = function (j) {
-    $modal({
+    /*$modal({
       contentTemplate: 'cancel-job.html'
-    });
+    });*/
     if (j.job_id &&
         confirm("Are you sure you want to remove job "+j.job_id+"?"))
       return stork.cancel(j.job_id).then(
