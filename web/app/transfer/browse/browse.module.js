@@ -267,14 +267,26 @@ angular.module('stork.transfer.browse', [
   $scope.select = function (e) {
     var scope = this;
     var u = this.path();
+
       // Enable to choose mutiple files.
-    if (e.ctrlKey) {
+    var old_selected = $scope.lastSel;
+    $scope.lastSel = u;
+
+    var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
+    if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
       this.root.selected = !this.root.selected;
       if (this.root.selected)
         $scope.end.$selected[u] = this.root;
       else
         delete $scope.end.$selected[u];
-    } else if ($scope.selectedUris().length != 1) {
+    }else if (e.shiftKey) {
+       this.root.selected = !this.root.selected;
+       if (this.root.selected)
+         $scope.end.$selected[u] = this.root;
+       else
+         delete $scope.end.$selected[u];
+     }
+     else if ($scope.selectedUris().length != 1) {
       // Either nothing is selected, or multiple things are selected.
       $scope.unselectAll();
       this.root.selected = true;
