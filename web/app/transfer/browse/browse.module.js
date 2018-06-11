@@ -152,9 +152,13 @@ angular.module('stork.transfer.browse', [
 
   // Get the path URI of this item.
   $scope.path = function () {
-    if ($scope.root === this.root)
-      return $scope.uri.parsed.clone();
-    return this.parent().path().segmentCoded(this.root.name);
+    return $scope.genericPath(this);
+  };
+  // Get the path URI of an item.
+  $scope.genericPath = function (that) {
+      if ($scope.root === that.root)
+         return $scope.uri.parsed.clone();
+      return that.parent().path().segmentCoded(that.root.name);
   };
 
   // Open the mkdir dialog.
@@ -209,7 +213,6 @@ angular.module('stork.transfer.browse', [
       return alert('You must select a file.');
     else if (uris.length > 1)
       return alert('You can only download one file at a time.');
-
     var end = {
       uri: uris[0],
       credential: $scope.end.credential
@@ -268,34 +271,58 @@ angular.module('stork.transfer.browse', [
     var scope = this;
     var u = this.path();
 
-      // Enable to choose mutiple files.
-    var old_selected = $scope.lastSel;
-    $scope.lastSel = u;
+    // Enable to choose mutiple files.
+
 
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
+
     if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
       this.root.selected = !this.root.selected;
-      if (this.root.selected)
+      if (this.root.selected){
         $scope.end.$selected[u] = this.root;
+      }
       else
         delete $scope.end.$selected[u];
     }else if (e.shiftKey) {
-       this.root.selected = !this.root.selected;
-       if (this.root.selected)
-         $scope.end.$selected[u] = this.root;
-       else
-         delete $scope.end.$selected[u];
+
+       if($scope.start_select && ($scope.start_select.parent().root == this.parent().root)){
+        var target = this.root;
+        var source = $scope.start_select;
+        var arrayOfSelects = [];
+
+        while(source.$$nextSibling != null && source.root != target){
+            arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+            source = ((source.$index < this.$index) ? source.$$nextSibling : source.$$prevSibling);
+        }
+        arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+
+        $scope.unselectAll();
+        arrayOfSelects.map((v)=>{
+          v.root.selected = true;
+          $scope.end.$selected[v.path] = v.root;
+        });
+       }else{
+       // shift click without setting start point
+        $scope.start_select = this;
+        $scope.unselectAll();
+        this.root.selected = true;
+        $scope.end.$selected[u] = this.root;
+       }
      }
      else if ($scope.selectedUris().length != 1) {
+      $scope.start_select = this;
       // Either nothing is selected, or multiple things are selected.
+      console.log("selectedUris != 1");
       $scope.unselectAll();
       this.root.selected = true;
       $scope.end.$selected[u] = this.root;
-    } else if ($scope.selectedUris().length = 1){
+    }else if ($scope.selectedUris().length = 1){
+      console.log("selectedUris == 1");
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
       if (!selected) {
+        $scope.start_select = this;
         this.root.selected = true;
         $scope.end.$selected[u] = this.root;
       }
@@ -321,6 +348,7 @@ angular.module('stork.transfer.browse', [
   $scope.unselectAll = function () {
     var s = $scope.end.$selected;
     if (s) _.each(s, function (f) {
+      f.selected = false;
       delete f.selected;
     });
     $scope.end.$selected = {};
