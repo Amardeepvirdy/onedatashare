@@ -116,7 +116,7 @@ angular.module('stork.transfer.queue', [])
         for (var i in jobs) {
           var j = jobs[i];
           var i = j.job_id+'';
-          if (!i)
+          if (!j)
             continue;
           if (!$scope.jobs)
             $scope.jobs = { };
