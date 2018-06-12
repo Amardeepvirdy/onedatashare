@@ -5,8 +5,8 @@ import stork.module.*;
 
 public class FTPModule extends Module<FTPResource> {
   {
-    name("Stork FTP Module");
-    protocols("ftp", "gsiftp", "gridftp");
+    name("Stork GridFTP Module");
+    protocols("gsiftp", "gridftp");
     description(
       "A module for interacting with FTP systems and derivatives thereof.",
       "Supports RFC 2228 security extensions with GSSAPI, as well as a few",

@@ -21,6 +21,7 @@ public class ModuleTable {
   public void populate() {
     // Load built-in modules.
     // TODO: Automatic discovery for built-in modules.
+    register(new stork.module.ftpNew.FTPNewModule());
     register(new stork.module.ftp.FTPModule());
     register(new stork.module.irods.IRODSModule());
     register(new stork.module.http.HTTPModule());
