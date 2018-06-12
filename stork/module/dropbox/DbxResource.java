@@ -160,6 +160,8 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
           //End changes for Issue #21
           finish();
           return null;
+        } public void done() {
+          finish();
         } public void fail(Throwable t) {
           finish();
         }
@@ -175,8 +177,8 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     protected Bell<?> start() {
       return initialize().and((Bell<Stat>)source().stat()).new As<Void>() {
         public Void convert(Stat stat) throws Exception {
-          upload = session.client.files().upload(
-                  destination().path.toString());
+          upload = session.client.files().uploadBuilder(
+                  destination().path.toString()).withMode(WriteMode.OVERWRITE).start();
           return null;
         } public void fail(Throwable t) {
           finish(t);

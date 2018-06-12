@@ -182,7 +182,7 @@ class SFTPResource extends Resource<SFTPSession, SFTPResource> {
       protected Bell start() {
         return initialize().and((Bell<Stat>)source().stat()).new As<Void>() {
           public Void convert(Stat stat) throws Exception {
-            os = session.channel.put(path.toString());
+            os = session.channel.put(path.toString(), ChannelSftp.OVERWRITE);
             return null;
           } public void fail(Throwable t) {
             finish(t);
