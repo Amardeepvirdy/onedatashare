@@ -226,6 +226,8 @@ angular.module('stork.transfer.browse', [
       return alert('You must select a file.');
     else if (uris.length > 1)
       return alert('You must select exactly one file.');
+
+
     stork.share({
       uri: uris[0],
       credential: $scope.end.credential
@@ -272,7 +274,6 @@ angular.module('stork.transfer.browse', [
     var u = this.path();
 
     // Enable to choose mutiple files.
-
 
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
 
@@ -336,6 +337,7 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.dragAndDrop = function (e) {
+    console.log("drag and drop");
     var scope = this;
     var u = this.path();
     $scope.end.$selected[u] = this.root;
@@ -418,30 +420,40 @@ angular.module('stork.transfer.browse', [
   }
 
   $scope.storkDragStart = function (e) {
+    console.log("stork drag start");
     /** or e.target.style.opacity = '.8';*/
     this.style.opacity='.8';
+    console.log(this)
     e.dataTransfer.setData('text', e.target.root);
     ;
   };
   $scope.storkDragEnd = function (e) {
+    console.log("stork drag end");
+    this.root.selected = false;
     this.style.opacity='1';
   };
   $scope.storkDragOver = function (e) {
-    e.preventDefault();   
+
+    console.log("stork drag over");
+    console.log(this);
+    e.preventDefault();
   };
   $scope.storkDragEnter = function (e) {
+    console.log("stork drag enter");
     e.target.style.opacity=".3";
   };
   $scope.storkDragLeave = function (e) {
+    console.log("stork drag leave");
     e.target.style.opacity="";
   };
   $scope.storkDrop = function (e) {
     e.preventDefault();
+    console.log("stork drag drop");
     e.target.style.opacity="";    
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
-    $scope.transfer('left','right',false);
+        $scope.transfer('left','right',false);
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
-    $scope.transfer('right','left',false);
+        $scope.transfer('right','left',false);
     $scope.unselectAll();
   };
 
