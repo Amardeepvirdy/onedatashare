@@ -431,6 +431,7 @@ angular.module('stork.transfer.browse', [
     console.log("stork drag end");
     this.root.selected = false;
     this.style.opacity='1';
+    e.target.style.background ="";
   };
   $scope.storkDragOver = function (e) {
 
@@ -441,10 +442,12 @@ angular.module('stork.transfer.browse', [
   $scope.storkDragEnter = function (e) {
     console.log("stork drag enter");
     e.target.style.opacity=".3";
+    e.target.style.background ="#006ccc";
   };
   $scope.storkDragLeave = function (e) {
     console.log("stork drag leave");
     e.target.style.opacity="";
+    e.target.style.background ="";
   };
   $scope.storkDrop = function (e) {
     e.preventDefault();
