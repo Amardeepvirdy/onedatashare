@@ -36,6 +36,7 @@ angular.module('stork.transfer.browse', [
 
   /** Get an endpoint by name. */
   this.get = function (name) {
+    console.log(ends);
     return ends[name] || (ends[name] = {});
   };
 })
@@ -220,6 +221,18 @@ angular.module('stork.transfer.browse', [
     stork.get(end);
   };
 
+   $scope.upload = function (uris) {
+      if (uris == undefined || uris.length == 0)
+        return alert('You must select a file.');
+      else if (uris.length > 1)
+        return alert('You can only upload one file at a time.');
+      var end = {
+        uri: uris[0],
+        credential: $scope.end.credential
+      };
+      stork.get(end);
+    };
+
   // Share the selected file.
   $scope.share = function (uris) {
     if (uris == undefined || uris.length == 0)
@@ -313,12 +326,11 @@ angular.module('stork.transfer.browse', [
      else if ($scope.selectedUris().length != 1) {
       $scope.start_select = this;
       // Either nothing is selected, or multiple things are selected.
-      console.log("selectedUris != 1");
+
       $scope.unselectAll();
       this.root.selected = true;
       $scope.end.$selected[u] = this.root;
     }else if ($scope.selectedUris().length = 1){
-      console.log("selectedUris == 1");
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
@@ -337,7 +349,6 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.dragAndDrop = function (e) {
-    console.log("drag and drop");
     var scope = this;
     var u = this.path();
     $scope.end.$selected[u] = this.root;
@@ -419,42 +430,48 @@ angular.module('stork.transfer.browse', [
     }
   }
 
-  $scope.storkDragStart = function (e) {
-    console.log("stork drag start");
+  $scope.storkDragStart = function (ele, scope) {
     /** or e.target.style.opacity = '.8';*/
-    this.style.opacity='.8';
-    console.log(this)
+    //this.style.opacity='.8';
+    if(_.size($scope.end.selected) == 0){
+        console.log("added");
+        var u = $scope.genericPath(scope);
+        scope.root.select = true;
+      $scope.end.$selected[u] = scope.root;
+      $scope.$digest();
+    }
     e.dataTransfer.setData('text', e.target.root);
-    ;
   };
-  $scope.storkDragEnd = function (e) {
-    console.log("stork drag end");
-    this.root.selected = false;
-    this.style.opacity='1';
-    e.target.style.background ="";
+  $scope.storkDragEnd = function (e, scope) {
+    //this.style.opacity='1';
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
+    scope.unselectAll();
   };
   $scope.storkDragOver = function (e) {
-
-    console.log("stork drag over");
-    console.log(this);
     e.preventDefault();
   };
-  $scope.storkDragEnter = function (e) {
-    console.log("stork drag enter");
-    e.target.style.opacity=".3";
-    e.target.style.background ="#006ccc";
+  $scope.storkDragEnter = function (e, scope) {
+    if(scope.root.file){
+        scope.$parent.root.hoverOver = true;
+        $scope.$digest();
+    }else{
+        scope.root.hoverOver = true;
+        $scope.$digest();
+    }
   };
-  $scope.storkDragLeave = function (e) {
-    console.log("stork drag leave");
-    e.target.style.opacity="";
-    e.target.style.background ="";
+  $scope.storkDragLeave = function (e, scope) {
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
   };
   $scope.storkDrop = function (e) {
     e.preventDefault();
-    console.log("stork drag drop");
-    e.target.style.opacity="";    
+    e.target.style.opacity="";
+    console.log("triggered");
+
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
         $scope.transfer('left','right',false);
+
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
         $scope.transfer('right','left',false);
     $scope.unselectAll();
@@ -466,12 +483,23 @@ angular.module('stork.transfer.browse', [
     $scope.end.credential = undefined;
     $scope.refresh();
   }
+
+  $scope.onThisSide = function (node) {
+      while(node.$parent){
+        node = node.$parent;
+        if(node.root == $scope.root){
+            console.log(node.root);
+            console.log($scope.root);
+            return true;
+        }
+      }
+      return false;
+    }
   /*Issue 10 changes ends here - Ahmad*/
    
 })
 /** Controller forclosing the browse modal. */
 .controller('BrowseModal', function ($scope, $modal, stork) {
-
 $scope.mkdir = function () {
     var modal = $modal({
       title: 'Create Directory',
