@@ -113,8 +113,14 @@ angular.module('stork.transfer', [
     modal.$scope.job = job;
     modal.$scope.submit = $scope.submit;
   };
+  //Modal to prompt the user a credential rename
+  $scope.rename = function(credName) {
+  $modal({
+        title: 'Rename',
+        contentTemplate: 'app/transfer/parts/renameCred.html'
 
-  
+    });
+  }
 
   $scope.submit = function (job, then) {
     return stork.submit(job).then(

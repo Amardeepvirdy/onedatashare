@@ -5,6 +5,7 @@ import java.util.*;
 /** Include dropbox sdk. */
 import com.dropbox.core.*;
 
+import com.dropbox.core.v2.DbxClientV2;
 import stork.core.*;
 import stork.cred.*;
 
@@ -75,7 +76,7 @@ public class DbxOAuthSession extends OAuthSession {
       StorkOAuthCred cred = new StorkOAuthCred(finish.getAccessToken());
 
       cred.userID = finish.getUserId();
-      cred.name = "Dropbox";
+      cred.name = "DropBox: " + new DbxClientV2(config, finish.getAccessToken()).users().getCurrentAccount().getName().getAbbreviatedName();
       return cred;
     } catch (Exception e) {
       e.printStackTrace();
