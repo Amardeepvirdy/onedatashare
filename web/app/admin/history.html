@@ -3,6 +3,8 @@ div .endpoints {
   background: blue;
 }
 </style>-->
+<div id="userList" class="container col-md-8 col-md-push-3 col-md-pull-1 col-xs-7 col-xs-push-4 col-xs-pull-1 headSpace">
+    <div class="panel panel-info" ng-controller="Admin">
 <div class="container panel-group headSpace">
   <div class="panel panel-info"  ng-init="page = 1" ng-controller="Queue">
     <div class="hidden-xs clearfix panel-heading" style="font-weight: bold">
@@ -28,8 +30,9 @@ div .endpoints {
       </div>
       <div class="col-sm-4 text-left vertical-center">Source/Destination</div>
     </div>
+      <div class="col-sm-3 text-center vertical-center">Username</div>
 
-<!-- toolbar for reorderring jobs-->
+      <!-- toolbar for reorderring jobs-->
     <div class="panel-heading visible-xs">
       <button type="button" ng-click="predicate='job_id';reverse=!reverse">Sort by job ID</button>  &nbsp&#124
       <button type="button" ng-click="predicate='bytes.avg';reverse=!reverse">Sort by average speed</button>

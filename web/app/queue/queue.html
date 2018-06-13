@@ -18,7 +18,7 @@ div .endpoints {
           </span>
         </div>
       <div class="col-sm-3 text-center vertical-center">Progress</div>
-      <div class="col-sm-2 text-center">Average Speed
+        <div class="col-sm-2 text-center">Average Speed
          <span class="btn-group-vertical">
              <div class="btn-group">
                <button title="from slow to fast" type="button" class="fa fa-sort-up" ng-click="predicate='bytes.avg'; reverse=false" > </button></div>
@@ -29,7 +29,7 @@ div .endpoints {
       <div class="col-sm-4 text-left vertical-center">Source/Destination</div>
     </div>
 
-<!-- toolbar for reorderring jobs-->
+<!-- toolbar for reordering jobs-->
     <div class="panel-heading visible-xs">
       <button type="button" ng-click="predicate='job_id';reverse=!reverse">Sort by job ID</button>  &nbsp&#124
       <button type="button" ng-click="predicate='bytes.avg';reverse=!reverse">Sort by average speed</button>
@@ -178,7 +178,6 @@ div .endpoints {
                   {{j.run_timer.start | moment}}
                 </abbr>
               </dd>
-
               <dt class="col-sm-4" ng-if="j.queue_timer.end > 0">Job Completed</dt>
               <dd class="col-sm-8" ng-if="j.queue_timer.end > 0">
                 <abbr title="{{j.queue_timer.end | date:'medium'}}">
