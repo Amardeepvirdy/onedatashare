@@ -132,21 +132,32 @@
         </button>
 	  </div>
 	  <!-- Issue 10 changes ends here - Ahmad -->
+      <div class="btn-group">
+        <button class="btn btn-default" title="Upload" ngf-select="upload($file)">
+          <i class="fa fa-folder"></i>
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- Where files are displayed and can be browsed. -->
   <div class="tree" ng-class="{'hide-dots': !showHidden}">
     <div>
+      <!--<ul class="stork-list" ng-if="root && !error && localFS" ng-init="files = root"
+          ng-include="'browse-node-local.html'">
+      </ul>-->
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
       </ul>
-      <div ng-if="error && error.type != 'AuthenticationRequired'"
+      <div ng-if="error && error.type != 'AuthenticationRequired' && error.type != 'LocalFileSystem'"
            class="alert alert-danger" style="overflow-x: auto">
         <strong>Error:</strong> <span ng-bind="error.error"></span>
       </div>
       <div ng-if="error.type == 'AuthenticationRequired'"
            ng-include="'/app/transfer/parts/authenticationRequired.html'">
+      </div>
+      <div ng-if="error.type == 'LocalFileSystem'"
+           ng-include="'/app/transfer/parts/selectLocalFileSystem.html'">
       </div>
     </div>
   </div>
