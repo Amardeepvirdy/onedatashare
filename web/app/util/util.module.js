@@ -161,10 +161,10 @@ angular.module('stork.util', [
   return {   
     /** link to add event listener */
     link: function (scope, element, attrs) {
-      element[0].addEventListener("dragstart",scope.storkDragStart,false);
-      element[0].addEventListener("dragend",scope.storkDragEnd,false);
-      element[0].addEventListener("dragenter", scope.storkDragEnter, false);
-      element[0].addEventListener("dragleave",scope.storkDragLeave, false);
+      element[0].addEventListener("dragstart",(e)=>{scope.storkDragStart(e, scope)},false);
+      element[0].addEventListener("dragend",(e)=>{ scope.storkDragEnd(e, scope)},false);
+      element[0].addEventListener("dragenter",(e)=>{ scope.storkDragEnter(e, scope)}, false);
+      element[0].addEventListener("dragleave",(e)=>{ scope.storkDragLeave(e, scope) }, false);
     }
   };
 })
