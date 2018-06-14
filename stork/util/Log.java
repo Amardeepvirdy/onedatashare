@@ -62,18 +62,7 @@ public abstract class Log {
       }
 
       log.log(lr);
-      fh.flush();
-      fh.close();
-      log.removeHandler(fh);
-      FileHandler fh2 = null;
-      try {
-          fh2 = new FileHandler("../onedatashare/stork/core/server/LogFiles/" + dtf.format(date) + " log.log",true);
-      }catch (IOException e) {
-          System.out.println("Error reading/writing to log file.  Wrong path?");
-      }
 
-      fh2.setFormatter(new SimpleFormatter());
-      log.addHandler(fh2);
     }
   } public static void finest(Object... o) {
     log(FINEST, o);

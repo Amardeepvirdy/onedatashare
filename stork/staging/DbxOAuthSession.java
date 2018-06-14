@@ -76,7 +76,7 @@ public class DbxOAuthSession extends OAuthSession {
       StorkOAuthCred cred = new StorkOAuthCred(finish.getAccessToken());
 
       cred.userID = finish.getUserId();
-      cred.name = "DropBox: " + new DbxClientV2(config, finish.getAccessToken()).users().getCurrentAccount().getName().getAbbreviatedName();
+      cred.name = "DropBox: " + new DbxClientV2(config, finish.getAccessToken()).users().getCurrentAccount().getEmail();
       return cred;
     } catch (Exception e) {
       e.printStackTrace();
