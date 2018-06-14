@@ -6,7 +6,7 @@
   font-size: 0.9em;
   white-space: normal;
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: hidden;
   text-align: left;
 }
 
