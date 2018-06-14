@@ -54,7 +54,6 @@ div .endpoints {
             <div title="cancel" class="btn-group">
             <button class="btn btn-default fa fa-remove" ng-click="cancel(j)" ng-disabled="filters.done(j)"></button></div>
           </div>
-          <!---->
           <div class="col-xs-5 visible-xs">
              &nbsp Job ID
           </div>
@@ -62,7 +61,6 @@ div .endpoints {
           <div class="col-xs-7 col-sm-1 text-center">
             {{j.job_id}}
           </div>
-          
           <div class="col-xs-5 visible-xs">
             &nbspProgress
           </div>
@@ -80,7 +78,13 @@ div .endpoints {
               </span>
             </div>
           </div>
+              <div ng-init="p = j.User" class="col-xs-5 visible-xs">
+                  &nbsp Username
+              </div>
 
+              <div class="col-xs-7 col-sm-5 text-right">
+                  {{j.owner}}
+              </div>
           <div ng-init="p = j.bytes" class="col-xs-5 visible-xs">
             &nbspAverage Speed
           </div>
