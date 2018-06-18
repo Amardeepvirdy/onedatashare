@@ -1,11 +1,11 @@
 'use strict';
 
 /** Module for monitoring transfers. */
-angular.module('stork.transfer.queue', [])
+angular.module('stork.transfer.history', [])
 //in the main/stork.module.js: q->backend, backend handled inside the......
 //Adding the user column, sort the user, sort the job ID in both ways.
 //Separate, for user-admin interface.
-.controller('Queue', function ($scope, $filter, $rootScope, stork, $timeout, $modal) {
+.controller('History', function ($scope, $filter, $rootScope, stork, $timeout, $modal) {
   $scope.filters = {
     all: function (j) {
       return true
@@ -114,18 +114,21 @@ angular.module('stork.transfer.queue', [])
 
   $scope.refresh = function () {
     return stork.q().then(
-      function (jobs) {
-        for (var i in jobs) {
-          var j = jobs[i];
-          var i = j.job_id+'';
-          if (!i)
-            continue;
-          if (!$scope.jobs)
-            $scope.jobs = { };
-          if ($scope.jobs[i])
-            angular.extend($scope.jobs[i], j);
-          else
-            $scope.jobs[i] = j;
+      function(jobs){
+            var k = 0;
+                    for (var i in jobs) {
+                      var j = jobs[i];
+                      if (!j)
+                        continue;
+                      var i = k++ + '';
+                      if (!i)
+                        continue;
+                      if (!$scope.jobs)
+                        $scope.jobs = { };
+                      if ($scope.jobs[i])
+                        angular.extend($scope.jobs[i], j);
+                      else
+                        $scope.jobs[i] = j;
         }
       }
     );

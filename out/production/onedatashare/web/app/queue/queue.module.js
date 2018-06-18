@@ -115,18 +115,21 @@ angular.module('stork.transfer.queue', [])
 
   $scope.refresh = function () {
     return stork.q().then(
-      function (jobs) {
-        for (var i in jobs) {
-          var j = jobs[i];
-          var i = j.job_id+'';
-          if (!i)
-            continue;
-          if (!$scope.jobs)
-            $scope.jobs = { };
-          if ($scope.jobs[i])
-            angular.extend($scope.jobs[i], j);
-          else
-            $scope.jobs[i] = j;
+    function(jobs){
+      var k = 0;
+              for (var i in jobs) {
+                var j = jobs[i];
+                if (!j)
+                  continue;
+                var i = k++ + '';
+                if (!i)
+                  continue;
+                if (!$scope.jobs)
+                  $scope.jobs = { };
+                if ($scope.jobs[i])
+                  angular.extend($scope.jobs[i], j);
+                else
+                  $scope.jobs[i] = j;
         }
       }
     );

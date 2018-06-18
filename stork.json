@@ -169,6 +169,31 @@
       "max_attempts": 10,
       "status": "complete",
       "attempts": 1
+    },
+    {
+      "owner": "aptsubl@gmail.com",
+      "src": {
+        "uri": "ftp://speedtest.tele2.net/50MB.zip"
+      },
+      "dest": {
+        "uri": "ftp://speedtest.tele2.net/upload/50MB.zip"
+      },
+      "uuid": "d1e7bb36-f06e-4033-88e7-ab75aeb1b2f0",
+      "times": {
+        "scheduled": 1528963495334,
+        "started": 1528963495337,
+        "completed": 1528963801796
+      },
+      "bytes": {
+        "total": 52428800,
+        "avg": 171335.9477124183,
+        "inst": 129864.34846641321,
+        "done": 52428800
+      },
+      "job_id": 2,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 4
     }
   ],
   "shares": {
@@ -222,11 +247,12 @@
       "credentials": {
       },
       "jobs": [
-        "0e6b39c3-1d92-414a-8082-65f33e570fd2"
+        "0e6b39c3-1d92-414a-8082-65f33e570fd2",
+        "d1e7bb36-f06e-4033-88e7-ab75aeb1b2f0"
       ],
       "history": [
-        "ftp://speedtest.tele2.net/upload",
         "ftp://speedtest.tele2.net/",
+        "ftp://speedtest.tele2.net/upload",
         "dropbox:/"
       ],
       "registerMoment": 0,
