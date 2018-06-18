@@ -78,12 +78,7 @@ angular.module('stork.transfer', [
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
-    if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
-      /*$modal({
-      title: 'ATTENTION',
-      contentTemplate: 'transfer-error.html',
-      });*/
-      return false;
+
     if(!$scope.flag)
       return false;
     return true;

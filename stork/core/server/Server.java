@@ -233,6 +233,7 @@ public class Server {
     handlers.put("q",      QHandler.class);
     handlers.put("status", QHandler.class);
     handlers.put("submit", SubmitHandler.class);
+    handlers.put("upload", UploadHandler.class);
     handlers.put("user",   UserHandler.class);
 
     modules.populate();
