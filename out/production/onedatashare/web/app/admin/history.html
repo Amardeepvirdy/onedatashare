@@ -29,12 +29,21 @@ div .endpoints {
           </span>
       </div>
       <div class="col-sm-4 text-left vertical-center">Source/Destination</div>
-        <div class="col-sm-4 text-right vertical-center">Username</div>
+        <div class="col-sm-4 text-right vertical-center">
+            Username
+            <span class="btn-group-vertical">
+             <div class="btn-group">
+               <button title="from first to end" type="button" class="fa fa-sort-up" ng-click="predicate='owner'; reverse=false" > </button></div>
+             <div class="btn-group">
+               <button title="from end to first" type="button" class="fa fa-sort-desc" ng-click="predicate='-owner'; reverse=false" > </button> </div>
+          </span>
+        </div>
     </div>
       <!-- toolbar for reorderring jobs-->
     <div class="panel-heading visible-xs">
       <button type="button" ng-click="predicate='job_id';reverse=!reverse">Sort by job ID</button>  &nbsp&#124
       <button type="button" ng-click="predicate='bytes.avg';reverse=!reverse">Sort by average speed</button>
+        <button type="button" ng-click="predicate='owner';reverse=!reverse">Sort by username</button>  &nbsp&#124
     </div>
 
     <div class="panel-body">
