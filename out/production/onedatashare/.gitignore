@@ -1,0 +1,10 @@
+*.class
+*.war
+*.ear
+*.swp
+*.dmp
+*.dap
+doc
+build
+.project
+.classpath
