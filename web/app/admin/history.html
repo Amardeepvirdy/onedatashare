@@ -3,7 +3,7 @@ div .endpoints {
   background: blue;
 }
 </style>-->
-<div id="userList" class="container col-md-8 col-md-push-3 col-md-pull-1 col-xs-7 col-xs-push-4 col-xs-pull-1 headSpace">
+<div id="userList" class="container col-md-8 col-md-push-3 col-md-pull-1 col-xs-7 col-xs-push-4 headSpace">
     <div class="panel panel-info" ng-controller="History">
 <div class="container panel-group headSpace">
   <div class="panel panel-info"  ng-init="page = 1" ng-controller="Queue">
@@ -38,8 +38,9 @@ div .endpoints {
                <button title="from end to first" type="button" class="fa fa-sort-desc" ng-click="predicate='-owner'; reverse=false" > </button> </div>
           </span>
         </div>
+        <!--<div class="col-sm-2 "></div>-->
     </div>
-      <!-- toolbar for reorderring jobs-->
+      <!-- toolbar for reordering jobs-->
     <div class="panel-heading visible-xs">
       <button type="button" ng-click="predicate='job_id';reverse=!reverse">Sort by job ID</button>  &nbsp&#124
       <button type="button" ng-click="predicate='bytes.avg';reverse=!reverse">Sort by average speed</button>
@@ -87,13 +88,6 @@ div .endpoints {
               </span>
             </div>
           </div>
-              <div ng-init="p = j.User" class="col-xs-5 visible-xs">
-                  &nbsp Username
-              </div>
-
-              <div class="col-xs-7 col-sm-5 text-right">
-                  {{j.owner}}
-              </div>
           <div ng-init="p = j.bytes" class="col-xs-5 visible-xs">
             &nbspAverage Speed
           </div>
@@ -102,11 +96,18 @@ div .endpoints {
             <!--<span ng-show="!p || p.avg <= 0">&nbsp</span>
             <span ng-hide="!p || p.inst <= 0">({{p.inst|size:2}}B/s)</span>-->
           </div>
+              <div ng-init="p = j.User" class="col-xs-1 visible-xs">
+                  &nbsp Username
+              </div>
+
+              <div class="pull-right col-xs-7 col-sm-3 text-right clearfix endpoints">
+                  {{j.owner}}
+              </div>
 
           <div class="col-xs-5 visible-xs">
             &nbspEndpoints
           </div>
-          <div class="col-xs-7 col-sm-3 clearfix endpoints ">
+          <div class="col-xs-7 col-sm-2 clearfix endpoints">
             <span>{{j.src.uri}}<i class="fa fa-long-arrow-right"></i></span> 
             <span>{{j.dest.uri}}</span>
           </div>

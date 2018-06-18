@@ -1,13 +1,13 @@
 
 /* endpoints layout */
 .endpoints {  
-  padding-left: 10px;
-  padding-top: 0 !important;
+  padding-left: 5px;
+  padding-top: 1;
   font-size: 0.9em;
   white-space: normal;
   overflow-x: auto;
-  overflow-y: hidden;
-  text-align: left;
+  overflow-y: auto;
+  text-align: right;
 }
 
 @media all and (max-width: 750px) {
@@ -16,7 +16,7 @@
     font-size: 0.9em;
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
   }
 }
 
