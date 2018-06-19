@@ -10,8 +10,9 @@ import stork.feather.errors.*;
 import stork.feather.util.*;
 
 public class DbxResource extends Resource<DbxSession, DbxResource> {
-  DbxResource(DbxSession session, Path path) {
-    super(session, path);
+
+  DbxResource(DbxSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public synchronized Emitter<String> list() {
@@ -33,7 +34,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
       @Override
       public DbxResource run() throws Exception {
         CreateFolderResult cfr = session.client.files().createFolderV2(path.toString());
-        return new DbxResource(session, path);
+        return new DbxResource(session, path, null);
       }
     }.startOn(initialize());
   }

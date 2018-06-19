@@ -11,8 +11,8 @@ public class LocalResource extends Resource<LocalSession,LocalResource> {
   // Separate reference to work around javac bug.
   LocalSession session;
 
-  public LocalResource(LocalSession session, Path path) {
-    super(session, path);
+  public LocalResource(LocalSession session, Path path, String id) {
+    super(session, path, id);
     this.session = session;
   }
 

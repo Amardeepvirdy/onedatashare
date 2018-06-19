@@ -80,11 +80,40 @@ angular.module('stork.transfer', [
     var job = angular.copy($scope.job);
     job.src = src;
     job.dest = dest;
-    var su = _.keys(src.$selected);//[0];
-    var du = _.keys(dest.$selected)[0];
+    var su = src.$selectedPaths;
+    var du = dest.$selectedPaths[0];
+    /*var su = _.keys(src.$selected);//[0];
+    var du = _.keys(dest.$selected)[0];*/
     var dest_uris = "";
     var src_uris = "";
-    for (var i = 0; i < _.keys(src.$selected).length; i++) {
+    for(var i = 0; i < src.$selectedPaths.length; i++){
+        if(src.$selected[i].hasOwnProperty('id')) {
+            job.src.selectedFolderIds += src.$selected[i].id;
+        }
+        if(dest.$selected[0].dir){
+            var n = new URI(su[i]).segment(-1);
+            dest_uris += new URI(du).segment(n).toString().trim();
+        }
+        src_uris += su[i].trim();
+        if (i + 1 != src.$selectedPaths.length) {
+            dest_uris += ",";
+            src_uris += ",";
+            job.src.selectedFolderIds += ",";
+        }
+    }
+    if(dest.$selected[0].hasOwnProperty('id')) {
+        job.dest.selectedFolderIds += dest.$selected[0].id;
+    }
+
+    if(job.src.selectedFolderIds === "") {
+        job.src.selectedFolderIds = null;
+    }
+
+    if(job.dest.selectedFolderIds === "") {
+        job.dest.selectedFolderIds = null;
+    }
+
+    /*for (var i = 0; i < _.keys(src.$selected).length; i++) {
         console.log("key: " + _.keys(src.$selected)[i]);
         if (dest.$selected[du].dir) {
             var n = new URI(su[i]).segment(-1);
@@ -95,7 +124,7 @@ angular.module('stork.transfer', [
             dest_uris += ",";
             src_uris += ",";
         }
-    }
+    }*/
     job.dest.uri = du = dest_uris;
     job.src.uri = su = src_uris;
     console.log("new dest_uris: "+job.dest.uri);

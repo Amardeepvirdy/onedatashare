@@ -28,14 +28,14 @@ import java.util.List;
 public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveResource> {
 
   static GoogleClientSecrets clientSecrets;
-  Drive service;
+  transient Drive service;
 
   public GoogleDriveSession(URI uri, Credential cred) {
     super(uri, cred);
   }
 
-  public GoogleDriveResource select(Path path) {
-    return new GoogleDriveResource(this, path);
+  public GoogleDriveResource select(Path path, String id) {
+    return new GoogleDriveResource(this, path, id);
   }
 
   static String APPLICATION_NAME = "OneDataShare";
@@ -43,7 +43,7 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
   private static FileDataStoreFactory DATA_STORE_FACTORY;
   private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
   private static HttpTransport HTTP_TRANSPORT;
-  private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
+  private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_READONLY);
 
   public static void initGoogle() {
     try {

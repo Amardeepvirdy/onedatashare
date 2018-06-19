@@ -10,8 +10,8 @@ public class DbxModule extends Module<DbxResource> {
     description("Experimental Dropbox module.");
   }
 
-  public DbxResource select(URI uri, Credential credential) {
+  public DbxResource select(URI uri, Credential credential, String id) {
     URI endpoint = uri.endpointURI(), resource = uri.resourceURI();
-    return new DbxSession(endpoint, credential).select(resource.path());
+    return new DbxSession(endpoint, credential).select(resource.path(), id);
   }
 }

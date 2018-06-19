@@ -10,9 +10,9 @@ public class HTTPModule extends Module<HTTPResource> {
     description("A module for interacting with HTTP(S) resources.");
   }
 
-  public HTTPResource select(URI uri, Credential credential) {
+  public HTTPResource select(URI uri, Credential credential, String id) {
     URI ep = uri.endpointURI(), res = uri.resourceURI();
     //return new HTTPSession(ep).select(res.path(), res.query());
-    return new HTTPSession(ep).select(res.path());
+    return new HTTPSession(ep).select(res.path(), id);
   }
 }

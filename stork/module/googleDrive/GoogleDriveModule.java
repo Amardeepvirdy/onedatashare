@@ -10,8 +10,8 @@ public class GoogleDriveModule extends Module<GoogleDriveResource> {
     description("Experimental Google Drive module.");
   }
 
-  public GoogleDriveResource select(URI uri, Credential credential) {
+  public GoogleDriveResource select(URI uri, Credential credential, String id) {
     URI endpoint = uri.endpointURI(), resource = uri.resourceURI();
-    return new GoogleDriveSession(endpoint, credential).select(resource.path());
+    return new GoogleDriveSession(endpoint, credential).select(resource.path(), id);
   }
 }
