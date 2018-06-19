@@ -1,0 +1,65 @@
+Jun 14, 2018 7:42:16 PM stork.core.server.Server <init>
+INFO: Loading server...
+Jun 14, 2018 7:42:16 PM stork.core.server.Server <init>
+INFO: Server config: {
+  "state_file": "stork.json",
+  "request_timeout": 5.0,
+  "max_history": 10,
+  "listen": [
+    "tcp://127.0.0.1:57024/",
+    "http://127.0.0.1:8080/api/stork"
+  ],
+  "web_service_url": "http://127.0.0.1:8080/",
+  "state_save_interval": 120,
+  "dropbox": {
+    "redirect": "http://127.0.0.1:8080/api/stork/oauth",
+    "secret": "l0v6r35zvi2nwrv",
+    "key": "t45hk61xvn5imgt"
+  },
+  "smtp_server": "smtp.buffalo.edu",
+  "max_attempts": 10,
+  "registration": true,
+  "connect": "tcp://localhost:57024/",
+  "email": "OneDataShare <noreply@onedatashare.org>",
+  "max_jobs": 10
+}
+Jun 14, 2018 7:42:16 PM stork.core.server.Server loadServerState
+INFO: Loading server state file: stork.json
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO: Registered module "stork_ftp_module" [handle: stork_ftp_module]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO:   Registering protocol(s): [ftp, gridftp, gsiftp]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO: Registered module "stork_irods_module" [handle: stork_irods_module]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO:   Registering protocol(s): [irods]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO: Registered module "stork_http_module" [handle: stork_http_module]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO:   Registering protocol(s): [http, https]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO: Registered module "stork_dbx_module" [handle: stork_dbx_module]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO:   Registering protocol(s): [dropbox]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO: Registered module "stork_sftp_module" [handle: stork_sftp_module]
+Jun 14, 2018 7:42:16 PM stork.module.ModuleTable register
+INFO:   Registering protocol(s): [scp, sftp]
+Jun 14, 2018 7:42:16 PM stork.core.server.DumpStateThread <init>
+INFO: Starting server state dump thread.
+Jun 14, 2018 7:42:16 PM stork.core.commands.StorkServer execute
+INFO: Listening for TCP connections on: 127.0.0.1:57024
+Jun 14, 2018 7:42:16 PM stork.core.commands.StorkServer execute
+INFO: Listening for HTTP connections on: 127.0.0.1:8080
+Jun 14, 2018 7:42:16 PM stork.core.net.HTTPServer createStaticServer
+INFO: Serving static web files from web directory at http://127.0.0.1:8080/
+Jun 14, 2018 7:42:20 PM stork.core.server.Server issueRequest
+FINE: Enqueuing request: {
+  "command": "user",
+  "action": "login"
+}
+Jun 14, 2018 7:42:22 PM stork.core.server.Server issueRequest
+FINE: Enqueuing request: {
+  "command": "user",
+  "action": "history"
+}
