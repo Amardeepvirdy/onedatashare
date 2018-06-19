@@ -1,13 +1,13 @@
 package stork.util;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.*;
 import static java.util.logging.Level.*;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.FileHandler;
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 // A slightly more convenient logging utility.
 
 public abstract class Log {
@@ -17,8 +17,8 @@ public abstract class Log {
   // object can optionally be a throwable to print a stack trace.
   public static void log(Level l, Object... o){
       //Writes log input to file in project path
-      LocalDateTime date = LocalDateTime.now();
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      Date date = new Date();
+      SimpleDateFormat dtf = new SimpleDateFormat("MM-dd-yyyy");
       FileHandler fh = null;
       log.setLevel(Level.ALL);
       File f = new File("../onedatashare/stork/core/server/LogFiles/" +  dtf.format(date) + " log.log");
@@ -56,24 +56,15 @@ public abstract class Log {
       LogRecord lr = new LogRecord(l, StorkUtil.joinWith("", o));
       lr.setThrown(t);
 
+
       if (i < st.length) {
         lr.setSourceClassName(st[i].getClassName());
         lr.setSourceMethodName(st[i].getMethodName());
       }
 
       log.log(lr);
-      fh.flush();
       fh.close();
-      log.removeHandler(fh);
-      FileHandler fh2 = null;
-      try {
-          fh2 = new FileHandler("../onedatashare/stork/core/server/LogFiles/" + dtf.format(date) + " log.log",true);
-      }catch (IOException e) {
-          System.out.println("Error reading/writing to log file.  Wrong path?");
-      }
 
-      fh2.setFormatter(new SimpleFormatter());
-      log.addHandler(fh2);
     }
   } public static void finest(Object... o) {
     log(FINEST, o);
