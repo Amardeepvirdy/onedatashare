@@ -299,11 +299,11 @@
     "vanditsa@buffalo.edu": {
       "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10",
       "credentials": {
-        "83f5ad20-d65f-409b-a0ff-6734f2c6ad76": {
-          "name": "DropBox: JF",
+        "4a85a9b9-e6f0-4c70-934b-d98ad6b64dba": {
+          "name": "DropBox: javierfalca1@gmail.com",
           "type": "oauth",
           "userID": "297932535",
-          "token": "xrNqXEY0jrYAAAAAAAAAnmGqCJasg4oYOxqVUA0123ZabyUqzqpgVX3Wjtfyu1Qo"
+          "token": "xrNqXEY0jrYAAAAAAAAAs1mWrDaJhmvkoGS-yrG-g7mzAOF5aUgADQZtw5WSkLp7"
         }
       },
       "jobs": [
