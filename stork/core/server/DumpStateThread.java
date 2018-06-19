@@ -4,7 +4,6 @@ import java.io.*;
 
 import stork.ad.*;
 import stork.core.*;
-import stork.feather.util.MethodLogs;
 import stork.util.*;
 
 /**
@@ -80,10 +79,9 @@ public class DumpStateThread extends Thread {
       pw = new PrintWriter(temp_file, "UTF-8");
 
       pw.print(Ad.marshal(object).toJSON());
-      //System.out.println(Ad.marshal(object).toJSON().getClass().getSimpleName());
       pw.close();
       pw = null;
-      MethodLogs.storkMessages(Ad.marshal(object).toJSON());
+
       if (!temp_file.renameTo(state_file))
         throw new RuntimeException("Could not rename temp dump file.");
     } catch (Exception e) {

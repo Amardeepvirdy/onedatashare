@@ -1,5 +1,0 @@
-[submodule "doc"]
-	path = doc
-	url = https://github.com/didclab/stork.git
-	branch = gh-pages
-	update = merge
