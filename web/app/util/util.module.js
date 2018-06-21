@@ -173,7 +173,7 @@ angular.module('stork.util', [
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      element[0].addEventListener("drop",scope.storkDrop,false);
+      element[0].addEventListener("drop",(e)=>{scope.storkDrop(e, scope)},false);
       element[0].addEventListener("dragover", scope.storkDragOver,false);
     }    
   };
