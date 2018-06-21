@@ -54,7 +54,6 @@ angular.module('stork.transfer.browse', [
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
-
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
     $scope.uri = {};
@@ -64,7 +63,7 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.reset();
-
+  $scope.timer = [];
   // Example display
   $scope.exDisplay = function (uri) {
     uri = new URI(uri).normalize();
@@ -79,6 +78,7 @@ angular.module('stork.transfer.browse', [
 
   // Set the endpoint URI.
   $scope.go = function (uri) {
+    console.log("scope going");
     if (!uri)
       return $scope.reset();
     if (typeof uri === 'string')
@@ -284,11 +284,12 @@ angular.module('stork.transfer.browse', [
   $scope.select = function (e) {
     var scope = this;
     var u = this.path();
+    // if dragging, dont select anything;
+    if($scope.dragO != null){return}
 
     // Enable to choose mutiple files.
-
+    console.log("select triggered");
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
-
     if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
       this.root.selected = !this.root.selected;
       if (this.root.selected){
@@ -430,40 +431,40 @@ angular.module('stork.transfer.browse', [
   }
 
   $scope.storkDragStart = function (ele, scope) {
-    /** or e.target.style.opacity = '.8';*/
-    //this.style.opacity='.8';
-    if(_.size($scope.end.selected) == 0){
+    if(_.size($scope.end.$selected) == 0){
       var u = $scope.genericPath(scope);
       scope.root.select = true;
       $scope.end.$selected[u] = scope.root;
-      $scope.$digest();
+
     }
-    if(ele){
-        ele.dataTransfer.setData('text', ele.target.root);
-    }
+    $scope.dragO = _.size($scope.end.$selected);
+
+    $scope.$digest();
+    console.log(scope.dragO);
   };
   $scope.storkDragEnd = function (e, scope) {
-    //this.style.opacity='1';
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
-    scope.unselectAll();
     $scope.clearTimeout($scope.timer);
+    $scope.dragO = null;
+    $scope.$digest();
   };
-  $scope.storkDragOver = function (e) {
-
+  $scope.storkDragOver = function (e, scope) {
     e.preventDefault();
+    if(scope.root.dir){
+          scope.root.hoverOver = true;
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
+     }
   };
   $scope.storkDragEnter = function (e, scope) {
     $scope.unHoverFriends(scope);
     if(scope.root.file){
           scope.$parent.root.hoverOver = true;
-          $scope.$digest();
      }else{
-
           scope.root.hoverOver = true;
-          setTimeout(function (){ $scope.timer = $scope.toggleOnLongHover(scope)}, 2000);
-          $scope.$digest();
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
      }
+     $scope.$digest();
      e.preventDefault();
   };
   $scope.toggleOnLongHover = function(node){
@@ -473,24 +474,23 @@ angular.module('stork.transfer.browse', [
   }
 
   $scope.storkDragLeave = function (e, scope) {
+
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
     $scope.clearTimeout($scope.timer);
   };
   $scope.storkDrop = function (e, scope) {
     e.preventDefault();
-    e.target.style.opacity="";
 
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
-    $scope.clearTimeout($scope.timer);
 
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
         $scope.transfer('left','right',false);
 
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
         $scope.transfer('right','left',false);
-    $scope.unselectAll();
+    $scope.$digest();
   };
 
   /*Issue 10 changes starts here - Ahmad*/
@@ -502,13 +502,18 @@ angular.module('stork.transfer.browse', [
   $scope.unHoverFriends = function(node){
     if(node.$$nextSibling){
         node.$$nextSibling.root.hoverOver = false;
+
+    }
+    if(node.$parent){
+        node.$parent.root.hoverOver = false;
     }
     if(node.$$prevSibling){
-        if(node.$$prevSibling.$$childTail && node.$$prevSibling.root.dir && node.$$prevSibling.root.files.map){
+        console.log(node.$$prevSibling);
+        /*if(node.$$prevSibling.$$childTail && node.$$prevSibling.root.dir && node.$$prevSibling.root.files.map){
             node.$$prevSibling.root.files.map((file)=>{
                 file.hoverOver = false;
             });
-        }
+        }*/
         node.$$prevSibling.root.hoverOver = false;
     }
     if(node.root.files && node.root.files.map && node.$$childHead){
@@ -518,10 +523,12 @@ angular.module('stork.transfer.browse', [
     }
   }
   $scope.clearTimeout = function(timer){
-    if(timer){
-         clearTimeout(timer);
-     }
+    timer.map((time)=>{
+        clearTimeout(time);
+    });
+    timer = [];
   }
+
   // TODO: this function does not work
   $scope.onThisSide = function (node) {
       while(node.$parent){

@@ -118,18 +118,18 @@
     <i class="fa text-muted toggle" ng-mousedown="root.dir && toggle()"
        ng-class="{'fa-minus-square-o': open, 'fa-plus-square-o': !open}"></i>
 
+
     <!-- Name, Indent and date and time of the file. -->
     <div ng-class="{'alert-info': (root.hoverOver || root.selected) , 'alert-warning': !!error}"
          ng-dblclick="toggle()" ng-mouseup="select($event)" draggable="true" droppable="true" li-drop="select($event)" >
 
+      <span  id="floatingMadam" class="badge" >{{$scope.dragO}}</span>
       <!-- Icon of directory / folder (open or closed) or file (all) -->
       <i class="fa" bo-class="{'fa-file': !root.dir}" ng-class="{'fa-folder': (root.dir && !open), 'fa-folder-open': (root.dir && open)}"></i>
 
       <!-- name and size of the files -->
       <span ng-bind-attr="{side}"></span>
       <span bo-bind="root.name"></span>
-      <span class="small text-muted" bo-if="!root.dir"
-            bo-bind="(root.size | size)+'B'"></span>
 
       <!-- if loading display an spinning icon -->
       <span class="fade fa fa-refresh text-muted" ng-class="loading && 'in fa-spin'"></span>

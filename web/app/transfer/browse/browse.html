@@ -150,6 +150,7 @@
 
   <!-- Where files are displayed and can be browsed. -->
   <div class="tree" ng-class="{'hide-dots': !showHidden}">
+
     <div>
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
