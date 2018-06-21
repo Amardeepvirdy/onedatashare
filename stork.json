@@ -318,6 +318,8 @@
       ],
       "history": [
         "dropbox:/",
+        "/heck",
+        "http:/",
         "dropbox:/test",
         "http://google.com/",
         "http://google.com/services",

@@ -17,13 +17,14 @@ public abstract class Log {
     // object can optionally be a throwable to print a stack trace.
     public static void log(Level l, Object... o){
         //Writes log input to file in project path
+        log.setUseParentHandlers(false);
         Date date = new Date();
         SimpleDateFormat dtf = new SimpleDateFormat("MM-dd-yyyy");
         FileHandler fh = null;
         log.setLevel(Level.ALL);
         File dir =  new File("../onedatashare/stork/core/LogFiles/");
 
-        File f = new File("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + " log.log");
+        File f = new File("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + ".log");
         try {
 
             if(!dir.exists()){
@@ -33,7 +34,7 @@ public abstract class Log {
             if (!f.exists()) {
                 f.createNewFile();
             }
-            fh = new FileHandler("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + " log.log",true);
+            fh = new FileHandler("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + ".log",true);
 
 
         }catch (IOException e) {

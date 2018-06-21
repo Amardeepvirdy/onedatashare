@@ -49,6 +49,7 @@ public class StorkServer extends Command {
         u = URI.EMPTY.scheme(u.path().name());
       StorkInterface si = StorkInterface.create(s, u);
       Log.info("Listening for ", si.name(), " connections on: "+si.address());
+      System.out.println("Listening for " + si.name()+ " connections on: " + si.address());
     } catch (Exception e) {
       e.printStackTrace();
       Log.warning("Could not create interface: "+e.getMessage());
