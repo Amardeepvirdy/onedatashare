@@ -403,7 +403,6 @@ body.logged-out .logged-in {
   margin-top: 0;
   height: 100%;
   position: absolute;
-  width: 12em;
 }.adminFont a {
   color: #AAAAAA;
 }.adminBar li a:hover {

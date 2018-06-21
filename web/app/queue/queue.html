@@ -3,10 +3,12 @@ div .endpoints {
   background: blue;
 }
 </style>-->
+
+<div class="col-sm-4 "></div>
 <div class="container panel-group headSpace">
   <div class="panel panel-info"  ng-init="page = 1" ng-controller="Queue">
     <div class="hidden-xs clearfix panel-heading" style="font-weight: bold">
-      <div class="col-sm-2 "></div>
+        <div class="col-sm-2"></div>
         <div class="col-sm-1 text-center">
           Job ID
 <!-- buttons for ordering jobs -->
@@ -154,7 +156,7 @@ div .endpoints {
               <dd class="col-sm-8">
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u<1000">{{u}} ms</div>
 
-<TODO: better approches to replace here... display time with second, and use filter to limit length of decimal >
+<!--TODO: better approches to replace here... display time with second, and use filter to limit length of decimal -->
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u>=1000&&u<60000">{{u/1000|number:2}} s</div>
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u>=60000">{{u/60000|number:2}} min</div>
               </dd>

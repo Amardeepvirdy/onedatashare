@@ -5,11 +5,11 @@
         <i class="collapsed fa fa-reorder" ></i>
       </button>
 
-      <a class="navbar-brand" href="/#/" ng-click = chageAdBack()>
+      <a class="navbar-brand" href="/#/" ng-click = "changeAdBack()">
         OneDataShare
       </a>
 
-      <a id="user-button" class="btn btn-default navbar-toggle logged-in" href="#/user" ng-click = chageAdBack()>
+      <a class="btn btn-default navbar-toggle logged-in" href="#/user" ng-click="changeAdBack()">
         <i class="fa fa-user"></i>
         <span ng-bind="$user.email">
           <em class="text-muted">Loading...</em>
@@ -31,11 +31,9 @@
             <span>Queue</span>
           </a>
         </li>
-      </ul>
-    
-      <ul class="nav navbar-nav logged-in" ng-cloak>
+
         <li bs-route="/admin">
-          <a href="/" ng-click="isAdmin($user)">
+          <a href="/#/admin" ng-click="isAdmin($user)">
             <i class="fa fa-laptop"></i>
             <span>Admin</span>
           </a>
@@ -43,18 +41,18 @@
       </ul>
 
       <ul ng-controller="User" class="nav navbar-nav navbar-right">
-        <li class="hidden-xs" bs-route="/user">
-          <a id="user-button" class="logged-in" href="/#/user" ng-cloak>
+        <li class="hidden-xs" bs-route="/user" >
+          <a id="user-button" class="logged-in" href="/#/user" ng-cloak ng-click="changeAdBack()">
             <i class="fa fa-user"></i>
             <span ng-bind="$user.email"></span>
           </a>
         </li>
         <li>
-          <a class="logged-out" href="#/" ng-click="login()" ng-click = chageAdBack()>
+          <a class="logged-out" href="#/" ng-click="login();changeAdBack();">
             <i class="fa fa-sign-in"></i>
             <span>Log in</span>
           </a>
-          <a class="logged-in" ng-click="logout()" href="/#/" ng-cloak ng-click = chageAdBack()>
+          <a class="logged-in" ng-click="logout();changeAdBack();" href="/#/"  ng-cloak>
             <i class="fa fa-sign-out"></i>
             <span>Log out</span>
           </a>
