@@ -1,4 +1,4 @@
-<div class="file-list panel panel-info" ng-class="state" >
+<div class="file-list panel panel-info"  ng-class="state" >
   <!-- Shown when the widget is disconnected. -->
   <div class="disconnected-icon">
     <span class="fa-stack fa-3x">
@@ -149,9 +149,11 @@
   </div>
 
   <!-- Where files are displayed and can be browsed. -->
-  <div class="tree" ng-class="{'hide-dots': !showHidden}">
 
+
+  <div class="tree" ng-class="{'hide-dots': !showHidden}">
     <div>
+      <span id="floatingMadam"  class="badge"> asdsadO </span>
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
       </ul>
@@ -165,5 +167,6 @@
     </div>
   </div>
 </div>
+
 <script>
   </script>

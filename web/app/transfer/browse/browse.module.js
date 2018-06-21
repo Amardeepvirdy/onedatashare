@@ -78,7 +78,6 @@ angular.module('stork.transfer.browse', [
 
   // Set the endpoint URI.
   $scope.go = function (uri) {
-    console.log("scope going");
     if (!uri)
       return $scope.reset();
     if (typeof uri === 'string')
@@ -288,7 +287,6 @@ angular.module('stork.transfer.browse', [
     if($scope.dragO != null){return}
 
     // Enable to choose mutiple files.
-    console.log("select triggered");
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
     if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
       this.root.selected = !this.root.selected;
@@ -440,7 +438,6 @@ angular.module('stork.transfer.browse', [
     $scope.dragO = _.size($scope.end.$selected);
 
     $scope.$digest();
-    console.log(scope.dragO);
   };
   $scope.storkDragEnd = function (e, scope) {
     scope.root.hoverOver = false;
@@ -508,7 +505,6 @@ angular.module('stork.transfer.browse', [
         node.$parent.root.hoverOver = false;
     }
     if(node.$$prevSibling){
-        console.log(node.$$prevSibling);
         /*if(node.$$prevSibling.$$childTail && node.$$prevSibling.root.dir && node.$$prevSibling.root.files.map){
             node.$$prevSibling.root.files.map((file)=>{
                 file.hoverOver = false;
