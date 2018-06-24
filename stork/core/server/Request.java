@@ -2,6 +2,7 @@ package stork.core.server;
 
 import java.util.*;
 
+import io.netty.util.internal.StringUtil;
 import stork.ad.*;
 import stork.core.handlers.*;
 import stork.feather.*;
@@ -112,5 +113,49 @@ public abstract class Request extends Bell<Object> implements Runnable {
   public void assertMayChangeState() {
     if (!mayChangeState)
       throw new PermissionDenied();
+  }
+
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
+
+    buf.append("(");
+    buf.append(StringUtil.simpleClassName(this));
+    buf.append(')');
+    buf.append(StringUtil.NEWLINE);
+    buf.append("Command: ");
+    buf.append(this.command);
+    buf.append(" ");
+    buf.append("Version: ");
+    buf.append(this.version);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Handler: ");
+    buf.append(this.handler);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("User: ");
+    buf.append(this.user);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Cookie: ");
+    buf.append(this.cookie);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Server: ");
+    buf.append(this.server);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("MayChangeState: ");
+    buf.append(this.mayChangeState);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Resource: ");
+    buf.append(this.resource);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
   }
 }

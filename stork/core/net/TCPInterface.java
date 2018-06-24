@@ -31,6 +31,7 @@ public class TCPInterface extends BaseTCPInterface {
   public void init(SocketChannel channel) {
     channel.pipeline().addLast(new AdDecoder());
     channel.pipeline().addLast(new SimpleChannelInboundHandler<Ad>() {
+
       public void messageReceived(final ChannelHandlerContext ctx, Ad ad) {
         Request r = getRequestForm(ad.get("command")).unmarshalFrom(ad);
         r.mayChangeState = true;  // Always allow state change.

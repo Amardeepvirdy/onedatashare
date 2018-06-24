@@ -78,7 +78,6 @@ angular.module('stork.transfer', [
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
-
     if(!$scope.flag)
       return false;
     return true;

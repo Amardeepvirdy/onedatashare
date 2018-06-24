@@ -2472,7 +2472,7 @@ ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize
 
   return upload;
 }]);
-
+//--------------- End of library, Start of uploading controller. Uploading component is located in browse.module ---------------//
 ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',  function ($scope, Upload, stork, endpoints, $attrs) {
     // upload later on form submit or something similar
     $scope.submit = function() {
@@ -2487,31 +2487,25 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
         if(!$scope.end.uri){
             alert('You need to Log in to Upload files.');
         }
-        console.log({
-            src:{
-                uri : "local",
-                file: file
-            },
-            dest: $scope.end
-        });
+
         Upload.upload({
-            url: "http://127.0.0.1:5000/post",
+            url: "/api/stork/upload",
             headers : {
                 'Content-Type': file.type
               },                               // resolved to the upload file size on the server.
-            resumeChunkSize: '10000KB',
+            resumeChunkSize: '1MB',
             method: 'POST',
             timeout: 1000000,
             resumeSizeResponseReader: (data) => {
-                console.log("wtf:");
                 console.log(data)
             },
             data: {
+
+                dest: $scope.end,
                 src:{
                     uri : "local",
                     file: file
                 },
-                dest: $scope.end
             }
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.src.file.name + 'uploaded. Response: ' + resp.config.data);

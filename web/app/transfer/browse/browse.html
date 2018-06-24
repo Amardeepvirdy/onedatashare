@@ -109,26 +109,23 @@
       </div>
 
 
-        <form  class="btn-group"ng-controller="FileUpload" name="form">
+      <form  class="btn-group"ng-controller="FileUpload" name="form">
 
-            <button class="btn btn-default" ngf-select="uploadFiles($files)" multiple="multiple" ng-model="file" name="file"  ngf-min-height="100"
-                    ngf-resize="{width: 100, height: 100}" ><span class="fa fa-upload"></span></button>
-
-
-
+        <button class="btn btn-default" ngf-select="uploadFiles($files)" ng-model="files" ngf-multiple="true">
+          <span class="fa fa-upload"></span>
+        </button>
 
         <button class="btn btn-default" title="Download"
                 ng-click="download(selectedUris())">
           <i class="fa fa-download"></i>
         </button>
+      </form>
 
-        </form>
-
-        <div class="btn-group ">
-        <button class="btn btn-default" title="Share"
-                ng-click="share(selectedUris())">
-          <i class="fa fa-link"></i>
-        </button>
+      <div class="btn-group">
+      <button class="btn btn-default" title="Share"
+              ng-click="share(selectedUris())">
+        <i class="fa fa-link"></i>
+      </button>
       </div>
       <div class="btn-group ">
         <button class="btn btn-default" title="Authenticate"

@@ -120,6 +120,9 @@ public class HTTPInterface extends StorkInterface {
     Pipes.AggregatorSink sink = Pipes.aggregatorSink();
     Bell<Ad> bell;
 
+    System.out.println(hr);
+    System.out.println(req.toString());
+
     // Make sure it's a type we can handle.
     if (type == null || type.startsWith("application/json")) {
       bell = sink.bell().new As<Ad>() {
@@ -133,9 +136,18 @@ public class HTTPInterface extends StorkInterface {
           return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
         }
       };
+    } else if (type.startsWith("multipart/form-data")) {
+      bell = sink.bell().new As<Ad>() {
+        public Ad convert(Slice slice) {
+          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+        }
+      };
     } else {
-      req.ring(new Exception("Unsupported content type."));
-      return new Bell<Request>(req);
+      bell = sink.bell().new As<Ad>() {
+        public Ad convert(Slice slice) {
+          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+        }
+      };
     }
 
     hr.root().tap().attach(sink).tap().start();

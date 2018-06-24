@@ -1,5 +1,6 @@
 package stork.core.handlers;
 
+import io.netty.util.internal.StringUtil;
 import stork.core.server.*;
 import stork.feather.*;
 
@@ -14,6 +15,32 @@ public class EndpointRequest extends Request {
     public User user() { return EndpointRequest.this.user(); }
   }
 
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
+
+    buf.append("(");
+    buf.append(StringUtil.simpleClassName(this));
+    buf.append(')');
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Endpoint Uri: ");
+    buf.append(uri);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Creadential: ");
+    buf.append(credential);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Module: ");
+    buf.append(module);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
+
+  }
   /** Get the {@code Resource} identified by this request. */
   public Resource resolve() { return resolveAs(null); }
 

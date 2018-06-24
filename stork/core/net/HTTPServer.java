@@ -1,6 +1,8 @@
 package stork.core.net;
 
 import java.net.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.io.*;
 import java.nio.file.*;
@@ -70,7 +72,7 @@ public class HTTPServer {
     sb.childHandler(new ChannelInitializer<SocketChannel>() {
       protected void initChannel(SocketChannel ch) {
         ChannelPipeline pl = ch.pipeline();
-        pl.addLast(new HttpServerCodec());
+        pl.addLast(new HttpServerCodec(2097152, 2097152, 2097152));
         pl.addLast(new RequestHandler());
       }
     });
@@ -249,11 +251,13 @@ public class HTTPServer {
 
       // Handle request content.
       if (msg instanceof HttpContent) {
+        System.out.print(((HttpContent) msg).content().toString(StandardCharsets.US_ASCII));
         HttpContent c = (HttpContent) msg;
         request.translate(c.content());
 
-        if (msg instanceof LastHttpContent)
+        if (msg instanceof LastHttpContent) {
           request.finishRequest();
+        }
       }
     }
 

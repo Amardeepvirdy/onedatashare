@@ -36,7 +36,6 @@ angular.module('stork.transfer.browse', [
 
   /** Get an endpoint by name. */
   this.get = function (name) {
-    console.log(ends);
     return ends[name] || (ends[name] = {});
   };
 })
@@ -220,18 +219,6 @@ angular.module('stork.transfer.browse', [
     };
     stork.get(end);
   };
-
-   $scope.upload = function (uris) {
-      if (uris == undefined || uris.length == 0)
-        return alert('You must select a file.');
-      else if (uris.length > 1)
-        return alert('You can only upload one file at a time.');
-      var end = {
-        uri: uris[0],
-        credential: $scope.end.credential
-      };
-      stork.get(end);
-    };
 
   // Share the selected file.
   $scope.share = function (uris) {
