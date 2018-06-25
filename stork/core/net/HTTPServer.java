@@ -203,6 +203,7 @@ public class HTTPServer {
    */
   public class RequestHandler extends ChannelHandlerAdapter {
     private HTTPRequest request;
+    private int filePos = 0;
     private Bell pauseBell;
     private HttpPostRequestDecoder httpDecoder;
 
@@ -253,6 +254,7 @@ public class HTTPServer {
         });
         if(request.isMultipart()) {
           httpDecoder = new HttpPostRequestDecoder(factory, head);
+          filePos = 0;
         }
       }
 
@@ -283,6 +285,7 @@ public class HTTPServer {
           if(httpDecoder != null) {
             httpDecoder.destroy();
             httpDecoder = null;
+            filePos = 0;
           }
         }
       }
@@ -301,13 +304,16 @@ public class HTTPServer {
                 String filename = "tmp/"+fileUpload.getFilename();
                 System.out.println(filename);
                 final File file = new File(filename);
-                if (!file.exists()) {
-                  file.createNewFile();
+                if (file.exists()) {
+                  file.delete();
                 }
+                file.createNewFile();
                 try (FileChannel inputChannel = new FileInputStream(fileUpload.getFile()).getChannel();
-                  FileChannel outputChannel = new FileOutputStream(file).getChannel()) {
-                  outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+                  FileChannel outputChannel = new FileOutputStream(file, true).getChannel()) {
+                  outputChannel.position(filePos);
+                  inputChannel.transferTo(0, inputChannel.size(), outputChannel);
                   sendResponse(ctx, CREATED, "file name: " + file.getAbsolutePath());
+                  filePos += inputChannel.size();
                 }catch(Exception e){
                   System.out.println("Error on read chunk");
                 }
