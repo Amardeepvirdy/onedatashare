@@ -1,6 +1,7 @@
 package stork.core.net;
 
 import java.net.*;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -15,6 +16,7 @@ import io.netty.channel.socket.nio.*;
 import io.netty.channel.nio.*;
 import io.netty.handler.codec.*;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.multipart.*;
 import io.netty.handler.ssl.*;
 import io.netty.handler.stream.*;
 import io.netty.util.*;
@@ -50,6 +52,10 @@ public class HTTPServer {
   // Map method and path to route handler.
   private Map<HttpMethod,Map<Path,Route>> routes =
     new HashMap<HttpMethod,Map<Path,Route>>();
+
+  // data factory used by http multipart request
+  private static final HttpDataFactory factory = new DefaultHttpDataFactory(true);
+
 
   /**
    * Return an {@code HTTPServer} bound to the given host and port. If an
@@ -195,9 +201,10 @@ public class HTTPServer {
   /**
    * A channel handler for incoming HTTP requests which ties Netty to Feather.
    */
-  private class RequestHandler extends ChannelHandlerAdapter {
+  public class RequestHandler extends ChannelHandlerAdapter {
     private HTTPRequest request;
     private Bell pauseBell;
+    private HttpPostRequestDecoder httpDecoder;
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
       if (msg instanceof HttpObject)
@@ -223,8 +230,10 @@ public class HTTPServer {
 
         // Run the requested path through the router.
         Route route = route(head.getMethod(), uri.path());
-        if (route == null)
+        if (route == null) {
+          ReferenceCountUtil.release(msg);
           throw new HTTPException(NOT_FOUND);
+        }
 
         // Pass to route handler.
         route.handle(request = new HTTPRequest(head) {
@@ -242,21 +251,71 @@ public class HTTPServer {
             request = null;
           }
         });
+        if(request.isMultipart()) {
+          httpDecoder = new HttpPostRequestDecoder(factory, head);
+        }
       }
 
       // If there was a problem, anything up to the next request should be
       // ignored.
-      if (request == null)
+      if (request == null) {
+        ReferenceCountUtil.release(msg);
         return;
+      }
 
       // Handle request content.
       if (msg instanceof HttpContent) {
         System.out.print(((HttpContent) msg).content().toString(StandardCharsets.US_ASCII));
         HttpContent c = (HttpContent) msg;
         request.translate(c.content());
-
+        if(httpDecoder != null) {
+          try {
+            httpDecoder.offer(c);
+            readChunk(ctx);
+          } catch (IOException e) {
+            System.out.println("Error: read chunk from Request Handler in HTTPServer.java");
+            e.printStackTrace();
+          }
+        }
         if (msg instanceof LastHttpContent) {
           request.finishRequest();
+          request = null;
+          if(httpDecoder != null) {
+            httpDecoder.destroy();
+            httpDecoder = null;
+          }
+        }
+      }
+    }
+
+    private void readChunk(ChannelHandlerContext ctx) throws IOException {
+      while (httpDecoder.hasNext()) {
+        InterfaceHttpData data = httpDecoder.next();
+        if (data != null) {
+          try {
+            switch (data.getHttpDataType()) {
+              case Attribute:
+                break;
+              case FileUpload:
+                final FileUpload fileUpload = (FileUpload) data;
+                String filename = "tmp/"+fileUpload.getFilename();
+                System.out.println(filename);
+                final File file = new File(filename);
+                if (!file.exists()) {
+                  file.createNewFile();
+                }
+                try (FileChannel inputChannel = new FileInputStream(fileUpload.getFile()).getChannel();
+                  FileChannel outputChannel = new FileOutputStream(file).getChannel()) {
+                  outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+                  sendResponse(ctx, CREATED, "file name: " + file.getAbsolutePath());
+                }catch(Exception e){
+                  System.out.println("Error on read chunk");
+                }
+                break;
+            }
+          } finally {
+            data.release();
+          }
         }
       }
     }
@@ -267,11 +326,32 @@ public class HTTPServer {
     }
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable t) {
+      System.out.println("Error: Exception caught in Request Handler, HTTPServer.");
+      t.printStackTrace();
       HTTPException he = (t instanceof HTTPException) ?
         (HTTPException) t : new HTTPException(INTERNAL_SERVER_ERROR);
       ctx.writeAndFlush(he.toHttpMessage());
       ctx.close();
     }
+  }
+  private static void sendResponse(ChannelHandlerContext ctx, HttpResponseStatus status, String message) {
+    final FullHttpResponse response;
+    String msgDesc = message;
+    if (message == null) {
+      msgDesc = "Failure: " + status;
+    }
+    msgDesc += " \r\n";
+
+    final ByteBuf buffer = Unpooled.copiedBuffer(msgDesc, CharsetUtil.UTF_8);
+    if (status.code() >= HttpResponseStatus.BAD_REQUEST.code()) {
+      response = new DefaultFullHttpResponse(HTTP_1_1, status, buffer);
+    } else {
+      response = new DefaultFullHttpResponse(HTTP_1_1, status, buffer);
+    }
+    response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
+
+    // Close the connection as soon as the response is sent.
+    ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
   }
 
   // A codec for converting ads to HTTP responses.

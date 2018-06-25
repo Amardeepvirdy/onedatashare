@@ -2495,7 +2495,7 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
               },                               // resolved to the upload file size on the server.
             resumeChunkSize: '1MB',
             method: 'POST',
-            timeout: 1000000,
+            timeout: 10000,
             resumeSizeResponseReader: (data) => {
                 console.log(data)
             },
