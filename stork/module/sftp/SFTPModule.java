@@ -152,15 +152,16 @@ class SFTPResource extends Resource<SFTPSession, SFTPResource> {
 
   //removes file or directory
   public Bell delete() {
-
-    return new ThreadBell<Void>() {
-      public Void run() throws Exception {
-
+    if (!isSingleton())
+      throw new UnsupportedOperationException();
+    return new ThreadBell<SFTPResource>()  {
+      public SFTPResource run() throws Exception {
         if(session.channel.stat(path.toString()).isDir())
-          session.channel.rmdir(path.toString());
+            session.channel.rmdir(path.toString());
+
         else
-          session.channel.rm(path.toString());
-        return null;
+            session.channel.rm(path.toString());
+        return session.root();
       }
     }.startOn(initialize());
   }
