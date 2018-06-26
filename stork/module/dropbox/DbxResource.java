@@ -1,8 +1,14 @@
 package stork.module.dropbox;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 
+import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.files.*;
 import com.dropbox.core.DbxDownloader;
 import stork.feather.*;
@@ -169,14 +175,24 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
 
   private class DbxSink extends Sink<DbxResource> {
     private UploadUploader upload;
+    private Stat dbxStat;
+    private boolean chunked = true;
+    private String sessionId = null;
+    private static final long CHUNKED_UPLOAD_CHUNK_SIZE = 4L << 20; // 4MiB
+    long uploaded = 0L;
+    UploadSessionCursor cursor;
+    InputStream in;
 
     protected DbxSink() { super(DbxResource.this); }
 
     protected Bell<?> start() {
       return initialize().and((Bell<Stat>)source().stat()).new As<Void>() {
         public Void convert(Stat stat) throws Exception {
-          upload = session.client.files().upload(
-                  destination().path.toString());
+          dbxStat = stat;
+          if(dbxStat.size < CHUNKED_UPLOAD_CHUNK_SIZE || stat.dir) {
+              chunked = false;
+          }
+          startUpload();
           return null;
         } public void fail(Throwable t) {
           finish(t);
@@ -187,7 +203,12 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     protected Bell drain(final Slice slice) {
       return new ThreadBell<Void>() {
         public Void run() throws Exception {
-          upload.getOutputStream().write(slice.asBytes());
+          if(chunked) {
+            chunkedUpload(slice);
+          }
+          else {
+            upload(slice);
+          }
           return null;
         }
       }.start();
@@ -195,12 +216,49 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
 
     protected void finish(Throwable t) {
       try {
-        upload.finish();
+        if(chunked) {
+          long remaining = dbxStat.size - uploaded;
+          CommitInfo commitInfo = CommitInfo.newBuilder(destination().path.toString())
+                  .withMode(WriteMode.ADD)
+                  .withClientModified(new Date(dbxStat.time))
+                  .build();
+          FileMetadata metadata = session.client.files().uploadSessionFinish(cursor, commitInfo)
+                  .uploadAndFinish(in, 0L);
+        }
+        else {
+          upload.finish();
+        }
       } catch (Exception e) {
         // Ignore...?
       } finally {
         upload.close();
       }
+    }
+
+    private void startUpload() throws Exception {
+      if(chunked) {
+        in = new ByteArrayInputStream(new byte[] {});
+        sessionId = session.client.files().uploadSessionStart()
+                .uploadAndFinish(in, 0L)
+                .getSessionId();
+        cursor = new UploadSessionCursor(sessionId, uploaded);
+      }
+      else {
+          upload = session.client.files().upload(
+                  destination().path.toString());
+      }
+    }
+
+    private void chunkedUpload(Slice slice) throws Exception {
+      in = new ByteArrayInputStream(slice.asBytes());
+      session.client.files().uploadSessionAppendV2(cursor)
+              .uploadAndFinish(in, slice.length());
+      uploaded += slice.length();
+      cursor = new UploadSessionCursor(sessionId, uploaded);
+    }
+
+    private void upload(Slice slice) throws Exception {
+      upload.getOutputStream().write(slice.asBytes());
     }
   }
 }
