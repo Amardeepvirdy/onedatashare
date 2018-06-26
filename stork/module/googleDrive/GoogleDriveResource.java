@@ -15,9 +15,12 @@ import com.google.api.services.drive.model.*;
 import com.google.api.services.drive.Drive;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriveResource> {
 
@@ -266,35 +269,35 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
   }
 
   private class GoogleDriveSink extends Sink<GoogleDriveResource> {
-//    private UploadUploader upload;
-    File fileMetadata = new File();
-    File file;
-    Drive.Files.Create create;
-    String id;
-    InputStream input;
-    MediaHttpUploader uploader;
-    ByteArrayContent content;
+    String resumableSessionURL;
+    long chunkPosition = 0;
+    java.io.File file;
 
     protected GoogleDriveSink() { super(GoogleDriveResource.this); }
 
     protected Bell<?> start() {
       return initialize().and((Bell<Stat>)source().stat()).new As<Void>() {
         public Void convert(Stat stat) throws Exception {
-          fileMetadata.setName(stat.name);
-          String s = "daskagdadjkgjdkfgejkfhifkwegfkwfewf";
-          content = new ByteArrayContent("plain/text", s.getBytes(StandardCharsets.UTF_8));
-          InputStreamContent mediaContent =
-                  new InputStreamContent("image/jpeg",
-                          new BufferedInputStream(new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8))));
-          mediaContent.setLength(stat.size);
-          create = session.service.files().create(fileMetadata, mediaContent);
-          uploader = create.getMediaHttpUploader();
-          file = create.setFields("id")
-                  .execute();
-          id = file.getId();
-
-//          upload = session.client.files().upload(
-//                  destination().path.toString());
+          file = new java.io.File("C:\\Users\\Rohit\\Downloads\\Axis.pdf");
+          URL url = new URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable");
+          HttpURLConnection request = (HttpURLConnection) url.openConnection();
+          request.setRequestMethod("POST");
+          request.setRequestProperty("Authorization", "Bearer " + session.credential.data());
+          request.setRequestProperty("X-Upload-Content-Type", "application/pdf");
+          //request.setRequestProperty("X-Upload-Content-Length", Long.toString(stat.size));
+          request.setRequestProperty("X-Upload-Content-Length", Long.toString(file.length()));
+          request.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+          //String body = "{\"name\": \"" + stat.name + "\"}";
+          String body = "{\"name\": \"Axis.pdf\"}";
+          request.setRequestProperty("Content-Length", Integer.toString(body.getBytes().length));
+          request.setDoOutput(true);
+          OutputStream outputStream = request.getOutputStream();
+          outputStream.write(body.getBytes());
+          outputStream.close();
+          request.connect();
+          if(request.getResponseCode() == 200) {
+            resumableSessionURL = request.getHeaderField("location");
+          }
           return null;
         } public void fail(Throwable t) {
           finish(t);
@@ -305,10 +308,46 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
     protected Bell drain(final Slice slice) {
       return new ThreadBell<Void>() {
         public Void run() throws Exception {
-          String uploadURL = "https://www.googleapis.com/upload/drive/v3/files/" + id;
-          HttpResponse res = uploader.upload(new GenericUrl(uploadURL));
-          //File file1 = session.service.files().update(id, fileMetadata, content).execute();
-//          upload.getOutputStream().write(slice.asBytes());
+          /*URL url = new URL(resumableSessionURL);
+          HttpURLConnection request = (HttpURLConnection) url.openConnection();
+          request.setRequestMethod("PUT");
+          request.setConnectTimeout(10000);
+          request.setRequestProperty("Content-Type", "application/pdf");
+          request.setRequestProperty("Content-Length", Integer.toString(slice.asBytes().length));
+          request.setRequestProperty("Content-Range", "bytes " + chunkPosition + "-" + (chunkPosition + slice.asBytes().length - 1) + "/" + fileSize);
+          request.setDoOutput(true);
+          OutputStream outputStream = request.getOutputStream();
+          outputStream.write(slice.asBytes());
+          outputStream.close();
+          request.connect();*/
+          URL url = new URL(resumableSessionURL);
+          HttpURLConnection request = (HttpURLConnection) url.openConnection();
+          request.setRequestMethod("PUT");
+          request.setDoOutput(true);
+          request.setConnectTimeout(10000);
+          request.setRequestProperty("Content-Type", "application/pdf");
+          long uploadedBytes = 262144;
+          if (chunkPosition + uploadedBytes > file.length()) {
+            uploadedBytes = (int) file.length() - chunkPosition;
+          }
+          request.setRequestProperty("Content-Length", String.format(Locale.ENGLISH, "%d", uploadedBytes));
+          request.setRequestProperty("Content-Range", "bytes " + chunkPosition + "-" + (chunkPosition + uploadedBytes - 1) + "/" + file.length());
+          byte[] buffer = new byte[(int) uploadedBytes];
+          FileInputStream fileInputStream = new FileInputStream(file);
+          fileInputStream.getChannel().position(chunkPosition);
+          if (fileInputStream.read(buffer, 0, (int) uploadedBytes) == -1) { System.out.println("End of file");}
+          fileInputStream.close();
+          OutputStream outputStream = request.getOutputStream();
+          outputStream.write(buffer);
+          outputStream.close();
+          request.connect();
+          if(request.getResponseCode() == 308) {
+            System.out.println("Chunked upload working");
+            String range = request.getHeaderField("range");
+            chunkPosition = Long.parseLong(range.substring(range.lastIndexOf("-") + 1, range.length())) + 1;
+          }else {
+            System.out.println("Unable to perform resumable uploads to google drive");
+          }
           return null;
         }
       }.start();
