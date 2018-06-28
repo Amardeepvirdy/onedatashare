@@ -55,28 +55,15 @@ public class OAuthHandler extends Handler<OAuthRequest> {
 
             StorkOAuthCred cred = session.finish(req.code);
 
-            for(StorkCred val: req.user().credentials.values()){
-                if (val.userID.equals(cred.userID)){
-                    String uuid = "";
-                    for(UUID id: req.user().credentials.keySet()){
-                        if(req.user().credentials.get(id).equals(val)) {
-                            uuid = id.toString();
-                        }
-                    }
-                    throw new Redirect("/oauth/" + uuid);
+            for(Map.Entry<UUID, StorkCred> val: req.user().credentials.entrySet()){
 
-                }
-                else{
-                    String uuid = req.user().addCredential(cred);
-                    server.dumpState();
-                    throw new Redirect("/oauth/" + uuid);
+                if (val.getValue().userID.equals(cred.userID)){
+                    throw new Redirect("/oauth/" + val.getKey());
                 }
             }
-
-
-
-
-
+        String uuid = req.user().addCredential(cred);
+        server.dumpState();
+        throw new Redirect("/oauth/" + uuid);
     }
 
     /** Create a new OAuthSession of a given type. */
