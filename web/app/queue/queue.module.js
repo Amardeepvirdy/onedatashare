@@ -99,8 +99,8 @@ angular.module('stork.transfer.queue', [])
   $scope.close = function (i, j) {
   if (confirm("Are you sure you want to close job " + j.job_id + "?"))
 
-        delete $scope.jobs[j.job_id];
-//      $scope.jobs.splice($scope.jobs[j.job_id]);
+//        delete $scope.jobs[j.job_id];
+     $scope.jobs.splice($scope.jobs[j.job_id]);
 
   };
 
