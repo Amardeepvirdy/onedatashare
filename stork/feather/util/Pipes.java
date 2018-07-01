@@ -7,8 +7,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import io.netty.buffer.*;
+import io.netty.handler.codec.http.multipart.DiskAttribute;
 import io.netty.util.*;
 
+import jdk.nashorn.internal.parser.JSONParser;
+import stork.ad.Ad;
+import stork.ad.AdParser;
 import stork.feather.*;
 
 /**
@@ -121,6 +125,9 @@ public final class Pipes {
       list.add(slice.asByteBuf());
       return null;
     }
+    /**
+     * Get an {@code AggregatorSink} for an anonymous {@code Resource}.
+     */
 
     public void finish(Throwable t) {
       ByteBuf[] array = list.toArray(new ByteBuf[0]);
@@ -128,13 +135,54 @@ public final class Pipes {
       bell.ring(new Slice(buf));
     }
   }
-
   /**
    * Get an {@code AggregatorSink} for an anonymous {@code Resource}.
    */
   public static AggregatorSink aggregatorSink() {
     return new AggregatorSink(Resources.anonymous());
   }
+
+  /**
+   * A {@code Sink} used by MultiPart Request {@code Slice}.
+   */
+  public static class MultipartSink extends Sink {
+    private Bell<Slice> bell = new Bell<Slice>();
+    private Ad list = new Ad();
+
+    public MultipartSink(Resource r) { super(r); }
+
+    public Bell<Slice> bell() { return bell; }
+
+    public Bell drain(Ad slice) {
+      list = list.merge(slice);
+      return null;
+    }
+    public Bell drain(Slice slice) {
+      byte[] buffer = slice.asBytes();
+      String json = new String(buffer);
+      this.drain(Ad.parse(new ByteBufInputStream(slice.asByteBuf())));
+      return null;
+    }
+    // avoid hardcode much?
+    public void finish(Throwable t) {
+      Ad ad = new Ad("attributes", list);
+      ad.put("file", list.get("file"));
+      ad.put("credential", new Ad("uuid", list.get("uri[credential][uuid]")));
+      ad.put("uri", list.get("uri[uri]"));
+      list.remove("file");
+      list.remove("uri[credential][uuid]");
+      list.remove("uri[uri]");
+      bell.ring(new Slice(ad.toJSON().getBytes()));
+    }
+  }
+  /**
+   * Get an {@code MultipartSink} for an anonymous {@code Resource}.
+   */
+  public static MultipartSink MultipartSink() {
+    return new MultipartSink(Resources.anonymous());
+  }
+
+
 
   /**
    * View {@code pipe} as an {@code InputStream}. This will attach to {@code

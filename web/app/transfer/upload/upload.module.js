@@ -2483,11 +2483,14 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
 
     // upload on file select or drop
     $scope.upload = function (file) {
-
+        console.log(file);
         if(!$scope.end.uri){
             alert('You need to Log in to Upload files.');
         }
-
+        var u = $scope.uri.parsed;
+        u = u._string+"/"+file.name;
+        var ep = angular.copy($scope.end);
+        ep.uri = u.replace(new RegExp(' ', 'g'), "%20");
         Upload.upload({
             url: "/api/stork/upload",
             headers : {
@@ -2495,17 +2498,13 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
               },                               // resolved to the upload file size on the server.
             resumeChunkSize: '1MB',
             method: 'POST',
-            timeout: 10000,
+            timeout: 1000000,
             resumeSizeResponseReader: (data) => {
                 console.log(data)
             },
             data: {
-
-                dest: $scope.end,
-                src:{
-                    uri : "local",
-                    file: file
-                },
+                uri: ep,
+                file: file,
             }
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.src.file.name + 'uploaded. Response: ' + resp.config.data);

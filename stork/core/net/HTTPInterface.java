@@ -10,6 +10,7 @@ import io.netty.channel.*;
 import io.netty.channel.socket.*;
 import io.netty.handler.codec.*;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.multipart.FileUpload;
 import io.netty.handler.ssl.*;
 import io.netty.handler.stream.*;
 import io.netty.util.*;
@@ -120,27 +121,32 @@ public class HTTPInterface extends StorkInterface {
     Pipes.AggregatorSink sink = Pipes.aggregatorSink();
     Bell<Ad> bell;
 
-    System.out.println(hr);
-    System.out.println(req.toString());
-
     // Make sure it's a type we can handle.
     if (type == null || type.startsWith("application/json")) {
       bell = sink.bell().new As<Ad>() {
         public Ad convert(Slice slice) {
-          return Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
+          Ad ad = Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
+          return ad;
         }
       };
     } else if (type.startsWith("application/x-www-form-urlencoded")) {
       bell = sink.bell().new As<Ad>() {
         public Ad convert(Slice slice) {
-          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+          Ad ad = queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+          return ad;
         }
       };
     } else if (type.startsWith("multipart/form-data")) {
-      bell = sink.bell().new As<Ad>() {
+      Pipes.MultipartSink sink1 = Pipes.MultipartSink();
+      bell = sink1.bell().new As<Ad>(){
         public Ad convert(Slice slice) {
-          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+          Ad ad = Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
+          return ad;
         }
+      };
+      hr.root().tap().attach(sink1).tap().start();
+      return bell.new As<Request>() {
+        public Request convert(Ad body) { return req.unmarshalFrom(body); }
       };
     } else {
       bell = sink.bell().new As<Ad>() {

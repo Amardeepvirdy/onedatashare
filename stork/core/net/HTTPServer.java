@@ -27,6 +27,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.*;
 import static io.netty.handler.codec.http.HttpVersion.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
 
+import io.netty.util.Attribute;
 import stork.ad.*;
 import stork.feather.*;
 import stork.feather.URI;
@@ -34,6 +35,7 @@ import stork.feather.Path;
 import stork.feather.util.*;
 import stork.scheduler.*;
 import stork.util.*;
+
 
 /**
  * A simple prefix routing HTTP server utility integrated with Feather. This
@@ -252,9 +254,9 @@ public class HTTPServer {
             request = null;
           }
         });
+        System.out.println(request);
         if(request.isMultipart()) {
           httpDecoder = new HttpPostRequestDecoder(factory, head);
-          filePos = 0;
         }
       }
 
@@ -267,9 +269,8 @@ public class HTTPServer {
 
       // Handle request content.
       if (msg instanceof HttpContent) {
-        System.out.print(((HttpContent) msg).content().toString(StandardCharsets.US_ASCII));
         HttpContent c = (HttpContent) msg;
-        request.translate(c.content());
+
         if(httpDecoder != null) {
           try {
             httpDecoder.offer(c);
@@ -278,6 +279,8 @@ public class HTTPServer {
             System.out.println("Error: read chunk from Request Handler in HTTPServer.java");
             e.printStackTrace();
           }
+        }else{
+          request.translate(c.content());
         }
         if (msg instanceof LastHttpContent) {
           request.finishRequest();
@@ -285,7 +288,6 @@ public class HTTPServer {
           if(httpDecoder != null) {
             httpDecoder.destroy();
             httpDecoder = null;
-            filePos = 0;
           }
         }
       }
@@ -293,30 +295,29 @@ public class HTTPServer {
 
     private void readChunk(ChannelHandlerContext ctx) throws IOException {
       while (httpDecoder.hasNext()) {
+
         InterfaceHttpData data = httpDecoder.next();
+
         if (data != null) {
           try {
             switch (data.getHttpDataType()) {
+              case InternalAttribute:
+                final DiskAttribute t = (DiskAttribute) data;
+
+                Ad ad = new Ad(t.getName(), t.getValue());
+                request.tap.drain(ad);
+                break;
               case Attribute:
+                final DiskAttribute t1 = (DiskAttribute) data;
+
+                Ad ad1 = new Ad(t1.getName(), t1.getValue());
+                request.tap.drain(ad1);
                 break;
               case FileUpload:
                 final FileUpload fileUpload = (FileUpload) data;
-                String filename = "tmp/"+fileUpload.getFilename();
-                System.out.println(filename);
-                final File file = new File(filename);
-                if (file.exists()) {
-                  file.delete();
-                }
-                file.createNewFile();
-                try (FileChannel inputChannel = new FileInputStream(fileUpload.getFile()).getChannel();
-                  FileChannel outputChannel = new FileOutputStream(file, true).getChannel()) {
-                  outputChannel.position(filePos);
-                  inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-                  sendResponse(ctx, CREATED, "file name: " + file.getAbsolutePath());
-                  filePos += inputChannel.size();
-                }catch(Exception e){
-                  System.out.println("Error on read chunk");
-                }
+                HttpHeaders.isTransferEncodingChunked(request.netty);
+                Ad ad2 = new Ad("file", fileUpload.getFile());
+                request.tap.drain(ad2);
                 break;
             }
           } finally {
@@ -330,7 +331,12 @@ public class HTTPServer {
       if (request == null || request.ready)
         ctx.read();
     }
-
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+      if (httpDecoder != null) {
+        httpDecoder.cleanFiles();
+      }
+    }
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable t) {
       System.out.println("Error: Exception caught in Request Handler, HTTPServer.");
       t.printStackTrace();

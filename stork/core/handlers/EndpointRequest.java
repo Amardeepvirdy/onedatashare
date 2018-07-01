@@ -19,11 +19,6 @@ public class EndpointRequest extends Request {
   public String toString(){
     StringBuilder buf = new StringBuilder();
 
-    buf.append("(");
-    buf.append(StringUtil.simpleClassName(this));
-    buf.append(')');
-    buf.append(StringUtil.NEWLINE);
-
     buf.append("Endpoint Uri: ");
     buf.append(uri);
     buf.append(StringUtil.NEWLINE);

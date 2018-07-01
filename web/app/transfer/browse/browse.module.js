@@ -518,7 +518,7 @@ $scope.mkdir = function () {
     //u = new URI(u);
     if (!u) return;
     var ep = angular.copy($scope.end);
-    ep.uri = u;
+    ep.uri = u.replace(" ", "%20");
     //u.segment(name);
     return stork.mkdir(ep).then(
       function (m) {

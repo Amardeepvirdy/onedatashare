@@ -69,6 +69,13 @@ public class HTTPBody extends Resource<HTTPRequest,HTTPBody> {
     }
 
     public Bell drain(Slice s) { return super.drain(s); }
+
+    public Bell drain(Ad s) {
+      String json = s.toJSON();
+      byte[] buffer = json.getBytes();
+      Slice slice = new Slice(buffer);
+      return super.drain(slice);
+    }
     public void finish(Throwable t) { super.finish(t); }
   };
 
