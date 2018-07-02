@@ -24,7 +24,6 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
 
     if (isMultipart()){
       // set a flag abbout all the package decodin.
-    //  System.out.println(this.toString());
     }
   }
 
@@ -66,6 +65,7 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
     if (tap != null)
       tap.finish(null);
   }
+
 
   /** Send an error to the requestor. */
   public void sendError(int code) {

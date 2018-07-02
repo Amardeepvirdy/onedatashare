@@ -23,7 +23,7 @@ public class EndpointRequest extends Request {
     buf.append(uri);
     buf.append(StringUtil.NEWLINE);
 
-    buf.append("Creadential: ");
+    buf.append("credential: ");
     buf.append(credential);
     buf.append(StringUtil.NEWLINE);
 

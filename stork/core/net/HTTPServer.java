@@ -207,7 +207,7 @@ public class HTTPServer {
     private HTTPRequest request;
     private int filePos = 0;
     private Bell pauseBell;
-    private HttpPostRequestDecoder httpDecoder;
+    private HttpPostMultipartRequestDecoder httpDecoder;
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
       if (msg instanceof HttpObject)
@@ -256,7 +256,7 @@ public class HTTPServer {
         });
         System.out.println(request);
         if(request.isMultipart()) {
-          httpDecoder = new HttpPostRequestDecoder(factory, head);
+          httpDecoder = new HttpPostMultipartRequestDecoder(factory, head);
         }
       }
 
@@ -303,21 +303,24 @@ public class HTTPServer {
             switch (data.getHttpDataType()) {
               case InternalAttribute:
                 final DiskAttribute t = (DiskAttribute) data;
-
                 Ad ad = new Ad(t.getName(), t.getValue());
                 request.tap.drain(ad);
                 break;
               case Attribute:
-                final DiskAttribute t1 = (DiskAttribute) data;
-
+                io.netty.handler.codec.http.multipart.Attribute t1;
+                if(data instanceof MemoryAttribute) {
+                  t1 = (MemoryAttribute) data;
+                }else{
+                  t1 = (DiskAttribute) data;
+                }
                 Ad ad1 = new Ad(t1.getName(), t1.getValue());
                 request.tap.drain(ad1);
                 break;
               case FileUpload:
                 final FileUpload fileUpload = (FileUpload) data;
                 HttpHeaders.isTransferEncodingChunked(request.netty);
-                Ad ad2 = new Ad("file", fileUpload.getFile());
-                request.tap.drain(ad2);
+                request.tap.drain(new Slice(fileUpload.content().copy()));
+
                 break;
             }
           } finally {

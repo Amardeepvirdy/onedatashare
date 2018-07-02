@@ -22,6 +22,7 @@ import static io.netty.handler.codec.http.HttpVersion.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
 
 import stork.ad.*;
+import stork.core.handlers.MultipartRequest;
 import stork.feather.*;
 import stork.feather.util.*;
 import stork.feather.URI;
@@ -137,16 +138,26 @@ public class HTTPInterface extends StorkInterface {
         }
       };
     } else if (type.startsWith("multipart/form-data")) {
+      Bell<ArrayList<Object>> bell2;
       Pipes.MultipartSink sink1 = Pipes.MultipartSink();
-      bell = sink1.bell().new As<Ad>(){
-        public Ad convert(Slice slice) {
-          Ad ad = Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
-          return ad;
+      bell2 = sink1.bell().new As<ArrayList<Object>>(){
+        public ArrayList<Object> convert(ArrayList<Object> slices) {
+          return slices;
         }
       };
       hr.root().tap().attach(sink1).tap().start();
-      return bell.new As<Request>() {
-        public Request convert(Ad body) { return req.unmarshalFrom(body); }
+      return bell2.new As<Request>() {
+        public Request convert(ArrayList<Object> body) {
+          for(Object o : body){
+            if(o instanceof Slice){
+              MultipartRequest mult = (MultipartRequest) req;
+              mult.file = (Slice) o;
+            }else if(o instanceof Ad){
+              return req.unmarshalFrom((Ad) o);
+            }
+          }
+          return req;
+        }
       };
     } else {
       bell = sink.bell().new As<Ad>() {

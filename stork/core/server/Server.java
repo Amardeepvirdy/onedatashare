@@ -119,7 +119,7 @@ public class Server {
     if (request.handler == null) {
       request.ring(new Exception("Invalid command."));
     } else try {
-      Log.fine("Enqueuing request: "+Ad.marshal(request));
+      //Log.fine("Enqueuing request: "+Ad.marshal(request));
       Bell.dispatch(request);
     } catch (Exception e) {
       // This can happen if the queue is full. Which right now it never should

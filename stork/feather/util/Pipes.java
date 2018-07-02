@@ -146,33 +146,47 @@ public final class Pipes {
    * A {@code Sink} used by MultiPart Request {@code Slice}.
    */
   public static class MultipartSink extends Sink {
-    private Bell<Slice> bell = new Bell<Slice>();
+    private Bell<ArrayList<Object>> bell = new Bell<ArrayList<Object>>();
     private Ad list = new Ad();
+    private Slice file;
 
     public MultipartSink(Resource r) { super(r); }
 
-    public Bell<Slice> bell() { return bell; }
+    public Bell<ArrayList<Object>> bell() { return bell; }
 
     public Bell drain(Ad slice) {
       list = list.merge(slice);
       return null;
     }
     public Bell drain(Slice slice) {
-      byte[] buffer = slice.asBytes();
-      String json = new String(buffer);
-      this.drain(Ad.parse(new ByteBufInputStream(slice.asByteBuf())));
+
+      try{
+        this.drain(Ad.parse(new ByteBufInputStream(slice.asByteBuf())));
+      }catch(Exception e){
+          this.file = slice;
+      }
       return null;
     }
     // avoid hardcode much?
     public void finish(Throwable t) {
       Ad ad = new Ad("attributes", list);
-      ad.put("file", list.get("file"));
-      ad.put("credential", new Ad("uuid", list.get("uri[credential][uuid]")));
+
+      Ad tempad = new Ad("uuid", list.get("uri[credential][uuid]"));
+      tempad.put("type", list.get("uri[credential][type]"));
+      tempad.put("username", list.get("uri[credential][username]"));
+      tempad.put("password", list.get("uri[credential][password]"));
+      ad.put("credential", tempad);
       ad.put("uri", list.get("uri[uri]"));
-      list.remove("file");
       list.remove("uri[credential][uuid]");
-      list.remove("uri[uri]");
-      bell.ring(new Slice(ad.toJSON().getBytes()));
+      list.remove("uri[credential][type]");
+      list.remove("uri[credential][username]");
+      list.remove("uri[credential][password]");
+      ad.put("attributes", list);
+
+      ArrayList<Object> slices = new ArrayList<Object>();
+      slices.add(file);
+      slices.add(ad);
+      bell.ring(slices);
     }
   }
   /**
