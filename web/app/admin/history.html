@@ -3,14 +3,14 @@ div .endpoints {
   background: blue;
 }
 </style>-->
-<div class="col-sm-2"></div>
-<div class="container panel-group headSpace col-sm-10">
+<!--<div class="col-md-2"></div>-->
+<div class="container panel-group headSpace col-md-12">
 
   <div class="panel panel-info"  ng-init="page = 1" ng-controller="Queue" >
     <div class="hidden-xs clearfix panel-heading" style="font-weight: bold">
 
-        <div class="col-sm-1 "></div>
-        <div class="col-sm-2 text-center ">
+        <div class="col-md-1 "></div>
+        <div class="col-md-2 text-center ">
             Username
             <span class="btn-group-vertical">
              <div class="btn-group">
@@ -20,7 +20,7 @@ div .endpoints {
           </span>
         </div>
 
-        <div class="col-sm-1 text-center ">
+        <div class="col-md-2 text-center ">
           Job ID
     <!-- buttons for ordering jobs -->
           <span class="btn-group-vertical">
@@ -30,8 +30,8 @@ div .endpoints {
                <button title="from new to old" type="button" class="fa fa-sort-desc" ng-click="predicate='-job_id'; reverse=false" > </button> </div>
           </span>
         </div>
-        <div class="col-sm-3 text-center vertical-center">Progress</div>
-        <div class="col-sm-1 text-center">
+        <div class="col-md-3 text-center vertical-center">Progress</div>
+        <div class="col-md-1 text-center">
             Average Speed
             <span class="btn-group-vertical">
                 <div class="btn-group">
@@ -40,9 +40,9 @@ div .endpoints {
                 <button title="from fast to slow" type="button" class="fa fa-sort-desc" ng-click="predicate='-bytes.avg'; reverse=false" > </button> </div>
             </span>
         </div>
-        <div class="col-sm-3 text-center vertical-center">Source/Destination</div>
+        <div class="col-md-3 text-center vertical-center">Source/Destination</div>
 
-        <!--<div class="col-sm-2 "></div>-->
+        <!--<div class="col-md-2 "></div>-->
     </div>
       <!-- toolbar for reordering jobs-->
     <div class="panel-heading visible-xs">
@@ -60,33 +60,33 @@ div .endpoints {
 <!-- add for removing a job from view -->
 
 
-          <table class="table table-bordered col-sm-12 clearfix ">
+          <table class="table table-bordered col-md-12 clearfix ">
 
-              <div class="col-xs-7 col-sm-1 btn-group" >
+              <div class="col-md-7 col-md-1 btn-group" >
                   <button type="button" title="details" class="btn btn-default fa fa-info" ng-click="info.show = !info.show" style="width: 20px;"></button>
                 <div title="cancel" class="btn-group" style="width: 10px;">
                     <button style="width: 30px;" class="btn btn-default fa fa-remove" ng-click="cancel(j)" ng-disabled="filters.done(j)"></button></div>
               </div>
-              <div class="col-xs-10"></div>
-              <div ng-init="p = j.User" class="col-xs-5 visible-xs">
+              <div class="col-md-10"></div>
+              <div ng-init="p = j.User" class="col-md-5 visible-xs visible-sm">
                   &nbsp Username
               </div>
 
-              <div class=" col-xs-7 col-sm-2 text-center">
+              <div class=" col-md-7 col-md-2 text-center">
                   {{j.owner}}
               </div>
 
-              <div class="col-xs-5 visible-xs">
+              <div class="col-md-5 visible-xs visible-sm">
                  &nbsp Job ID
               </div>
 
-              <div class="col-xs-5 col-sm-1 text-center">
+              <div class="col-md-5 col-md-1 text-center">
                 {{j.job_id}}
               </div>
-              <div class="col-xs-5 visible-xs">
+              <div class="col-md-5 visible-xs visible-sm">
                 &nbspProgress
               </div>
-              <div class="col-xs-7 col-sm-3">
+              <div class="col-md-7 col-md-3">
                 <div class="progress" data-placement="top" data-trigger="hover"
                      bs-popover content-template="prog-pop.html"
                      ng-class="{processing: 'progress-striped active'}[j.status]">
@@ -100,24 +100,29 @@ div .endpoints {
                   </span>
                 </div>
               </div>
-              <div ng-init="p = j.bytes" class="col-xs-5 visible-xs">
+              <div ng-init="p = j.bytes" class="col-md-5 visible-xs visible-sm">
                 &nbspAverage Speed
               </div>
-              <div class="col-xs-7 col-sm-1 text-center" ng-init="p = j.bytes">
+              <div class="col-md-7 col-md-1 text-center" ng-init="p = j.bytes">
                 <span>{{j.bytes.avg|size:2}}B/s</span>
                 <!--<span ng-show="!p || p.avg <= 0">&nbsp</span>
                 <span ng-hide="!p || p.inst <= 0">({{p.inst|size:2}}B/s)</span>-->
               </div>
 
-          <div class="col-xs-5 visible-xs">
+          <div class="col-md-5 visible-xs visible-sm">
             &nbspEndpoints
           </div>
 
-          <div class="col-xs-7 col-sm-3 clearfix endpoints ">
+              <!--<div class="col-md-5 visible-sm">-->
+                  <!--&nbspEndpoints-->
+              <!--</div>-->
+
+
+          <div class="col-md-7 col-md-3 clearfix endpoints ">
             <span >{{j.src.uri}}<i class="fa fa-long-arrow-right"></i></span>
             <span>{{j.dest.uri}}</span>
           </div>
-              <div class="col-sm-1 clearfix">
+              <div class="col-md-1 clearfix">
                   <button title="close" type="button" class="close" aria-label="close" ng-click= "close($index, j)">
                       <span aria-hidden="true">&times;</span></button>
               </div>
@@ -136,7 +141,7 @@ div .endpoints {
 
     <div class="clearfix panel-footer">
       <!-- Auto-refresh controls. -->
-      <div class="btn-group input-group col-xs-3 text-left pull-left">
+      <div class="btn-group input-group col-md-3 text-left pull-left">
         <button ng-click="refresh()" title="Refresh" class="btn btn-default" ng-disabled="auto">
           <i class="fa fa-refresh" ng-class="auto && 'fa-spin'"></i>
         </button>
@@ -154,7 +159,7 @@ div .endpoints {
       </div>
 
       <!-- Pager controls. -->
-      <div class="col-xs-6 text-center pull-left">
+      <div class="col-md-6 text-center pull-left">
         <ul pagination total-items="filteredJobs.length" items-per-page="perPage"
             page="page" max-size="4" previous-text="&laquo;" next-text="&raquo;"></ul> 
 
@@ -166,7 +171,7 @@ div .endpoints {
       </div>
 
       <!-- Filter menu. -->
-      <div ng-init="filterMenu = {show: false}" class="btn-group dropup pull-left text-right col-xs-3">
+      <div ng-init="filterMenu = {show: false}" class="btn-group dropup pull-left text-right col-md-3">
         <i class="fa fa-info-circle text-info" bs-tooltip
            ng-show="(jobs | keys).length - filteredJobs.length"
            title="Hidden jobs: {{(jobs | keys).length - filteredJobs.length}}"></i>
