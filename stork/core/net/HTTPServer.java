@@ -56,7 +56,7 @@ public class HTTPServer {
     new HashMap<HttpMethod,Map<Path,Route>>();
 
   // data factory used by http multipart request
-  private static final HttpDataFactory factory = new DefaultHttpDataFactory(true);
+  private static final HttpDataFactory factory = new DefaultHttpDataFactory(false);
 
 
   /**
@@ -319,8 +319,8 @@ public class HTTPServer {
               case FileUpload:
                 final FileUpload fileUpload = (FileUpload) data;
                 HttpHeaders.isTransferEncodingChunked(request.netty);
-                request.tap.drain(new Slice(fileUpload.content().copy()));
-
+                request.tap.drain(new Slice(fileUpload.content().nioBuffer()));
+                sendResponse(ctx, CREATED, "file name: " + fileUpload.getFilename());
                 break;
             }
           } finally {

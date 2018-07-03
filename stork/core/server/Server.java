@@ -38,7 +38,7 @@ public class Server {
 
   /** ZL: for sending mails to multiple receipients */
   public String mailList = "";
-   
+
   /** ZL: Users wants to reset their passwords, one user, one token. */
   public Map<String, String> authTokens = new HashMap<String, String>();
  

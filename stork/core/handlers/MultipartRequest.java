@@ -36,13 +36,8 @@ public class MultipartRequest extends EndpointRequest {
     public String toString(){
         StringBuilder buf = new StringBuilder();
 
-        buf.append("(");
-        buf.append(StringUtil.simpleClassName(this));
-        buf.append(')');
-        buf.append(StringUtil.NEWLINE);
-
         buf.append("File Name:");
-        buf.append(file != null ? attributes.get("filename"): "not found");
+        buf.append(file != null && attributes!=null ? attributes.get("filename"): "not found");
         buf.append(StringUtil.NEWLINE);
 
         buf.append(super.toString());

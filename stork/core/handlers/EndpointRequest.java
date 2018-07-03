@@ -70,8 +70,8 @@ public class EndpointRequest extends Request {
       throw new RuntimeException("No URI scheme for "+name+"endpoint.");
     if (credential != null)
       result.credential = credential.resolve();
-    if (credential != null && result.credential == null)
-      throw new RuntimeException("Invalid credential for "+name+"endpoint.");
+    //if (credential != null && result.credential == null)
+      //throw new RuntimeException("Invalid credential for "+name+"endpoint.");
     if (module != null)
       result.module = server().modules.byHandle(module);
     else
