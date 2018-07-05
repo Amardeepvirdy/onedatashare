@@ -93,7 +93,8 @@ div .endpoints {
           </div>
           <div class="col-xs-7 col-sm-3 clearfix endpoints" data-placement="top" data-trigger="hover"
                bs-popover content-template="src-dest.html">
-            <span>{{j.src.uri}}
+              <span>{{j.src.uri}} </span>
+              <span>{{j.dest.uri}}</span>
           </div>
 
           <div class="clearfix"></div>
@@ -268,6 +269,7 @@ div .endpoints {
         <span ng-bind="percent(j.progress.files)"></span>
         <span ng-bind="progress(j.progress.files)"></span>
       </dd>
+            <br> <span>  {{j.message}} </span>
     </dl>
   </script>
 
