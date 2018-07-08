@@ -139,7 +139,7 @@ angular.module('stork.transfer.browse', [
 
     var ep = angular.copy($scope.end);
     ep.uri = uri.href();
-    ep.folder_id = scope.folder_id;
+    ep.selectedFolderIds = scope.folder_id;
 
     return stork.ls(ep, 1).then(
       function (d) {
@@ -449,12 +449,18 @@ $scope.mkdir = function () {
   };
 
   $scope.mk_dir = function (name) {
+    var scope = this;
     var u = $scope.uri.parsed;
     u = u._string+name+"/";
     //u = new URI(u);
     if (!u) return;
     var ep = angular.copy($scope.end);
     ep.uri = u;
+    if($scope.end.$selected.length > 1) {
+
+    }else {
+        ep.selectedFolderIds = $scope.end.$selected[0].id;
+    }
     //u.segment(name);
     return stork.mkdir(ep).then(
       function (m) {

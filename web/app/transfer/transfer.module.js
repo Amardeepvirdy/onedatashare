@@ -98,7 +98,9 @@ angular.module('stork.transfer', [
         if (i + 1 != src.$selectedPaths.length) {
             dest_uris += ",";
             src_uris += ",";
-            job.src.selectedFolderIds += ",";
+            if(src.$selected[i].hasOwnProperty('id')) {
+                job.src.selectedFolderIds += ",";
+            }
         }
     }
     if(dest.$selected[0].hasOwnProperty('id')) {
