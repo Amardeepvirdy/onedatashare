@@ -371,13 +371,29 @@ angular.module('stork.transfer.browse', [
     return _.keys($scope.end.$selected);
   };
 
+  /* canDownload(): Function is used to determine if download button should be enabled or disabled
+   * It returns true (download button will be enabled) when only one file is selected and
+   * false (download button will be disabled) when multiple files are selected or a folder is selected.
+   */
+  $scope.canDownload = function() {
+    var selectedItems = $scope.end.$selected;
+    if (!selectedItems || _.isEmpty(selectedItems) || _.size(selectedItems) > 1)
+        return false;
+    for (var i = 0; i < _.size(selectedItems); i++) {
+        if (_.values(selectedItems)[i].dir)
+            return false;
+    }
+    return true;
+  }
+
   /* Supported protocol to show in the dropdown box.ex.ftp://ftp.mozilla.org/,gsiftp://oasis-dm.sdsc.xsede.org/ */
   $scope.dropdownDbx = [
     ["fa-dropbox", "Dropbox", "dropbox://"],
   ];
 
   $scope.dropdownList = [
-    ["fa-globe", "FTP", "ftp:"], 
+    ["fa-globe", "FTP", "ftp:"],
+    ["fa-globe", "SFTP", "sftp:"],
     ["fa-globe", "SDSC Gordon (GridFTP)", "gsiftp:"],
     ["fa-globe", "HTTP", "http:"],
     ["fa-globe", "SCP","scp:"],
