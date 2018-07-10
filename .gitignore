@@ -16,3 +16,4 @@ out\*
 lib/stork-3\.0a\.jar
 
 *.iml
+*.log
