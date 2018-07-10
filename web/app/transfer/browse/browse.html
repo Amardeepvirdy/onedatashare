@@ -108,6 +108,7 @@
       </div>
       <div class="btn-group ">
         <button class="btn btn-default" title="Download"
+                ng-disabled="!canDownload()"
                 ng-click="download(selectedUris())">
           <i class="fa fa-download"></i>
         </button>

@@ -74,7 +74,7 @@ angular.module('stork.transfer', [
   $scope.canTransfer = function (srcName, destName, contents) {
     var src = endpoints.get(srcName);
     var dest = endpoints.get(destName);
-    if (!src || !dest || !src.uri || !dest.uri)
+    if (!src || !dest || !src.uri || !dest.uri || dest.uri.indexOf("http://") == 0)
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
