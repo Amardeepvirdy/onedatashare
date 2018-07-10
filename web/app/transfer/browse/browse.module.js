@@ -444,7 +444,7 @@ $scope.mkdir = function () {
 
   $scope.mk_dir = function (name) {
     var u = $scope.uri.parsed;
-    u = u._string+name+"/";
+    u = u._string+"/"+name+"/";
     //u = new URI(u);
     if (!u) return;
     var ep = angular.copy($scope.end);

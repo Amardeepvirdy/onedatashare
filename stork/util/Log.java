@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 // A slightly more convenient logging utility.
 
 public abstract class Log {
+
     private final static Logger log = Logger.getAnonymousLogger();
     public static boolean just_log_to_stdout_who_cares = false;
     // Convenience logging methods that take variadic arguments. The last
@@ -23,7 +24,22 @@ public abstract class Log {
         FileHandler fh = null;
         log.setLevel(Level.ALL);
         File dir =  new File("../onedatashare/stork/core/LogFiles/");
-
+  private final static Logger log = Logger.getAnonymousLogger();
+  public static boolean just_log_to_stdout_who_cares = false;
+  // Convenience logging methods that take variadic arguments. The last
+  // object can optionally be a throwable to print a stack trace.
+  public static void log(Level l, Object... o){
+      //Writes log input to file in project path
+      Date date = new Date();
+      SimpleDateFormat dtf = new SimpleDateFormat("MM-dd-yyyy");
+      FileHandler fh = null;
+      log.setLevel(Level.ALL);
+      File f = new File("../onedatashare/stork/core/server/LogFiles/" +  dtf.format(date) + " log.log");
+      try {
+          fh = new FileHandler("../onedatashare/stork/core/server/LogFiles/" +  dtf.format(date) + " log.log",true);
+          if (!f.exists()) {
+              f.createNewFile();
+          }
         File f = new File("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + ".log");
         try {
 
@@ -89,6 +105,14 @@ public abstract class Log {
         log(WARNING, o);
     } public static void severe(Object... o) {
         log(SEVERE, o);
+
+      if (i < st.length) {
+        lr.setSourceClassName(st[i].getClassName());
+        lr.setSourceMethodName(st[i].getMethodName());
+      }
+
+      log.log(lr);
+      fh.close();
     }
 
 }

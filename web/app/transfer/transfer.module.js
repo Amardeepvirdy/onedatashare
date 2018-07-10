@@ -2,11 +2,25 @@
 
 /** Module for controlling and monitoring transfers. */
 angular.module('stork.transfer', [
-  'stork.transfer.browse', 'stork.transfer.queue', 'stork.credentials'
+  'stork.transfer.browse', 'stork.transfer.queue', 'stork.credentials', 'stork'
 ])
 
+.factory('fileService', ['stork', '$q', function (stork, $q) {
+    return {
+      getFiles : function (ep, d) {
+        var defer = $q.defer();
+        //setTimeout(function (){
+          stork.ls(ep, d).then(function (data) {
+            defer.resolve(data.hasOwnProperty("files") ? data["files"] : data);
+          });
+        //}, 0);
+        return defer.promise;
+      }
+    };
+  }])
+
 .controller('Transfer', function (
-  $rootScope, $scope, user, stork, $modal, endpoints)
+  $rootScope, $q, $timeout, $scope, user, stork, $modal, endpoints, fileService)
 {
   // Hardcoded options.
   $scope.optSet = [{
@@ -64,19 +78,79 @@ angular.module('stork.transfer', [
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
+    if (!_.values(dest.$selected)[0].dir)
+      return false;
     if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
       /*$modal({
       title: 'ATTENTION',
       contentTemplate: 'transfer-error.html',
       });*/
       return false;
+    if(!$scope.flag)
+      return false;
     return true;
   };
 
-  $scope.transfer = function (srcName, destName, contents) {
-    var src = endpoints.get(srcName);
-    var dest = endpoints.get(destName);
 
+  function getSourceFiles(src){
+    var res = [];
+    var i = 0;
+    for(var key in src){
+      if(src.hasOwnProperty(key)){
+        res[i++] = src[key];
+      }
+    }
+    return res;
+  }
+
+  function loadDestFiles(dest, key, srcFiles, src){
+    var ep = angular.copy(dest);
+    ep.uri = key;
+    fileService.getFiles(ep, 1).then(function (data){
+      getDuplicates(data, srcFiles, src, dest);
+    });
+  }
+
+  function getDestDirFiles(dest, srcFiles, src){
+    var destSelected = dest.$selected;
+    for (var key in destSelected) {
+      if (destSelected.hasOwnProperty(key)) {
+        if (destSelected[key].hasOwnProperty("files"))
+          getDuplicates(destSelected[key]["files"], srcFiles, src, dest);
+        else {
+          loadDestFiles(dest, key, srcFiles, src);
+          //return destFiles;
+        }
+      }
+    }
+  }
+
+  function getDestDirFileNames(destDirFiles, isFile) {
+    var names = [];
+    var n = 0;
+    for(var i = 0, len = destDirFiles.length; i < len; i++){
+      if(destDirFiles[i]["file"] === isFile)
+        names[n++] = destDirFiles[i]["name"];
+    }
+    return names;
+  }
+
+  function getDuplicates(destDirFiles, srcFiles, src, dest){
+    var d = 0;
+    if(destDirFiles != undefined){
+      var destDirFileNames = getDestDirFileNames(destDirFiles, true);
+      var destDirDirectoryNames = getDestDirFileNames(destDirFiles, false);
+      for(var i = 0, len = srcFiles.length; i < len; i++){
+        var destDir = srcFiles[i]["file"] ? destDirFileNames : destDirDirectoryNames;
+        if(destDir.indexOf(srcFiles[i]["name"]) != -1){
+            duplicates[d++] = srcFiles[i]["name"];
+        }
+      }
+    }
+    createJob(src, dest);
+  }
+
+  function createJob(src, dest){
     var job = angular.copy($scope.job);
     job.src = src;
     job.dest = dest;
@@ -85,7 +159,6 @@ angular.module('stork.transfer', [
     var dest_uris = "";
     var src_uris = "";
     for (var i = 0; i < _.keys(src.$selected).length; i++) {
-        console.log("key: " + _.keys(src.$selected)[i]);
         if (dest.$selected[du].dir) {
             var n = new URI(su[i]).segment(-1);
             dest_uris += new URI(du).segment(n).toString().trim();
@@ -96,22 +169,47 @@ angular.module('stork.transfer', [
             src_uris += ",";
         }
     }
-    job.dest.uri = du = dest_uris;
-    job.src.uri = su = src_uris;
-    console.log("new dest_uris: "+job.dest.uri);
-    console.log("new src_uris: "+job.src.uri);
-
-    var modal = $modal({
+    job.dest.uri = dest_uris.replace(/, /g, ",");
+    job.src.uri = src_uris.replace(/, /g, ",");
+    var modal = null;
+    if(duplicates.length > 0) {
+      var modal = $modal({
+        title: 'Confirm Overwrite',
+        contentTemplate: 'transfer-modal.html'
+      });
+    }
+    else {
+      var modal = $modal({
         title: 'Transfer',
         contentTemplate: 'transfer-modal.html'
-    });
+      });
+    }
 
-    console.log("job.src.uri: " + job.src.uri);
-    console.log("job.dest.uri: " + job.dest.uri);
-
-    console.log(job);
+    var strDuplicates = duplicates.length == 0 ? null : duplicates.join(", ");
+    modal.$scope.srcUris = src_uris;
+    modal.$scope.destUris = dest_uris;
+    modal.$scope.duplicates = strDuplicates;
     modal.$scope.job = job;
     modal.$scope.submit = $scope.submit;
+
+    $scope.flag = true;
+
+  }
+
+  var duplicates = [];
+  $scope.flag = true;
+  $scope.transfer = function (srcName, destName, contents) {
+    $scope.flag = false;
+    duplicates = [];
+    var src = endpoints.get(srcName);
+    var dest = endpoints.get(destName);
+    if(!$scope.job.options.overwrite) {
+      var srcFiles = getSourceFiles(src.$selected);
+      getDestDirFiles(dest, srcFiles, src);
+    }
+    else{
+      createJob(src, dest);
+    }
   };
   //Modal to prompt the user a credential rename
   $scope.rename = function(credName) {
