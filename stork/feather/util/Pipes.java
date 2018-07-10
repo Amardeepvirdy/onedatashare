@@ -172,16 +172,16 @@ public final class Pipes {
       Ad ad = new Ad("attributes", list);
 
       Ad tempad = new Ad();
-      if(list.containsKey("uuid")) {
+      if(list.containsKey("uri[credential][uuid]")) {
         tempad.put("uuid", list.get("uri[credential][uuid]"));
       }
-      if(list.containsKey("type")) {
+      if(list.containsKey("uri[credential][type]")) {
         tempad.put("type", list.get("uri[credential][type]"));
       }
-      if(list.containsKey("username")) {
+      if(list.containsKey("uri[credential][username]")) {
         tempad.put("username", list.get("uri[credential][username]"));
       }
-      if(list.containsKey("password")) {
+      if(list.containsKey("uri[credential][password]")) {
         tempad.put("password", list.get("uri[credential][password]"));
       }
 

@@ -16,36 +16,40 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CREATED;
 import static stork.scheduler.JobStatus.failed;
 
 /** Handles scheduling jobs. */
 public class UploadHandler extends Handler<MultipartRequest> {
+    public static HashMap<String, Resource> sessions = new HashMap<String, Resource>();
     public void handle(MultipartRequest req) {
         req.assertLoggedIn();
         req.assertMayChangeState();
-        Resource d = req.resolve();
-        final UploadResource s = new UploadSession(req.file, req.attributes).root();
+        final UploadResource s;
+        if(sessions.get(req.uri) == null) {
+            s = new UploadSession(req.file, req.attributes).root();
+            final Resource d = req.resolve();
+            final Transfer t = s.transferTo(d);
+            t.start();
+            t.onStop().new Promise() {
+                public void always() {
+                    s.session.close();
+                    d.session.close();
+                }
+                public void fail(Throwable t) {
+                    // There was some problem during the transfer. Reschedule if possible.
+                    Log.warning("Job failed: ", " ", t);
+                }
+            };
+            sessions.put(req.uri, s);
 
-        Transfer t = s.transferTo(d);
-        t.start();
-        t.onStop().new Promise() {
-            public void always() {
-                s.session.close();
-                d.session.close();
-            }
-            public void fail(Throwable t) {
-                // There was some problem during the transfer. Reschedule if possible.
-                Log.warning("Job failed: ", " ", t);
-            }
-        };
+        }else{
+            s = (UploadResource) sessions.get(req.uri);
+            s.session.addFileToArray(req.file, req.attributes);
 
-
-
-
-
-
+        }
         /*try (FileChannel inputChannel = new FileInputStream(fileUpload.getFile()).getChannel();
              FileChannel outputChannel = new FileOutputStream(file, true).getChannel()) {
             inputChannel.transferTo(0, inputChannel.size(), outputChannel);

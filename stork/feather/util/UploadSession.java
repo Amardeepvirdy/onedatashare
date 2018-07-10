@@ -21,29 +21,39 @@ import stork.feather.*;
 public class UploadSession extends Session<UploadSession,UploadResource> {
     final ScheduledThreadPoolExecutor executor =
             new ScheduledThreadPoolExecutor(1);
-    final Slice _file;
-    final Ad _attributes;
-    static final String pathStr = "local";
-    static final Path path = Path.create(UploadSession.pathStr);
-
-    /** Create a {@code LocalSession} at the system root. */
-    public UploadSession() { this(Path.ROOT); }
+    public Slice[] _file;
+    public Ad[] _attributes;
+    final Path _path;
+    final UploadResource _upr;
+    final String _uri;
+    final int _totalSize;
+    final String _filename;
 
     /** Create a {@code LocalSession} at {@code path}. */
     public UploadSession(Slice file, Ad attributes) {
-        super(URI.create(pathStr));
-        _file = file;
-        _attributes = attributes;
+
+        super(URI.create(attributes.get("uri[uri]")));
+        _uri = attributes.get("uri[uri]");
+        _path = Path.create(_uri);
+        _filename = attributes.get("_filename");
+        _totalSize = Integer.parseInt(attributes.get("_totalSize"));
+        int total = _totalSize;
+        int chunk = Integer.parseInt(attributes.get("_chunkSize"));
+        int totalNumbebrOfChunks = total / chunk + (total % chunk == 0 ? 0 : 1) ;
+        _file = new Slice[totalNumbebrOfChunks];
+        _attributes = new Ad[totalNumbebrOfChunks];
+        addFileToArray(file, attributes);
+        _upr = new UploadResource(this, _path);
     }
 
-    public UploadSession(Path path) {
-        super(URI.create(path.toString()));
-        _file = null;
-        _attributes = null;
+    public void addFileToArray(Slice file, Ad attributes){
+        int chunkNum = Integer.parseInt(attributes.get("_chunkNumber"));
+        _file[chunkNum] = file;
+        _attributes[chunkNum] = attributes;
     }
 
     public UploadResource select(Path path) {
-        return new UploadResource(this, path);
+        return _upr ;
     }
 
     protected void finalize() {

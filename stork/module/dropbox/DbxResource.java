@@ -187,6 +187,7 @@ public class DbxResource extends Resource<DbxSession, DbxResource> {
     protected Bell drain(final Slice slice) {
       return new ThreadBell<Void>() {
         public Void run() throws Exception {
+          int x = slice.length();
           upload.getOutputStream().write(slice.asBytes());
           return null;
         }

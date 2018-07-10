@@ -315,11 +315,13 @@ public class HTTPServer {
                 }
                 Ad ad1 = new Ad(t1.getName(), t1.getValue());
                 request.tap.drain(ad1);
+
                 break;
               case FileUpload:
                 final FileUpload fileUpload = (FileUpload) data;
+                data.retain();
                 HttpHeaders.isTransferEncodingChunked(request.netty);
-                request.tap.drain(new Slice(fileUpload.content().nioBuffer()));
+                request.tap.drain(new Slice(fileUpload.getByteBuf()));
                 sendResponse(ctx, CREATED, "file name: " + fileUpload.getFilename());
                 break;
             }

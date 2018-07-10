@@ -66,9 +66,12 @@ public abstract class Tap<S extends Resource> extends Pipe {
 
   public final Bell start() {
     return start0().new Promise() {
-      public void fail(Throwable t) { finish(t); }
+      public void fail(Throwable t) {
+        finish(t);
+      }
     };
-  } private final Bell start0() {
+  }
+  private final Bell start0() {
     try {
       // Start downstream elements.
       Bell b1 = super.start();
