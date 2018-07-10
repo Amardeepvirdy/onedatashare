@@ -299,15 +299,11 @@
     "vanditsa@buffalo.edu": {
       "salt": "7282c9dbd900e5bfc9befd0003e42e19d8e9186ed5e55a10",
       "credentials": {
-        "7196f99d-7962-4d3a-974d-b78e4e937410": {
-          "name": "Dropbox",
+        "4a85a9b9-e6f0-4c70-934b-d98ad6b64dba": {
+          "name": "DropBox: javierfalca1@gmail.com",
           "type": "oauth",
-          "token": "xrNqXEY0jrYAAAAAAAAAD-9-K7nvt0dpT7r3ohZoswuWXpITwgEMzyduz0zGX3o1"
-        },
-        "ddac932e-fa4b-4f83-9c15-596fc2ead41c": {
-          "name": "Dropbox",
-          "type": "oauth",
-          "token": "xrNqXEY0jrYAAAAAAAAADQ8Fsv7MwRDdJ1775lp_ERDU6BeRNpdMV6JTSI-mCOZd"
+          "userID": "297932535",
+          "token": "xrNqXEY0jrYAAAAAAAAAs1mWrDaJhmvkoGS-yrG-g7mzAOF5aUgADQZtw5WSkLp7"
         }
       },
       "jobs": [
@@ -321,8 +317,10 @@
         "299d3656-8d8b-4873-bfa1-3109f5bd2ed0"
       ],
       "history": [
-        "dropbox:/test",
         "dropbox:/",
+        "/heck",
+        "http:/",
+        "dropbox:/test",
         "http://google.com/",
         "http://google.com/services",
         "gsiftp://oasis-dm.sdsc.xsede.org/",

@@ -203,6 +203,10 @@
       <button ng-click="$hide()" type="button" class="btn btn-default">
         Cancel
       </button>
+        <!--Ideally we should add renaming functionality at some point, but we need a better approach-->
+     <!--<button ng-click = "rename(cred.name)" type="button" class="btn btn-default" >-->
+        <!--Rename-->
+     <!--</button>-->
     </div>
   </form>
 </script>
@@ -231,6 +235,25 @@
       </button>
     </div>
   </form>
+</script>
+
+<!-- Rename existing credential -->
+<script type="text/ng-template" id="rename-cred.html">
+    <form ng-controller="EnterCredential" ng-submit="saveCredential(cred)">
+        <div class="form-group col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control" ng-model="cred.name" required>
+        </div>
+        <div class="text-center modal-footer">
+            <button type="submit" class="btn btn-primary"
+                    ng-disabled="cred.$agreed === false">
+                OK
+            </button>
+            <button ng-click="$hide()" type="button" class="btn btn-default">
+                Cancel
+            </button>
+        </div>
+    </form>
 </script>
 
 <!-- Create new credential MyProxy credential. -->
