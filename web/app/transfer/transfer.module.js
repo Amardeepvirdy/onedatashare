@@ -19,8 +19,8 @@ angular.module('stork.transfer', [
     };
   }])
 
-.controller('Transfer', function (
-  $rootScope, $q, $timeout, $scope, user, stork, $modal, endpoints, fileService)
+.controller('Transfer', function
+    ($rootScope, $q, $timeout, $scope, user, stork, $modal, endpoints, fileService)
 {
   // Hardcoded options.
   $scope.optSet = [{
@@ -78,8 +78,6 @@ angular.module('stork.transfer', [
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
-    if (!_.values(dest.$selected)[0].dir)
-      return false;
     if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
       /*$modal({
       title: 'ATTENTION',
@@ -113,6 +111,7 @@ angular.module('stork.transfer', [
 
   function getDestDirFiles(dest, srcFiles, src){
     var destSelected = dest.$selected;
+
     for (var key in destSelected) {
       if (destSelected.hasOwnProperty(key)) {
         if (destSelected[key].hasOwnProperty("files"))
@@ -162,6 +161,9 @@ angular.module('stork.transfer', [
         if (dest.$selected[du].dir) {
             var n = new URI(su[i]).segment(-1);
             dest_uris += new URI(du).segment(n).toString().trim();
+        }else{
+            var n = new URI(su[i]).segment(-1);
+            dest_uris += new URI(du.substr(0, du.lastIndexOf('/') + 1)).segment(n).toString().trim();
         }
         src_uris += su[i].trim();
         if (i + 1 != _.keys(src.$selected).length) {
@@ -217,9 +219,14 @@ angular.module('stork.transfer', [
         title: 'Rename',
         contentTemplate: 'app/transfer/parts/renameCred.html'
 
+<<<<<<< HEAD
     });
   }
 
+=======
+  
+  // scope submit
+>>>>>>> 03a115dbfd553bd30c752ca92dd0b77935c2edbc
   $scope.submit = function (job, then) {
     return stork.submit(job).then(
       function (d) {

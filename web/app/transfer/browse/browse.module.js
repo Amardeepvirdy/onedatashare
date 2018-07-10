@@ -54,7 +54,6 @@ angular.module('stork.transfer.browse', [
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
-
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
     $scope.uri = {};
@@ -64,7 +63,7 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.reset();
-
+  $scope.timer = [];
   // Example display
   $scope.exDisplay = function (uri) {
     uri = new URI(uri).normalize();
@@ -152,9 +151,13 @@ angular.module('stork.transfer.browse', [
 
   // Get the path URI of this item.
   $scope.path = function () {
-    if ($scope.root === this.root)
-      return $scope.uri.parsed.clone();
-    return this.parent().path().segmentCoded(this.root.name);
+    return $scope.genericPath(this);
+  };
+  // Get the path URI of an item.
+  $scope.genericPath = function (that) {
+      if ($scope.root === that.root)
+         return $scope.uri.parsed.clone();
+      return that.parent().path().segmentCoded(that.root.name);
   };
 
   // Open the mkdir dialog.
@@ -209,7 +212,6 @@ angular.module('stork.transfer.browse', [
       return alert('You must select a file.');
     else if (uris.length > 1)
       return alert('You can only download one file at a time.');
-
     var end = {
       uri: uris[0],
       credential: $scope.end.credential
@@ -217,12 +219,26 @@ angular.module('stork.transfer.browse', [
     stork.get(end);
   };
 
+   $scope.upload = function (uris) {
+      if (uris == undefined || uris.length == 0)
+        return alert('You must select a file.');
+      else if (uris.length > 1)
+        return alert('You can only upload one file at a time.');
+      var end = {
+        uri: uris[0],
+        credential: $scope.end.credential
+      };
+      stork.get(end);
+    };
+
   // Share the selected file.
   $scope.share = function (uris) {
     if (uris == undefined || uris.length == 0)
       return alert('You must select a file.');
     else if (uris.length > 1)
       return alert('You must select exactly one file.');
+
+
     stork.share({
       uri: uris[0],
       credential: $scope.end.credential
@@ -267,23 +283,57 @@ angular.module('stork.transfer.browse', [
   $scope.select = function (e) {
     var scope = this;
     var u = this.path();
-      // Enable to choose mutiple files.
-    if (e.ctrlKey) {
+    // if dragging, dont select anything;
+    if($scope.dragO != null){return}
+
+    // Enable to choose mutiple files.
+    var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
+    if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
       this.root.selected = !this.root.selected;
-      if (this.root.selected)
+      if (this.root.selected){
         $scope.end.$selected[u] = this.root;
+      }
       else
         delete $scope.end.$selected[u];
-    } else if ($scope.selectedUris().length != 1) {
+    }else if (e.shiftKey) {
+
+       if($scope.start_select && ($scope.start_select.parent().root == this.parent().root)){
+        var target = this.root;
+        var source = $scope.start_select;
+        var arrayOfSelects = [];
+
+        while(source.$$nextSibling != null && source.root != target){
+            arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+            source = ((source.$index < this.$index) ? source.$$nextSibling : source.$$prevSibling);
+        }
+        arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+
+        $scope.unselectAll();
+        arrayOfSelects.map((v)=>{
+          v.root.selected = true;
+          $scope.end.$selected[v.path] = v.root;
+        });
+       }else{
+       // shift click without setting start point
+        $scope.start_select = this;
+        $scope.unselectAll();
+        this.root.selected = true;
+        $scope.end.$selected[u] = this.root;
+       }
+     }
+     else if ($scope.selectedUris().length != 1) {
+      $scope.start_select = this;
       // Either nothing is selected, or multiple things are selected.
+
       $scope.unselectAll();
       this.root.selected = true;
       $scope.end.$selected[u] = this.root;
-    } else if ($scope.selectedUris().length = 1){
+    }else if ($scope.selectedUris().length = 1){
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
       if (!selected) {
+        $scope.start_select = this;
         this.root.selected = true;
         $scope.end.$selected[u] = this.root;
       }
@@ -309,6 +359,7 @@ angular.module('stork.transfer.browse', [
   $scope.unselectAll = function () {
     var s = $scope.end.$selected;
     if (s) _.each(s, function (f) {
+      f.selected = false;
       delete f.selected;
     });
     $scope.end.$selected = {};
@@ -377,46 +428,118 @@ angular.module('stork.transfer.browse', [
     }
   }
 
-  $scope.storkDragStart = function (e) {
-    /** or e.target.style.opacity = '.8';*/
-    this.style.opacity='.8';
-    e.dataTransfer.setData('text', e.target.root);
-    ;
+  $scope.storkDragStart = function (ele, scope) {
+    if(_.size($scope.end.$selected) == 0){
+      var u = $scope.genericPath(scope);
+      scope.root.select = true;
+      $scope.end.$selected[u] = scope.root;
+
+    }
+    $scope.dragO = _.size($scope.end.$selected);
+
+    $scope.$digest();
   };
-  $scope.storkDragEnd = function (e) {
-    this.style.opacity='1';
+  $scope.storkDragEnd = function (e, scope) {
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
+    $scope.clearTimeout($scope.timer);
+    $scope.dragO = null;
+    $scope.$digest();
   };
-  $scope.storkDragOver = function (e) {
-    e.preventDefault();   
-  };
-  $scope.storkDragEnter = function (e) {
-    e.target.style.opacity=".3";
-  };
-  $scope.storkDragLeave = function (e) {
-    e.target.style.opacity="";
-  };
-  $scope.storkDrop = function (e) {
+  $scope.storkDragOver = function (e, scope) {
     e.preventDefault();
-    e.target.style.opacity="";    
+    if(scope.root.dir){
+          scope.root.hoverOver = true;
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
+     }
+  };
+  $scope.storkDragEnter = function (e, scope) {
+    $scope.unHoverFriends(scope);
+    if(scope.root.file){
+          scope.$parent.root.hoverOver = true;
+     }else{
+          scope.root.hoverOver = true;
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
+     }
+     $scope.$digest();
+     e.preventDefault();
+  };
+  $scope.toggleOnLongHover = function(node){
+    if(node.root.hoverOver && !node.open){
+        node.toggle();
+    }
+  }
+
+  $scope.storkDragLeave = function (e, scope) {
+
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
+    $scope.clearTimeout($scope.timer);
+  };
+  $scope.storkDrop = function (e, scope) {
+    e.preventDefault();
+
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
+
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
-    $scope.transfer('left','right',false);
+        $scope.transfer('left','right',false);
+
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
-    $scope.transfer('right','left',false);
-    $scope.unselectAll();
+        $scope.transfer('right','left',false);
+    $scope.$digest();
   };
 
   /*Issue 10 changes starts here - Ahmad*/
   $scope.logoutDbx = function () {
-    //console.log($scope.end);
     $scope.end.credential = undefined;
     $scope.refresh();
   }
+  // TODO: this function has bad algorithm
+  $scope.unHoverFriends = function(node){
+    if(node.$$nextSibling){
+        node.$$nextSibling.root.hoverOver = false;
+
+    }
+    if(node.$parent){
+        node.$parent.root.hoverOver = false;
+    }
+    if(node.$$prevSibling){
+        /*if(node.$$prevSibling.$$childTail && node.$$prevSibling.root.dir && node.$$prevSibling.root.files.map){
+            node.$$prevSibling.root.files.map((file)=>{
+                file.hoverOver = false;
+            });
+        }*/
+        node.$$prevSibling.root.hoverOver = false;
+    }
+    if(node.root.files && node.root.files.map && node.$$childHead){
+        node.root.files.map((file)=>{
+            file.hoverOver = false;
+        });
+    }
+  }
+  $scope.clearTimeout = function(timer){
+    timer.map((time)=>{
+        clearTimeout(time);
+    });
+    timer = [];
+  }
+
+  // TODO: this function does not work
+  $scope.onThisSide = function (node) {
+      while(node.$parent){
+        node = node.$parent;
+        if(node.root == $scope.root){
+            return true;
+        }
+      }
+      return false;
+    }
   /*Issue 10 changes ends here - Ahmad*/
    
 })
 /** Controller forclosing the browse modal. */
 .controller('BrowseModal', function ($scope, $modal, stork) {
-
 $scope.mkdir = function () {
     var modal = $modal({
       title: 'Create Directory',
