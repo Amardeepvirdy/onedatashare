@@ -219,14 +219,11 @@ angular.module('stork.transfer', [
         title: 'Rename',
         contentTemplate: 'app/transfer/parts/renameCred.html'
 
-<<<<<<< HEAD
     });
   }
 
-=======
   
   // scope submit
->>>>>>> 03a115dbfd553bd30c752ca92dd0b77935c2edbc
   $scope.submit = function (job, then) {
     return stork.submit(job).then(
       function (d) {
