@@ -17,8 +17,8 @@ public final class Resources {
    */
   public static Resource anonymous() {
     return new Session(URI.EMPTY) {
-      public Resource select(Path path) {
-        return new Resource(this, path) { };
+      public Resource select(Path path, String id) {
+        return new Resource(this, path, id) { };
       }
     }.root();
   }
@@ -34,8 +34,8 @@ public final class Resources {
    */
   public static Resource anonymous(final Stat stat) {
     return new Session(URI.EMPTY) {
-      public Resource select(Path path) {
-        return new Resource(this, path) {
+      public Resource select(Path path, String id) {
+        return new Resource(this, path, id) {
           public Bell<Stat> stat() {
             return new Bell<Stat>().ring(stat);
           }
@@ -79,8 +79,8 @@ public final class Resources {
       stat.size += slice.offset();
 
     return new Session(URI.EMPTY) {
-      public Resource select(Path path) {
-        return new Resource(this, path) {
+      public Resource select(Path path, String id) {
+        return new Resource(this, path, id) {
           public Bell<Stat> stat() {
             return new Bell<Stat>(stat);
           } public Tap tap() {

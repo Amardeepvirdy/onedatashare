@@ -110,7 +110,8 @@
   <li bindonce="root" ng-repeat="root in files | orderBy:['-dir','name']"
       bo-class="{ dir: root.dir, file: !root.dir, loading: loading,
                   dot: root.name && root.name.charAt(0) == '.' }"
-      ng-class="{open:open}"> 
+      ng-init="folder_id=root.id"
+      ng-class="{open:open}">
     <i class="fa text-muted toggle" ng-mousedown="root.dir && toggle()"
        ng-class="{'fa-minus-square-o': open, 'fa-plus-square-o': !open}"></i>
     <div ng-class="{'alert-info': root.selected, 'alert-warning': !!error}"
@@ -175,10 +176,16 @@
             {{c.name || 'Unnamed ('+c.type+')'}}
           </option>
         </optgroup>
-        <optgroup class="new-credential" label="New credential">
+
+         <!--Issue 14 changes starts here - Mythri > 
+
+        <!--<optgroup class="new-credential" label="New credential">
           <option value="new:userinfo">Username/Password</option>
           <option value="new:gss">MyProxy</option>
-        </optgroup>
+        </optgroup>-->
+        
+        <!--Issue 14 changes ends here - Mythri-->
+
       </select>
 
       <div class="modal-body" ng-switch="selected">

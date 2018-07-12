@@ -9,7 +9,7 @@ public abstract class AnonymousResource extends Resource {
 
   /** Create an {@code AnonymousResource} at {@code path}. */
   public AnonymousResource(Path path) {
-    super(new AnonymousSession(), path);
+    super(new AnonymousSession(), path, null);
     ((AnonymousSession)session).root = this;
   }
 
@@ -25,7 +25,7 @@ class AnonymousSession extends Session {
 
   AnonymousSession() { super(URI.EMPTY); }
 
-  public Resource select(Path path) {
+  public Resource select(Path path, String id) {
     return root.select(path);
   }
 }

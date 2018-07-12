@@ -20,9 +20,9 @@ public class SFTPModule extends Module<SFTPResource> {
     description("A module for SFTP/SCP file transfers.");
   }
 
-  public SFTPResource select(URI uri, Credential credential) {
+  public SFTPResource select(URI uri, Credential credential, String id) {
     URI ep = uri.endpointURI();
-    return new SFTPSession(ep, credential).select(uri.path());
+    return new SFTPSession(ep, credential).select(uri.path(), id);
   }
 }
 
@@ -39,8 +39,8 @@ class SFTPSession extends Session<SFTPSession, SFTPResource> {
   }
 
   /** Get an SFTPResource. */
-  public SFTPResource select(Path path) {
-    return new SFTPResource(this, path);
+  public SFTPResource select(Path path, String id) {
+    return new SFTPResource(this, path, id);
   }
 
   /** Connect to the remote server. */
@@ -95,8 +95,8 @@ class SFTPSession extends Session<SFTPSession, SFTPResource> {
 }
 
 class SFTPResource extends Resource<SFTPSession, SFTPResource> {
-  public SFTPResource(SFTPSession session, Path path) {
-    super(session, path);
+  public SFTPResource(SFTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public Bell<Stat> stat() {

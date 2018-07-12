@@ -14,8 +14,8 @@ public class DbxSession extends Session<DbxSession, DbxResource> {
     super(uri, cred);
   }
 
-  public DbxResource select(Path path) {
-    return new DbxResource(this, path);
+  public DbxResource select(Path path, String id) {
+    return new DbxResource(this, path, id);
   }
 
   public Bell<DbxSession> initialize() {

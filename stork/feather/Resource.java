@@ -48,15 +48,18 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
   /** The {@code Session} associated with this {@code Resource}. */
   public final S session;
 
-  protected Resource(S session, Path path) {
+  public String id;
+
+  protected Resource(S session, Path path, String id) {
     if (path == null)
       path = Path.ROOT;
     this.path = path;
     this.session = session;
+    this.id = id;
   }
 
   protected Resource(S session) {
-    this(session, null);
+    this(session, null, null);
   }
 
   /** Get the unencoded name of this {@code Resource}. */
@@ -79,7 +82,7 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
    * @return The first singleton ancestor of this {@code Resource}.
    */
   public final R trunk() {
-    return (isSingleton()) ? (R) this : session.select(path.trunk());
+    return (isSingleton()) ? (R) this : session.select(path.trunk(), id);
   }
 
   /**
@@ -114,7 +117,7 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
       return (R) this;
     if (!session.equals(this.session))
       throw new IllegalArgumentException();
-    return session.select(path);
+    return session.select(path, id);
   }
 
   /**
@@ -144,7 +147,7 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
    * @return A subresource relative to this {@code Resource}.
    */
   public R select(Path path) {
-    return session.select(this.path.append(path));
+    return session.select(this.path.append(path), id);
   }
 
   /**
@@ -176,6 +179,7 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
    * supported.
    */
   public Bell<Stat> stat() { throw unsupported("stat"); }
+  public Bell<Stat> stat(String folderId) { throw unsupported("stat"); }
 
   /**
    * Get a listing of names of sub-{@code Resource}s under this {@code

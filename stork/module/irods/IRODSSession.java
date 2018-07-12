@@ -51,7 +51,7 @@ public class IRODSSession extends Session<IRODSSession,IRODSResource> {
     executor.shutdown();
   }
 
-  public IRODSResource select(Path path) {
-    return new IRODSResource(this, path);
+  public IRODSResource select(Path path, String id) {
+    return new IRODSResource(this, path, id);
   }
 }

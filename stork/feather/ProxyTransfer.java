@@ -22,11 +22,15 @@ extends Transfer<S,D> {
   private static class Pending {
     final Bell bell;
     final Path path;
+    final String id;
     protected Pending(Path path) {
-      this(new Bell(), path);
-    } protected Pending(Bell bell, Path path) {
+      this(new Bell(), path, "");
+    }protected Pending(Bell bell, Path path, String id) {
       this.bell = bell;
       this.path = path;
+      this.id = id;
+    }protected Pending(Path path, String id) {
+      this(new Bell(), path, id);
     }
   }
 
@@ -78,7 +82,7 @@ extends Transfer<S,D> {
     if (isDone()) {
       return Bell.rungBell();
     } if (!canStartDataTransfer()) {
-      return enqueueTransfer(path, false);
+      return enqueueTransfer(path, false, source.id);
     } try {
       transferStarted(path);
       return transfer0(path).new Promise() {
@@ -103,6 +107,7 @@ extends Transfer<S,D> {
     return src.stat().new AsBell<Object>() {
       public Bell<Object> convert(Stat stat) {
         Bell b = Bell.rungBell();
+//<<<<<<< HEAD
         if (stat.dir) {
           int totalSize = 0;
           for(int fileIndex = 0 ; fileIndex < stat.files.length; fileIndex++){
@@ -115,6 +120,12 @@ extends Transfer<S,D> {
           info.total = stat.size;
           b = b.and(cancelBell = transferData(path));
         }
+/*=======
+        if (stat.dir)
+          b = b.and(dest.mkdir()).and(transferList(stat, path));
+        if (stat.file)
+          b = b.and(transferData(path));
+>>>>>>> mythri*/
         else
           transferEnded(path);
         return b;
@@ -123,8 +134,8 @@ extends Transfer<S,D> {
   }
 
   // If we are not yet able to start a transfer, put it in the transfer queue.
-  private synchronized Bell enqueueTransfer(Path path, boolean first) {
-    Pending pending = new Pending(path);
+  private synchronized Bell enqueueTransfer(Path path, boolean first, String id) {
+    Pending pending = new Pending(path, id);
     if (first)
       queue.addFirst(pending);
     else
@@ -138,6 +149,7 @@ extends Transfer<S,D> {
       Pending pending = queue.poll();
       if (pending == null)
         return;
+      source.id = pending.id;
       transfer(pending.path).promise(pending.bell);
     }
   }
@@ -178,9 +190,13 @@ extends Transfer<S,D> {
   private synchronized Bell transferList(final Stat stat, final Path path){
     listingStarted(path);
     for(Stat file: stat.files){
+//<<<<<<< HEAD
       //Ignore current (".") and parent ("..") directories present in stat.files
       if(!(".".equals(file.name) || "..".equals(file.name)))
-        enqueueTransfer(path.appendLiteral(file.name), true);
+        enqueueTransfer(path.appendLiteral(file.name), true, file.id);
+/*=======
+      enqueueTransfer(path.appendLiteral(file.name), true, file.id);
+>>>>>>> mythri*/
     }
     listingEnded(path);
     return Bell.rungBell();

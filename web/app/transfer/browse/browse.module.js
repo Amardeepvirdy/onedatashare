@@ -54,6 +54,9 @@ angular.module('stork.transfer.browse', [
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
+  $scope.end.$selectedPaths = [];
+  $scope.end.$selected = [];
+  $scope.end.selectedFolderIds = "";
 
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
@@ -136,6 +139,7 @@ angular.module('stork.transfer.browse', [
 
     var ep = angular.copy($scope.end);
     ep.uri = uri.href();
+    ep.selectedFolderIds = scope.folder_id;
 
     return stork.ls(ep, 1).then(
       function (d) {
@@ -269,10 +273,43 @@ angular.module('stork.transfer.browse', [
     var u = this.path();
       // Enable to choose mutiple files.
     if (e.ctrlKey) {
+      // handle selection and deselection
       this.root.selected = !this.root.selected;
-      if (this.root.selected)
+      if (this.root.selected){
+        $scope.end.$selected.push(this.root);
+        $scope.end.$selectedPaths.push(u.toString());
+        console.log($scope.end.$selected);
+        console.log($scope.end.$selectedPaths);
+      } else {
+        var index = $scope.end.$selected.indexOf(this.root);
+        $scope.end.$selected.splice(index, 1);
+        console.log($scope.end.$selected);
+        $scope.end.$selectedPaths.splice(index, 1);
+        console.log($scope.end.$selectedPaths);
+      }
+    } else if ($scope.end.$selected.length != 1) {
+      // Either nothing is selected, or multiple things are selected.
+      $scope.unselectAll();
+      this.root.selected = true;
+      $scope.end.$selected.push(this.root);
+      $scope.end.$selectedPaths.push(u.toString());
+    } else if ($scope.end.$selected.length = 1){
+      // Only one thing is selected.
+      var selected = this.root.selected;
+      $scope.unselectAll();
+      if (!selected) {
+        this.root.selected = true;
+        $scope.end.$selected.push(this.root);
+        $scope.end.$selectedPaths.push(u.toString());
+      }
+    }
+    /*if (e.ctrlKey) {
+      this.root.selected = !this.root.selected;
+      if (this.root.selected) {
         $scope.end.$selected[u] = this.root;
-      else
+        console.log(this.root);
+        console.log($scope.end.$selected);
+      } else
         delete $scope.end.$selected[u];
     } else if ($scope.selectedUris().length != 1) {
       // Either nothing is selected, or multiple things are selected.
@@ -287,7 +324,7 @@ angular.module('stork.transfer.browse', [
         this.root.selected = true;
         $scope.end.$selected[u] = this.root;
       }
-    }
+    }*/
 
     // Unselect text.
     if (document.selection && document.selection.empty)
@@ -299,7 +336,9 @@ angular.module('stork.transfer.browse', [
   $scope.dragAndDrop = function (e) {
     var scope = this;
     var u = this.path();
-    $scope.end.$selected[u] = this.root;
+    $scope.end.$selected.push(this.root);
+    $scope.end.$selectedPaths.push(u.toString());
+    //$scope.end.$selected[u] = this.root;
     if (document.selection && document.selection.empty)
       document.selection.empty();
     else if (window.getSelection)
@@ -307,11 +346,15 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.unselectAll = function () {
-    var s = $scope.end.$selected;
+    $scope.end.$selected.splice(0,$scope.end.$selected.length);
+    $scope.end.$selected = [];
+    $scope.end.$selectedPaths.splice(0,$scope.end.$selectedPaths.length);
+    $scope.end.$selectedPaths = [];
+    /*var s = $scope.end.$selected;
     if (s) _.each(s, function (f) {
       delete f.selected;
     });
-    $scope.end.$selected = {};
+    $scope.end.$selected = {};*/
   };
 
   $scope.selectedUris = function () {
@@ -321,6 +364,11 @@ angular.module('stork.transfer.browse', [
   };
 
   /* Supported protocol to show in the dropdown box.ex.ftp://ftp.mozilla.org/,gsiftp://oasis-dm.sdsc.xsede.org/ */
+  
+  $scope.dropdownGoogleDrive = [
+    ["fa-google", "Google Drive", "googledrive://"],
+  ];
+
   $scope.dropdownDbx = [
     ["fa-dropbox", "Dropbox", "dropbox://"],
   ];
@@ -381,7 +429,6 @@ angular.module('stork.transfer.browse', [
     /** or e.target.style.opacity = '.8';*/
     this.style.opacity='.8';
     e.dataTransfer.setData('text', e.target.root);
-    ;
   };
   $scope.storkDragEnd = function (e) {
     this.style.opacity='1';
@@ -443,12 +490,26 @@ $scope.mkdir = function () {
   };
 
   $scope.mk_dir = function (name) {
+//<<<<<<< HEAD
     var u = $scope.uri.parsed;
     u = u._string+"/"+name+"/";
+/*=======
+    var scope = this;
+    var u = $scope.uri.parsed;
+    u = u._string+name+"/";
+>>>>>>> mythri*/
     //u = new URI(u);
     if (!u) return;
     var ep = angular.copy($scope.end);
     ep.uri = u;
+/*<<<<<<< HEAD
+=======*/
+    if($scope.end.$selected.length > 1) {
+
+    }else {
+        ep.selectedFolderIds = $scope.end.$selected[0].id;
+    }
+//>>>>>>> mythri
     //u.segment(name);
     return stork.mkdir(ep).then(
       function (m) {
