@@ -5,9 +5,19 @@
   padding-top: 1;
   font-size: 0.9em;
   white-space: normal;
-  overflow-x: auto;
-  overflow-y: auto;
-  text-align: right;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  text-align: left;
+
+}
+
+dl {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+
 }
 
 @media all and (max-width: 750px) {
@@ -21,13 +31,13 @@
 }
 
 .endpoints span {
-  white-space: nowrap;
+  white-space: normal;
 }
 
 /* panel heading */
 .panel-heading {
   font-size: 0.8em;
-  white-space: nowrap;
+  white-space: normal;
 } .hidden-xs button {
   font-size: 1em !important;
   background: transparent;
