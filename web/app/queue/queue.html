@@ -3,10 +3,12 @@ div .endpoints {
   background: blue;
 }
 </style>-->
+
+<div class="col-sm-4 "></div>
 <div class="container panel-group headSpace">
   <div class="panel panel-info"  ng-init="page = 1" ng-controller="Queue">
     <div class="hidden-xs clearfix panel-heading" style="font-weight: bold">
-      <div class="col-sm-2 "></div>
+        <div class="col-sm-2"></div>
         <div class="col-sm-1 text-center">
           Job ID
 <!-- buttons for ordering jobs -->
@@ -18,7 +20,7 @@ div .endpoints {
           </span>
         </div>
       <div class="col-sm-3 text-center vertical-center">Progress</div>
-      <div class="col-sm-2 text-center">Average Speed
+        <div class="col-sm-2 text-center">Average Speed
          <span class="btn-group-vertical">
              <div class="btn-group">
                <button title="from slow to fast" type="button" class="fa fa-sort-up" ng-click="predicate='bytes.avg'; reverse=false" > </button></div>
@@ -29,7 +31,7 @@ div .endpoints {
       <div class="col-sm-4 text-left vertical-center">Source/Destination</div>
     </div>
 
-<!-- toolbar for reorderring jobs-->
+<!-- toolbar for reordering jobs-->
     <div class="panel-heading visible-xs">
       <button type="button" ng-click="predicate='job_id';reverse=!reverse">Sort by job ID</button>  &nbsp&#124
       <button type="button" ng-click="predicate='bytes.avg';reverse=!reverse">Sort by average speed</button>
@@ -91,7 +93,7 @@ div .endpoints {
           <div class="col-xs-5 visible-xs">
             &nbspEndpoints
           </div>
-          <div class="col-xs-7 col-sm-3 clearfix endpoints ">
+          <div class="col-xs-7 col-sm-3 clearfix endpoints">
             <span>{{j.src.uri}}<i class="fa fa-long-arrow-right"></i></span> 
             <span>{{j.dest.uri}}</span>
           </div>
@@ -154,7 +156,7 @@ div .endpoints {
               <dd class="col-sm-8">
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u<1000">{{u}} ms</div>
 
-<TODO: better approches to replace here... display time with second, and use filter to limit length of decimal >
+<!--TODO: better approches to replace here... display time with second, and use filter to limit length of decimal -->
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u>=1000&&u<60000">{{u/1000|number:2}} s</div>
                  <div ng-repeat="u in [j.times.completed-j.times.started]" ng-show="u>=60000">{{u/60000|number:2}} min</div>
               </dd>
@@ -178,7 +180,6 @@ div .endpoints {
                   {{j.run_timer.start | moment}}
                 </abbr>
               </dd>
-
               <dt class="col-sm-4" ng-if="j.queue_timer.end > 0">Job Completed</dt>
               <dd class="col-sm-8" ng-if="j.queue_timer.end > 0">
                 <abbr title="{{j.queue_timer.end | date:'medium'}}">
