@@ -74,6 +74,7 @@
     <div class="modal-body">
         <div class="form-group col-sm-push-3 col-sm-6">
               <label>Name</label>
+
   	          <input type="text" class="form-control" ng-model="name" focus-me required>
         </div>
     </div>
@@ -112,30 +113,25 @@
           <i class="fa" ng-class="showHidden && 'fa-eye' || 'fa-eye-slash'"></i>
         </button>
       </div>
-      <div class="btn-group">
+
+
+      <form  class="btn-group"ng-controller="FileUpload" name="form">
+
+        <button class="btn btn-default" ngf-select="uploadFiles($files)" ng-model="files" ngf-multiple="true">
+          <span class="fa fa-upload"></span>
+        </button>
 
         <button class="btn btn-default" title="Download"
                 ng-click="download(selectedUris())">
           <i class="fa fa-download"></i>
         </button>
+      </form>
 
-        <button id="notpure" class="btn upload-button-wrapper btn-default" title="Upload"
-                ng-click="">
-
-          <span class="fa fa-upload" ></span>
-          <input type="file" class="btn btn-default" title="Upload" name="uploadedFile"/>
-
-        </button>
-
-
-
-
-      </div>
-      <div class="btn-group ">
-        <button class="btn btn-default" title="Share"
-                ng-click="share(selectedUris())">
-          <i class="fa fa-link"></i>
-        </button>
+      <div class="btn-group">
+      <button class="btn btn-default" title="Share"
+              ng-click="share(selectedUris())">
+        <i class="fa fa-link"></i>
+      </button>
       </div>
       <div class="btn-group ">
         <button class="btn btn-default" title="Authenticate"
@@ -173,6 +169,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  </script>

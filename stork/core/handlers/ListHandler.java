@@ -64,6 +64,6 @@ public class ListHandler extends Handler<ListRequest> {
 }
 
 // A listing request is just an endpoint request with some options.
-class ListRequest extends EndpointRequest {
+class sListRequest extends EndpointRequest {
   boolean forceRefresh = false;
 }

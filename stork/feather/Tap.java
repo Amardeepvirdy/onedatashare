@@ -58,15 +58,20 @@ public abstract class Tap<S extends Resource> extends Pipe {
         bell = Bell.rungBell();
       return bell;
     } catch (Exception e) {
+      System.out.println("An exception had happened in Tap.java Bell Drain");
+      e.printStackTrace();
       return new Bell(e);
     }
   }
 
   public final Bell start() {
     return start0().new Promise() {
-      public void fail(Throwable t) { finish(t); }
+      public void fail(Throwable t) {
+        finish(t);
+      }
     };
-  } private final Bell start0() {
+  }
+  private final Bell start0() {
     try {
       // Start downstream elements.
       Bell b1 = super.start();
@@ -76,6 +81,7 @@ public abstract class Tap<S extends Resource> extends Pipe {
       if (b2 == null) b2 = Bell.rungBell();
       return b1.and(b2);
     } catch (Exception e) {
+      e.printStackTrace();
       return new Bell(e);
     }
   }

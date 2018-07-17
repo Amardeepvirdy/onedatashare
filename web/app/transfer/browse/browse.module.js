@@ -223,18 +223,6 @@ angular.module('stork.transfer.browse', [
     stork.get(end);
   };
 
-   $scope.upload = function (uris) {
-      if (uris == undefined || uris.length == 0)
-        return alert('You must select a file.');
-      else if (uris.length > 1)
-        return alert('You can only upload one file at a time.');
-      var end = {
-        uri: uris[0],
-        credential: $scope.end.credential
-      };
-      stork.get(end);
-    };
-
   // Share the selected file.
   $scope.share = function (uris) {
     if (uris == undefined || uris.length == 0)
@@ -593,14 +581,12 @@ $scope.mkdir = function () {
     if (!u) return;
     var ep = angular.copy($scope.end);
     ep.uri = u;
-/*<<<<<<< HEAD
-=======*/
     if($scope.end.$selected.length > 1) {
 
     }else {
         ep.selectedFolderIds = $scope.end.$selected[0].id;
     }
-//>>>>>>> mythri
+    ep.uri = u.replace(" ", "%20");
     //u.segment(name);
     return stork.mkdir(ep).then(
       function (m) {

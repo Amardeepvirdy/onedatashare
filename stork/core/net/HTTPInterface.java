@@ -10,6 +10,7 @@ import io.netty.channel.*;
 import io.netty.channel.socket.*;
 import io.netty.handler.codec.*;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.multipart.FileUpload;
 import io.netty.handler.ssl.*;
 import io.netty.handler.stream.*;
 import io.netty.util.*;
@@ -21,6 +22,7 @@ import static io.netty.handler.codec.http.HttpVersion.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
 
 import stork.ad.*;
+import stork.core.handlers.MultipartRequest;
 import stork.feather.*;
 import stork.feather.util.*;
 import stork.feather.URI;
@@ -124,18 +126,45 @@ public class HTTPInterface extends StorkInterface {
     if (type == null || type.startsWith("application/json")) {
       bell = sink.bell().new As<Ad>() {
         public Ad convert(Slice slice) {
-          return Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
+          Ad ad = Ad.parse(new ByteBufInputStream(slice.asByteBuf()));
+          return ad;
         }
       };
     } else if (type.startsWith("application/x-www-form-urlencoded")) {
       bell = sink.bell().new As<Ad>() {
         public Ad convert(Slice slice) {
-          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+          Ad ad = queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+          return ad;
+        }
+      };
+    } else if (type.startsWith("multipart/form-data")) {
+      Bell<ArrayList<Object>> bell2;
+      Pipes.MultipartSink sink1 = Pipes.MultipartSink();
+      bell2 = sink1.bell().new As<ArrayList<Object>>(){
+        public ArrayList<Object> convert(ArrayList<Object> slices) {
+          return slices;
+        }
+      };
+      hr.root().tap().attach(sink1).tap().start();
+      return bell2.new As<Request>() {
+        public Request convert(ArrayList<Object> body) {
+          for(Object o : body){
+            if(o instanceof Slice){
+              MultipartRequest mult = (MultipartRequest) req;
+              mult.file = (Slice) o;
+            }else if(o instanceof Ad){
+              return req.unmarshalFrom((Ad) o);
+            }
+          }
+          return req;
         }
       };
     } else {
-      req.ring(new Exception("Unsupported content type."));
-      return new Bell<Request>(req);
+      bell = sink.bell().new As<Ad>() {
+        public Ad convert(Slice slice) {
+          return queryToAd(slice.asByteBuf().toString(CharsetUtil.UTF_8));
+        }
+      };
     }
 
     hr.root().tap().attach(sink).tap().start();
