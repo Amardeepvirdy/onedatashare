@@ -43,43 +43,46 @@ public class OAuthHandler extends Handler<OAuthRequest> {
         }
     }
 
-  /** This is called when we're finishing an OAuth handshake. */
-  private void handleFinish(OAuthRequest req) {
-    if (req.code == null)
-      throw new RuntimeException("Missing OAuth token.");
+    /** This is called when we're finishing an OAuth handshake. */
+    private void handleFinish(OAuthRequest req) {
+        if (req.code == null)
+            throw new RuntimeException("Missing OAuth token.");
 
-    OAuthSession session = findSession(req.state);
+        OAuthSession session = findSession(req.state);
 
-    if (session == null)
-      throw new RuntimeException("Invalid session key.");
+        if (session == null)
+            throw new RuntimeException("Invalid session key.");
 
-    StorkOAuthCred cred = session.finish(req.code);
-    String uuid = req.user().addCredential(cred);
-    server.dumpState();
+        StorkOAuthCred cred = session.finish(req.code);
 
-    throw new Redirect("/oauth/"+uuid);
-  }
+        for(Map.Entry<UUID, StorkCred> val: req.user().credentials.entrySet()){
 
-  /** Create a new OAuthSession of a given type. */
-  private OAuthSession newSession(String type) {
-    if ("dropbox".equals(type))
-      return new DbxOAuthSession();
-    if ("googledrive".equals(type))
-      return new GoogleDriveOAuthSession();
-    throw new RuntimeException("Expecting OAuth type.");
-  }
+            if (val.getValue().userID.equals(cred.userID)){
+                throw new Redirect("/oauth/" + val.getKey());
+            }
+        }
+        String uuid = req.user().addCredential(cred);
+        server.dumpState();
+        throw new Redirect("/oauth/" + uuid);
+    }
 
-  /** Save an OAuthSession so we can recover it later. */
-  private static synchronized
-  void storeSession(String key, OAuthSession session) {
-    sessions.put(key, session);
-  }
+    /** Create a new OAuthSession of a given type. */
+    private OAuthSession newSession(String type) {
+        if ("dropbox".equals(type))
+            return new DbxOAuthSession();
+        throw new RuntimeException("Expecting OAuth type.");
+    }
 
-  /** Recover a saved session. */
-  private static synchronized OAuthSession findSession(String key) {
-    return sessions.get(key);
-  }
+    /** Save an OAuthSession so we can recover it later. */
+    private static synchronized
+    void storeSession(String key, OAuthSession session) {
+        sessions.put(key, session);
+    }
 
+    /** Recover a saved session. */
+    private static synchronized OAuthSession findSession(String key) {
+        return sessions.get(key);
+    }
 }
 
 class OAuthRequest extends Request {
