@@ -17,6 +17,7 @@ public class ProxyTransfer<S extends Resource<?,S>, D extends Resource<?,D>>
 extends Transfer<S,D> {
   private LinkedList<Pending> queue = new LinkedList<Pending>();
   private Throwable error = null;
+  private boolean isfirst = true;
 
   // A pending transfer and a bell to ring when it starts.
   private static class Pending {
@@ -136,9 +137,10 @@ extends Transfer<S,D> {
   // If we are not yet able to start a transfer, put it in the transfer queue.
   private synchronized Bell enqueueTransfer(Path path, boolean first, String id) {
     Pending pending = new Pending(path, id);
-    if (first)
+    if (first) {
       queue.addFirst(pending);
-    else
+      isfirst = false;
+    } else
       queue.add(pending);
     return pending.bell;
   }
@@ -193,7 +195,7 @@ extends Transfer<S,D> {
 //<<<<<<< HEAD
       //Ignore current (".") and parent ("..") directories present in stat.files
       if(!(".".equals(file.name) || "..".equals(file.name)))
-        enqueueTransfer(path.appendLiteral(file.name), true, file.id);
+        enqueueTransfer(path.appendLiteral(file.name), isfirst, file.id);
 /*=======
       enqueueTransfer(path.appendLiteral(file.name), true, file.id);
 >>>>>>> mythri*/
