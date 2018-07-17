@@ -56,14 +56,12 @@ angular.module('stork.user', [
     this.forgetLogin();
 })
 
+
 .controller('User', function ($scope, $modal, $location, user, stork, $rootScope) {
   /* If info is given, log the user in. Otherwise show modal. */
   $rootScope.ad = false;
   $scope.changeAdBack = function() {
     $rootScope.ad = false;
-    /*Issue 6 changes starts here - Ahmad*/
-    //$scope.$apply();
-    /*Issue 6 changes ends here - Ahmad*/
   };
   $scope.login = function (info, then) {
     if (!info)
@@ -75,11 +73,8 @@ angular.module('stork.user', [
     return user.login(info).then(function (v) {
       if (then)
         then(v);
-      $modal({
-        title: "Welcome!",
-        content: "You have successfully logged in.",
-        show: true
-      });
+        $location.path("/transfer");
+
     }, function (error) {
       $scope.error = error;
     });
@@ -87,16 +82,17 @@ angular.module('stork.user', [
 
   /** ZL: check if a user is a administrator */
   $scope.isAdmin = function (u) {
+
     return stork.isAdmin(u).then(function(d) {
        $rootScope.ad = true;
        $scope.$apply();
-       $location.path('/admin'); 
     },function(e) {
        $modal({
         title: 'Error',
         content: "You are not an administrator. ",
         show: true
        });
+      $location.path('/#/')
     });
   }; 
 
@@ -119,7 +115,7 @@ angular.module('stork.user', [
       });      
     },function(e) {
        $modal({
-        title: 'We could not find your accout with that information',
+        title: 'We could not find your account with that information',
         content: e.error,
         show: true
        });
@@ -225,6 +221,12 @@ angular.module('stork.user', [
       });
     });
   };
+
+  var originatorEV;
+  $scope.openMenu = function($mdMenu, ev){
+  originatorEv = ev;
+  $mdMenu.open(ev);
+  }
 })
 
 .directive('adminBoolean', function(){

@@ -26,8 +26,8 @@ public class FTPSession extends Session<FTPSession, FTPResource> {
     super(uri, cred);
   }
 
-  public FTPResource select(Path path) {
-    return new FTPResource(this, path);
+  public FTPResource select(Path path, String id) {
+    return new FTPResource(this, path, id);
   }
 
   public Bell<FTPSession> initialize() {

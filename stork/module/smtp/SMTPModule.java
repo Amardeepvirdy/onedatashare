@@ -12,7 +12,7 @@ public class SMTPModule extends Module<SMTPResource> {
     description("A module interacting with SMTP systems.");
   }
 
-  public SMTPResource select(URI uri, Credential credential) {
+  public SMTPResource select(URI uri, Credential credential, String id) {
     return new SMTPSession(uri).root();
   }
 }

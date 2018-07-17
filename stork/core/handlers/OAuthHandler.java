@@ -8,40 +8,40 @@ import stork.feather.errors.*;
 import stork.staging.*;
 
 public class OAuthHandler extends Handler<OAuthRequest> {
-  /** Used to hold ongoing sessions. */
-  private static Map<String,OAuthSession> sessions =
-    new HashMap<String,OAuthSession>();
+    /** Used to hold ongoing sessions. */
+    private static Map<String,OAuthSession> sessions =
+            new HashMap<String,OAuthSession>();
 
-  public void handle(final OAuthRequest req) {
-    req.assertLoggedIn();
+    public void handle(final OAuthRequest req) {
+        req.assertLoggedIn();
 
-    // Request state will only be given when we're finishing a handshake, so
-    // use its presense to determine whether we're starting or finishing a
-    // handshake.
-    if (req.state == null)
-      handleStart(req);
-    else
-      handleFinish(req);
+        // Request state will only be given when we're finishing a handshake, so
+        // use its presense to determine whether we're starting or finishing a
+        // handshake.
+        if (req.state == null)
+            handleStart(req);
+        else
+            handleFinish(req);
 
-    // If we get here, it's because we didn't redirect the user anywhere. Just
-    // send them home, I guess.
-    throw new Redirect("/");
-  }
-
-  /**
-   * This is called when we're starting an OAuth handshake. It should redirect
-   * the user to the OAuth URL.
-   */
-  private void handleStart(OAuthRequest req) {
-    OAuthSession session = newSession(req.type);
-    String url = session.start();
-
-    // The URL should actually never be null, but just in case...
-    if (url != null) {
-      storeSession(session.key, session);
-      throw new Redirect(url);
+        // If we get here, it's because we didn't redirect the user anywhere. Just
+        // send them home, I guess.
+        throw new Redirect("/");
     }
-  }
+
+    /**
+     * This is called when we're starting an OAuth handshake. It should redirect
+     * the user to the OAuth URL.
+     */
+    private void handleStart(OAuthRequest req) {
+        OAuthSession session = newSession(req.type);
+        String url = session.start();
+
+        // The URL should actually never be null, but just in case...
+        if (url != null) {
+            storeSession(session.key, session);
+            throw new Redirect(url);
+        }
+    }
 
   /** This is called when we're finishing an OAuth handshake. */
   private void handleFinish(OAuthRequest req) {
@@ -64,6 +64,8 @@ public class OAuthHandler extends Handler<OAuthRequest> {
   private OAuthSession newSession(String type) {
     if ("dropbox".equals(type))
       return new DbxOAuthSession();
+    if ("googledrive".equals(type))
+      return new GoogleDriveOAuthSession();
     throw new RuntimeException("Expecting OAuth type.");
   }
 
@@ -77,15 +79,16 @@ public class OAuthHandler extends Handler<OAuthRequest> {
   private static synchronized OAuthSession findSession(String key) {
     return sessions.get(key);
   }
+
 }
 
 class OAuthRequest extends Request {
-  String type, state, code;
+    String type, state, code;
 
-  Map<String,String[]> toParamMap() {
-    Map<String,String[]> map = new HashMap<String,String[]>();
-    map.put("state", new String[] {state});
-    map.put("code", new String[] {code});
-    return map;
-  }
+    Map<String,String[]> toParamMap() {
+        Map<String,String[]> map = new HashMap<String,String[]>();
+        map.put("state", new String[] {state});
+        map.put("code", new String[] {code});
+        return map;
+    }
 }

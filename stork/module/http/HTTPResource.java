@@ -19,8 +19,8 @@ public class HTTPResource extends Resource<HTTPSession, HTTPResource> {
    * @param session the class where this request made from
    * @param path requested resource {@code path}
    */
-  protected HTTPResource(HTTPSession session, Path path) {
-    super(session, path);
+  protected HTTPResource(HTTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public HTTPTap tap() {

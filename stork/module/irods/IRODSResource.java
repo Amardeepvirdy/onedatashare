@@ -12,8 +12,8 @@ import stork.feather.util.*;
 import stork.feather.Resource;
 
 public class IRODSResource extends Resource<IRODSSession,IRODSResource>{
-  protected IRODSResource(IRODSSession session, Path path) {
-    super(session, path);
+  protected IRODSResource(IRODSSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public Emitter<String> list() {

@@ -10,9 +10,9 @@ public class IRODSModule extends Module<IRODSResource>{
     description("A module for interacting with iRODS servers.");
   }
 
-  public IRODSResource select(URI uri, Credential credential) {
+  public IRODSResource select(URI uri, Credential credential, String id) {
     URI ep = uri.endpointURI();
     URI re = uri.resourceURI();
-    return new IRODSSession(ep, credential).select(re.path());
+    return new IRODSSession(ep, credential).select(re.path(), id);
   }
 }

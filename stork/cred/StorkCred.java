@@ -13,6 +13,8 @@ public abstract class StorkCred<O> extends Credential<O> {
   public String type;
   /** A user-given name for this credential. */
   public String name = "(unnamed)";
+  /** Unique user ID for the credential. */
+  public String userID = "000000";
   /** Cached hash code. */
   private transient int hashCode = -1;
 
@@ -25,6 +27,8 @@ public abstract class StorkCred<O> extends Credential<O> {
       return new StorkGSSCred();
     if (type.equals("oauth"))
       return new StorkOAuthCred(null);
+    if (type.equals("googledrive"))
+      return new StorkOAuthCred(null);
     throw new RuntimeException("Unknown credential type.");
   }
 
@@ -34,6 +38,7 @@ public abstract class StorkCred<O> extends Credential<O> {
     return new Object() {
       String name = StorkCred.this.name;
       String type = StorkCred.this.type;
+      String userID = StorkCred.this.userID;
     };
   }
 

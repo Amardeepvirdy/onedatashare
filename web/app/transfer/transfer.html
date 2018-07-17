@@ -112,9 +112,8 @@
   <li bindonce="root" ng-repeat="root in files | orderBy:['-dir','name']"
       bo-class="{ dir: root.dir, file: !root.dir, loading: loading,
                   dot: root.name && root.name.charAt(0) == '.' }"
+      ng-init="folder_id=root.id"
       ng-class="{open:open}">
-
-    <!-- Sign in-front-of root node. +/- -->
     <i class="fa text-muted toggle" ng-mousedown="root.dir && toggle()"
        ng-class="{'fa-minus-square-o': open, 'fa-plus-square-o': !open}"></i>
 
@@ -197,10 +196,16 @@
             {{c.name || 'Unnamed ('+c.type+')'}}
           </option>
         </optgroup>
-        <optgroup class="new-credential" label="New credential">
+
+         <!--Issue 14 changes starts here - Mythri > 
+
+        <!--<optgroup class="new-credential" label="New credential">
           <option value="new:userinfo">Username/Password</option>
           <option value="new:gss">MyProxy</option>
-        </optgroup>
+        </optgroup>-->
+        
+        <!--Issue 14 changes ends here - Mythri-->
+
       </select>
 
       <div class="modal-body" ng-switch="selected">
@@ -225,6 +230,10 @@
       <button ng-click="$hide()" type="button" class="btn btn-default">
         Cancel
       </button>
+        <!--Ideally we should add renaming functionality at some point, but we need a better approach-->
+     <!--<button ng-click = "rename(cred.name)" type="button" class="btn btn-default" >-->
+        <!--Rename-->
+     <!--</button>-->
     </div>
   </form>
 </script>
@@ -253,6 +262,25 @@
       </button>
     </div>
   </form>
+</script>
+
+<!-- Rename existing credential -->
+<script type="text/ng-template" id="rename-cred.html">
+    <form ng-controller="EnterCredential" ng-submit="saveCredential(cred)">
+        <div class="form-group col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control" ng-model="cred.name" required>
+        </div>
+        <div class="text-center modal-footer">
+            <button type="submit" class="btn btn-primary"
+                    ng-disabled="cred.$agreed === false">
+                OK
+            </button>
+            <button ng-click="$hide()" type="button" class="btn btn-default">
+                Cancel
+            </button>
+        </div>
+    </form>
 </script>
 
 <!-- Create new credential MyProxy credential. -->

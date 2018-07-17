@@ -125,6 +125,7 @@ public class HTTPServer {
     final LocalSession local = new LocalSession(path);
 
     Log.info("Serving static web files from "+root+" directory at "+uri);
+    System.out.println("Serving static web files from "+root+" directory at "+uri);
 
     return new Route(uri, "GET") {
       // The name of the index file.
@@ -135,7 +136,7 @@ public class HTTPServer {
       }
 
       private void trySend(final HTTPRequest request, final Path path) {
-        final LocalResource file = local.select(path);
+        final LocalResource file = local.select(path, null);
 
         file.stat().new Promise() {
           public void done(Stat s) {
