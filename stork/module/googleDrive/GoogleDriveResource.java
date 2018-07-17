@@ -258,25 +258,30 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
             String parentid = session.pathToParentIdMap.get(path.up().toString());
             if( parentid != null ) {
               id = session.pathToParentIdMap.get(path.up().toString());
+              System.out.println("File: " + path.toString());
+            }else {
+              System.out.println(stat.name + "has no parent");
+              System.out.println(path.toString());
+              System.out.println(session.pathToParentIdMap.toString());
             }
-          }
-          size = stat.size;
-          URL url = new URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable");
-          HttpURLConnection request = (HttpURLConnection) url.openConnection();
-          request.setRequestMethod("POST");
-          request.setRequestProperty("Authorization", "Bearer " + session.credential.data());
-          //request.setRequestProperty("X-Upload-Content-Type", "application/pdf");
-          request.setRequestProperty("X-Upload-Content-Length", Long.toString(size));
-          request.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-          String body = "{\"name\": \"" + stat.name + "\", \"parents\": [\"" + id + "\"]}";
-          request.setRequestProperty("Content-Length", Integer.toString(body.getBytes().length));
-          request.setDoOutput(true);
-          OutputStream outputStream = request.getOutputStream();
-          outputStream.write(body.getBytes());
-          outputStream.close();
-          request.connect();
-          if(request.getResponseCode() == 200) {
-            resumableSessionURL = request.getHeaderField("location");
+            size = stat.size;
+            URL url = new URL("https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable");
+            HttpURLConnection request = (HttpURLConnection) url.openConnection();
+            request.setRequestMethod("POST");
+            request.setRequestProperty("Authorization", "Bearer " + session.credential.data());
+            //request.setRequestProperty("X-Upload-Content-Type", "application/pdf");
+            request.setRequestProperty("X-Upload-Content-Length", Long.toString(size));
+            request.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            String body = "{\"name\": \"" + stat.name + "\", \"parents\": [\"" + id + "\"]}";
+            request.setRequestProperty("Content-Length", Integer.toString(body.getBytes().length));
+            request.setDoOutput(true);
+            OutputStream outputStream = request.getOutputStream();
+            outputStream.write(body.getBytes());
+            outputStream.close();
+            request.connect();
+            if(request.getResponseCode() == 200) {
+              resumableSessionURL = request.getHeaderField("location");
+            }
           }
           return null;
         } public void fail(Throwable t) {
