@@ -18,4 +18,11 @@ out/*
 lib/stork-3\.0a\.jar
 
 *.iml
+classes/
+stork.conf
+*.json
+stork/core/server/Logfiles/
+stork\core\server\Logfiles\
 *.log
+lib/
+lib\

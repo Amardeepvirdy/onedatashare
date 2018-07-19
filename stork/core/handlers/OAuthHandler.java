@@ -53,14 +53,14 @@ public class OAuthHandler extends Handler<OAuthRequest> {
         if (session == null)
             throw new RuntimeException("Invalid session key.");
 
-            StorkOAuthCred cred = session.finish(req.code);
+        StorkOAuthCred cred = session.finish(req.code);
 
-            for(Map.Entry<UUID, StorkCred> val: req.user().credentials.entrySet()){
+        for(Map.Entry<UUID, StorkCred> val: req.user().credentials.entrySet()){
 
-                if (val.getValue().userID.equals(cred.userID)){
-                    throw new Redirect("/oauth/" + val.getKey());
-                }
+            if (val.getValue().userID.equals(cred.userID)){
+                throw new Redirect("/oauth/" + val.getKey());
             }
+        }
         String uuid = req.user().addCredential(cred);
         server.dumpState();
         throw new Redirect("/oauth/" + uuid);

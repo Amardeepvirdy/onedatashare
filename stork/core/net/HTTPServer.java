@@ -136,7 +136,7 @@ public class HTTPServer {
       }
 
       private void trySend(final HTTPRequest request, final Path path) {
-        final LocalResource file = local.select(path);
+        final LocalResource file = local.select(path, null);
 
         file.stat().new Promise() {
           public void done(Stat s) {

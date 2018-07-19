@@ -34,17 +34,6 @@
         </li>
       </ul>
 
-      <!--Previous Admin Button-->
-
-      <!--<ul class="nav navbar-nav logged-in" ng-cloak>-->
-        <!--<li bs-route="/admin">-->
-          <!--<a href="/" ng-click="isAdmin($user)">-->
-            <!--<i class="fa fa-laptop"></i>-->
-            <!--<span>Admin</span>-->
-          <!--</a>-->
-        <!--</li>-->
-      <!--</ul>-->
-
       <!--New Admin Button with dropdown menu-->
 
       <div class="navbar-collapse collapse" >
@@ -52,8 +41,8 @@
       <div class="dropdown">
         <button class="dropbtn"> <i class="fa fa-laptop"> <span>Admin</span></i></button>
         <div class="dropdown-content">
-          <a  ng-click="isAdmin($user)" href="/#/userLs">Clients Information</a>
-          <a href="#">History</a>
+          <a ng-click="isAdmin($user)" href="/#/userLs">Clients Information</a>
+          <a ng-click= "isAdmin(&user)" href="/#/history">History</a>
           <a href="#">Management</a>
           <a href ="#"> Data</a>
         </div>
@@ -62,14 +51,14 @@
 
 
       <ul ng-controller="User" class="nav navbar-nav navbar-right">
-        <li class="hidden-xs" bs-route="/user">
-          <a id="user-button" class="logged-in" href="/#/user" ng-cloak>
+        <li class="hidden-xs" bs-route="/user" >
+          <a id="user-button" class="logged-in" href="/#/user" ng-cloak ng-click="changeAdBack()">
             <i class="fa fa-user"></i>
             <span ng-bind="$user.email"></span>
           </a>
         </li>
         <li>
-          <a class="logged-out" href="#/" ng-click="login()" ng-click = changeAdBack()>
+          <a class="logged-out" href="#/" ng-click="login()" ng-click =changeAdBack()>
             <i class="fa fa-sign-in"></i>
             <span>Log in</span>
           </a>

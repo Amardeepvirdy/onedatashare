@@ -34,7 +34,13 @@ public class ListHandler extends Handler<ListRequest> {
       return;
     }
 
+    /*if (req.uri != null && req.uri.startsWith("googledrive:///")) {
+      String folderId = req.asAd().get("folder_id");
+      listing = resource.stat(folderId);
+    }
+    else*/
     listing = resource.stat();
+
 
     // Register the ongoing listing.
     aggregator.put(resource, listing);

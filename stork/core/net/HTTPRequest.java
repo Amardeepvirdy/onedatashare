@@ -25,7 +25,7 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
       throw new RuntimeException("multipart is currently unsupported");
   }
 
-  public HTTPBody select(Path path) {
+  public HTTPBody select(Path path, String id) {
     return new HTTPBody(this, path);
   }
 

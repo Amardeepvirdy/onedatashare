@@ -23,10 +23,8 @@ public abstract class Log {
         FileHandler fh = null;
         log.setLevel(Level.ALL);
         File dir =  new File("../onedatashare/stork/core/LogFiles/");
-
         File f = new File("../onedatashare/stork/core/LogFiles/" +  dtf.format(date) + ".log");
         try {
-
             if(!dir.exists()){
                 System.out.println("Logfile directory not found. Creating new directory...");
                 dir.mkdirs();
@@ -64,7 +62,6 @@ public abstract class Log {
 
             LogRecord lr = new LogRecord(l, StorkUtil.joinWith("", o));
             lr.setThrown(t);
-
 
             if (i < st.length) {
                 lr.setSourceClassName(st[i].getClassName());

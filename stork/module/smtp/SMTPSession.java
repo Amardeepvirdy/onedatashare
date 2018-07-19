@@ -34,7 +34,7 @@ public class SMTPSession extends Session<SMTPSession,SMTPResource> {
     return bell.as(this);
   }
 
-  public SMTPResource select(Path path) {
-    return new SMTPResource(this,path);
+  public SMTPResource select(Path path, String id) {
+    return new SMTPResource(this, path, id);
   }
 }

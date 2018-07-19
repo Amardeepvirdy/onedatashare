@@ -28,8 +28,8 @@ public class HTTPSession extends Session<HTTPSession, HTTPResource> {
     workGroup = new NioEventLoopGroup();
   }
 
-  public HTTPResource select(Path path) {
-    HTTPResource resource = new HTTPResource(this, path);
+  public HTTPResource select(Path path, String id) {
+    HTTPResource resource = new HTTPResource(this, path, id);
 
     return resource;
   }
