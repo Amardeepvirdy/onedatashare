@@ -80,7 +80,7 @@ public class HTTPServer {
     sb.childHandler(new ChannelInitializer<SocketChannel>() {
       protected void initChannel(SocketChannel ch) {
         ChannelPipeline pl = ch.pipeline();
-        pl.addLast(new HttpServerCodec(2097152, 2097152, 2097152));
+        pl.addLast(new HttpServerCodec(4096, 8192, 8192));
         pl.addLast(new RequestHandler());
       }
     });
@@ -254,7 +254,6 @@ public class HTTPServer {
             request = null;
           }
         });
-        System.out.println(request);
         if(request.isMultipart()) {
           httpDecoder = new HttpPostMultipartRequestDecoder(factory, head);
         }
@@ -297,15 +296,9 @@ public class HTTPServer {
       while (httpDecoder.hasNext()) {
 
         InterfaceHttpData data = httpDecoder.next();
-
         if (data != null) {
           try {
             switch (data.getHttpDataType()) {
-              case InternalAttribute:
-                final DiskAttribute t = (DiskAttribute) data;
-                Ad ad = new Ad(t.getName(), t.getValue());
-                request.tap.drain(ad);
-                break;
               case Attribute:
                 io.netty.handler.codec.http.multipart.Attribute t1;
                 if(data instanceof MemoryAttribute) {
@@ -314,14 +307,17 @@ public class HTTPServer {
                   t1 = (DiskAttribute) data;
                 }
                 Ad ad1 = new Ad(t1.getName(), t1.getValue());
-                request.tap.drain(ad1);
-
+                request.tap.drain(new AttributeSlice(ad1.toJSON().getBytes()));
                 break;
               case FileUpload:
-                final FileUpload fileUpload = (FileUpload) data;
+                final FileUpload fileUpload;
+                if(data instanceof MemoryFileUpload) {
+                  fileUpload = (MemoryFileUpload) data;
+                }else{
+                  fileUpload = (DiskFileUpload) data;
+                }
                 data.retain();
-                HttpHeaders.isTransferEncodingChunked(request.netty);
-                request.tap.drain(new Slice(fileUpload.getByteBuf()));
+                request.tap.drain(new Slice(fileUpload.content().nioBuffer()));
                 sendResponse(ctx, CREATED, "file name: " + fileUpload.getFilename());
                 break;
             }

@@ -120,7 +120,7 @@
 
     <!-- Name, Indent and date and time of the file. -->
     <div ng-class="{'alert-info': (root.hoverOver || root.selected), 'alert-warning': !!error}"
-         ng-dblclick="toggle()" ng-mouseup="select($event)" draggable="true" droppable="true" li-drop="select($event)" >
+         ng-dblclick="toggle()" ng-mousedown="select($event)" ng-mouseup="select($event)" draggable="true" droppable="true" li-drop="select($event)" >
 
       <!-- Icon of directory / folder (open or closed) or file (all) -->
       <i class="fa" bo-class="{'fa-file': !root.dir}" ng-class="{'fa-folder': (root.dir && !open), 'fa-folder-open': (root.dir && open)}"></i>

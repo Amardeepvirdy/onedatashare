@@ -2496,9 +2496,9 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
             headers : {
                 'Content-Type': file.type
               },                               // resolved to the upload file size on the server.
-            resumeChunkSize: '1MB',
+            resumeChunkSize: '100KB',
             method: 'POST',
-            timeout: 1000000,
+            timeout: 100000,
             resumeSizeResponseReader: (data) => {
                 console.log(data)
             },
@@ -2514,7 +2514,7 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
         }, function (evt) {
             console.log(evt);
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.src.file.name);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
         });
     };
     // for multiple files:

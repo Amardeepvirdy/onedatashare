@@ -95,15 +95,15 @@ public class HTTPResource extends Resource<HTTPSession, HTTPResource> {
 
           synchronized (builder.getChannel()) {
             if (!builder.onCloseBell.isDone()) {
-              HTTPChannel ch = builder.getChannel();
+                HTTPChannel ch = builder.getChannel();
 
-              if (builder.isKeepAlive()) {
-                ch.addChannelTask(HTTPTap.this);
-                ch.writeAndFlush(
-                    builder.prepareGet(resourcePath));
-              } else {
-                builder.tryResetConnection(HTTPTap.this);
-              }
+                if (builder.isKeepAlive()) {
+                  ch.addChannelTask(HTTPTap.this);
+                  ch.writeAndFlush(
+                          builder.prepareGet(resourcePath));
+                } else {
+                  builder.tryResetConnection(HTTPTap.this);
+                }
             } else {
               onStartBell.ring(new HTTPException("HTTP session " +
                     builder.getHost() + " has been closed."));

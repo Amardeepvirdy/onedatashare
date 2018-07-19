@@ -26,30 +26,54 @@ public class UploadSession extends Session<UploadSession,UploadResource> {
     final Path _path;
     final UploadResource _upr;
     final String _uri;
-    final int _totalSize;
+    final long _totalSize;
     final String _filename;
+    short current_chunk = 0;
+    private short gotten_chunk = 0;
+    long totalNumbebrOfChunks = 0;
 
+    final Semaphore available;
+    final Bell<UploadInfo> newSlice = new Bell<UploadInfo>();
     /** Create a {@code LocalSession} at {@code path}. */
     public UploadSession(Slice file, Ad attributes) {
-
         super(URI.create(attributes.get("uri[uri]")));
         _uri = attributes.get("uri[uri]");
         _path = Path.create(_uri);
         _filename = attributes.get("_filename");
-        _totalSize = Integer.parseInt(attributes.get("_totalSize"));
-        int total = _totalSize;
+        _totalSize = Long.parseLong(attributes.get("_totalSize"));
+        long total = _totalSize;
         int chunk = Integer.parseInt(attributes.get("_chunkSize"));
-        int totalNumbebrOfChunks = total / chunk + (total % chunk == 0 ? 0 : 1) ;
-        _file = new Slice[totalNumbebrOfChunks];
-        _attributes = new Ad[totalNumbebrOfChunks];
+        totalNumbebrOfChunks = total / chunk + (total % chunk == 0 ? 0 : 1) ;
+        available = new Semaphore(0, false);
+        _file = new Slice[Math.toIntExact(totalNumbebrOfChunks)];
+        _attributes = new Ad[Math.toIntExact(totalNumbebrOfChunks)];
         addFileToArray(file, attributes);
         _upr = new UploadResource(this, _path);
     }
 
     public void addFileToArray(Slice file, Ad attributes){
         int chunkNum = Integer.parseInt(attributes.get("_chunkNumber"));
+        System.out.println("chunkNum Arrived "+ chunkNum);
+
+
         _file[chunkNum] = file;
         _attributes[chunkNum] = attributes;
+        /* For testing purpose try{
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e){}*/
+        while(gotten_chunk < totalNumbebrOfChunks && _file[gotten_chunk] != null){
+            gotten_chunk++;
+            available.release();
+        }
+       /* System.out.println("chunkNum Arrived "+ chunkNum);
+        while(!newSlice.isDone()) {
+            try {
+                TimeUnit.MICROSECONDS.sleep(100);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        newSlice.ring(new UploadInfo(file, attributes));*/
     }
 
     public UploadResource select(Path path) {
@@ -59,19 +83,12 @@ public class UploadSession extends Session<UploadSession,UploadResource> {
     protected void finalize() {
         executor.shutdown();
     }
-
-   /* public static void main(String[] args) {
-        String sp = args.length > 0 ? args[0] : "/home/bwross/test";
-        final Path path = Path.create(sp);
-        final UploadResource s = new UploadSession(path).root();
-        final HexDumpResource d = new HexDumpResource();
-
-        Transfer t = s.transferTo(d);
-        t.start();
-        t.onStop().new Promise() {
-            public void always() {
-                s.session.close();
-            }
-        }.sync();
-    }*/
+}
+class UploadInfo{
+    Slice slice;
+    Ad att;
+    public UploadInfo(Slice f, Ad attrib){
+        att = attrib;
+        slice = f;
+    }
 }

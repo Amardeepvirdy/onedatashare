@@ -1,7 +1,6 @@
 package stork.module.ftp;
 
 import io.netty.buffer.*;
-
 import stork.cred.*;
 import stork.feather.*;
 import stork.feather.errors.*;

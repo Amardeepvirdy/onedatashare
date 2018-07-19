@@ -29,14 +29,15 @@ public class UploadHandler extends Handler<MultipartRequest> {
         req.assertMayChangeState();
         final UploadResource s;
         if(sessions.get(req.uri) == null) {
+            System.out.println("before Start1");
             s = new UploadSession(req.file, req.attributes).root();
-            final Resource d = req.resolve();
+            final Resource d = req.resolveAs("destination");
             final Transfer t = s.transferTo(d);
+            System.out.println("before Start");
             t.start();
             t.onStop().new Promise() {
                 public void always() {
-                    s.session.close();
-                    d.session.close();
+                    sessions.remove(req.uri);
                 }
                 public void fail(Throwable t) {
                     // There was some problem during the transfer. Reschedule if possible.
@@ -44,11 +45,9 @@ public class UploadHandler extends Handler<MultipartRequest> {
                 }
             };
             sessions.put(req.uri, s);
-
         }else{
             s = (UploadResource) sessions.get(req.uri);
             s.session.addFileToArray(req.file, req.attributes);
-
         }
         /*try (FileChannel inputChannel = new FileInputStream(fileUpload.getFile()).getChannel();
              FileChannel outputChannel = new FileOutputStream(file, true).getChannel()) {

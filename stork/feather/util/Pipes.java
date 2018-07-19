@@ -159,11 +159,10 @@ public final class Pipes {
       return null;
     }
     public Bell drain(Slice slice) {
-
-      try{
+      if (slice instanceof AttributeSlice){
         this.drain(Ad.parse(new ByteBufInputStream(slice.asByteBuf())));
-      }catch(Exception e){
-          this.file = slice;
+      }else{
+        this.file = slice;
       }
       return null;
     }
@@ -194,6 +193,7 @@ public final class Pipes {
       ad.put("attributes", list);
 
       ArrayList<Object> slices = new ArrayList<Object>();
+      System.out.println("file Size" + file.length() + "chunk# "+list.get("_chunkNumber"));
       slices.add(file);
       slices.add(ad);
       bell.ring(slices);
