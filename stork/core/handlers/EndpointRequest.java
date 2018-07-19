@@ -9,6 +9,7 @@ public class EndpointRequest extends Request {
   public String uri;
   public InnerCredRequest credential;
   public String module;
+  public String selectedFolderIds;
 
   // Hack to get around marshalling badness.
   private class InnerCredRequest extends CredRequest {
@@ -76,6 +77,7 @@ public class EndpointRequest extends Request {
       result.module = server().modules.byHandle(module);
     else
       result.module = server().modules.byProtocol(result.uri.scheme());
+    result.id = selectedFolderIds;
     return result;
   }
 
@@ -91,8 +93,9 @@ class RealEndpoint {
   URI uri;
   Credential credential;
   stork.module.Module module;
+  String id;
 
   public Resource resolve() {
-    return module.select(uri, credential);
+    return module.select(uri, credential, id);
   }
 }

@@ -67,7 +67,7 @@ public abstract class Module<R extends Resource> {
    * identify a resource or specifies a scheme not supported by this module.
    */
   public final R select(String uri) {
-    return select(uri, null);
+    return select(uri, null, null);
   }
 
   /**
@@ -80,8 +80,8 @@ public abstract class Module<R extends Resource> {
    * @throws IllegalArgumentException if the given URI does not properly
    * identify a resource or specifies a scheme not supported by this module.
    */
-  public final R select(String uri, Credential credential) {
-    return select(URI.create(uri), credential);
+  public final R select(String uri, Credential credential, String id) {
+    return select(URI.create(uri), credential, id);
   }
 
   /**
@@ -93,7 +93,7 @@ public abstract class Module<R extends Resource> {
    * identify a resource or specifies a scheme not supported by this module.
    */
   public final R select(URI uri) {
-    return select(uri, null);
+    return select(uri, null, null);
   }
 
   /**
@@ -111,7 +111,7 @@ public abstract class Module<R extends Resource> {
    * @see Resource
    * @see Session
    */
-  public abstract R select(URI uri, Credential credential);
+  public abstract R select(URI uri, Credential credential, String id);
 
   public String toString() { return handle; }
 }

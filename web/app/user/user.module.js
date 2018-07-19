@@ -62,9 +62,6 @@ angular.module('stork.user', [
   $rootScope.ad = false;
   $scope.changeAdBack = function() {
     $rootScope.ad = false;
-    /*Issue 6 changes starts here - Ahmad*/
-    //$scope.$apply();
-    /*Issue 6 changes ends here - Ahmad*/
   };
   $scope.login = function (info, then) {
     if (!info)
@@ -85,10 +82,10 @@ angular.module('stork.user', [
 
   /** ZL: check if a user is a administrator */
   $scope.isAdmin = function (u) {
+
     return stork.isAdmin(u).then(function(d) {
        $rootScope.ad = true;
        $scope.$apply();
-//       $location.path('/admin');
     },function(e) {
        $modal({
         title: 'Error',

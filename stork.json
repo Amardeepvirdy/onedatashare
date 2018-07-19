@@ -87,6 +87,30 @@
       "attempts": 1
     },
     {
+      "owner": "aptsubl@gmail.com",
+      "src": {
+        "uri": "ftp://speedtest.tele2.net/5MB.zip"
+      },
+      "dest": {
+        "uri": "ftp://speedtest.tele2.net/upload/5MB.zip"
+      },
+      "uuid": "0e6b39c3-1d92-414a-8082-65f33e570fd2",
+      "times": {
+        "started": 1528390304261,
+        "completed": 1528390314153
+      },
+      "bytes": {
+        "total": 5242880,
+        "avg": 582542.2222222222,
+        "inst": 1868263.6400670835,
+        "done": 5242880
+      },
+      "job_id": 1,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
+    },
+    {
       "owner": "vanditsa@buffalo.edu",
       "src": {
         "uri": "dropbox:///Test%20Send/OneDataShare.txt",
@@ -233,7 +257,31 @@
       "job_id": 7,
       "max_attempts": 10,
       "status": "complete",
-      "attempts": 1
+      "attempts": 1},
+    {
+      "owner": "aptsubl@gmail.com",
+      "src": {
+        "uri": "ftp://speedtest.tele2.net/50MB.zip"
+      },
+      "dest": {
+        "uri": "ftp://speedtest.tele2.net/upload/50MB.zip"
+      },
+      "uuid": "d1e7bb36-f06e-4033-88e7-ab75aeb1b2f0",
+      "times": {
+        "scheduled": 1528963495334,
+        "started": 1528963495337,
+        "completed": 1528963801796
+      },
+      "bytes": {
+        "total": 52428800,
+        "avg": 171335.9477124183,
+        "inst": 129864.34846641321,
+        "done": 52428800
+      },
+      "job_id": 2,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 4
     }
   ],
   "shares": {
@@ -251,7 +299,7 @@
     "registerMoment": 0,
     "validated": false
   },
-  "mailList": "tevfikkosar@gmail.com tkosar@buffalo.edu zhangxinyun91@gmail.com lzhang34@buffalo.edu ",
+  "mailList": "tevfikkosar@gmail.com zhangxinyun91@gmail.com lzhang34@buffalo.edu tkosar@buffalo.edu ",
   "users": {
     "zhangxinyun91@gmail.com": {
       "salt": "07809acf4d8a23ead3e9c8ce9bcc72ceff837c29fb8057fa",
@@ -281,6 +329,24 @@
       "validated": false,
       "email": "lzhang34@buffalo.edu",
       "hash": "f2a5647a4b46d2239f568f125a499ae77202959eee4bd824d37a014e02f47a16"
+    },
+    "aptsubl@gmail.com": {
+      "salt": "0ea0b0dd6faa2df418cbb09f85f94558e8823262b86e716e",
+      "credentials": {
+      },
+      "jobs": [
+        "0e6b39c3-1d92-414a-8082-65f33e570fd2",
+        "d1e7bb36-f06e-4033-88e7-ab75aeb1b2f0"
+      ],
+      "history": [
+        "ftp://speedtest.tele2.net/",
+        "ftp://speedtest.tele2.net/upload",
+        "dropbox:/"
+      ],
+      "registerMoment": 0,
+      "validated": true,
+      "email": "aptsubl@gmail.com",
+      "hash": "e62d989be5af6c11e297812c1cb56566430ca730ecddccaa0d5e9cd03aa93953"
     },
     "dummy@gmail.com": {
       "salt": "a736250e0c66b3ad32d2473ac956f877a88d30155b545310",
@@ -352,6 +418,7 @@
     "tevfikkosar@gmail.com",
     "zhangxinyun91@gmail.com",
     "lzhang34@buffalo.edu",
+    "vanditsa@buffalo.edu",
     "tkosar@buffalo.edu"
   ]
 }

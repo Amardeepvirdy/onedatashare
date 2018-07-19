@@ -7,8 +7,8 @@ import stork.module.*;
 import stork.scheduler.*;
 
 public class SMTPResource extends Resource<SMTPSession, SMTPResource>{
-  SMTPResource(SMTPSession session, Path path) {
-    super(session,path);
+  SMTPResource(SMTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public Bell<SMTPResource> mkdir() {

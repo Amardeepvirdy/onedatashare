@@ -45,7 +45,7 @@ public class HTTPBody extends Resource<HTTPRequest,HTTPBody> {
 
   /** Create an HTTPBody representing a body part. */
   protected HTTPBody(HTTPRequest req, Path path) {
-    super(req, path);
+    super(req, path, null);
   }
 
   /**

@@ -36,8 +36,8 @@ public class LocalSession extends Session<LocalSession,LocalResource> {
     this.path = path;
   }
 
-  public LocalResource select(Path path) {
-    return new LocalResource(this, path);
+  public LocalResource select(Path path, String id) {
+    return new LocalResource(this, path, id);
   }
 
   protected void finalize() {

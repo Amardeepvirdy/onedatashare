@@ -27,7 +27,7 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
     }
   }
 
-  public HTTPBody select(Path path) {
+  public HTTPBody select(Path path, String id) {
     return new HTTPBody(this, path);
   }
 

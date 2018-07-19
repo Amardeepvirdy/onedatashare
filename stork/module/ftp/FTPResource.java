@@ -11,8 +11,8 @@ import stork.util.*;
 import static stork.module.ftp.FTPListCommand.*;
 
 public class FTPResource extends Resource<FTPSession, FTPResource> {
-  FTPResource(FTPSession session, Path path) {
-    super(session, path);
+  FTPResource(FTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public synchronized Emitter<String> list() {
