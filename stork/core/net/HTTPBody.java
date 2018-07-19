@@ -62,12 +62,14 @@ public class HTTPBody extends Resource<HTTPRequest,HTTPBody> {
           session.ready = true;
           session.read();
         } public void fail() {
-          // TODO
+          System.out.println("Error: HTTPBody.java, HttpTap Bell start Failed");
         }
       };
     }
 
-    public Bell drain(Slice s) { return super.drain(s); }
+    public Bell drain(Slice s) {
+      return super.drain(s);
+    }
     public void finish(Throwable t) { super.finish(t); }
   };
 

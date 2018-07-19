@@ -1,5 +1,6 @@
 package stork.core.handlers;
 
+import io.netty.util.internal.StringUtil;
 import stork.ad.*;
 import stork.core.server.*;
 import stork.feather.*;
@@ -72,7 +73,27 @@ class JobRequest extends Request {
     dest.validateAs("destination");
     return this;
   }
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
 
+    buf.append("(");
+    buf.append(StringUtil.simpleClassName(this));
+    buf.append(')');
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Source Endpoint: ");
+    buf.append(src);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Dest Endpoint: ");
+    buf.append(dest);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
+  }
   /** Create a {@code Job} from this request. */
   public Job createJob() {
     Job job = Ad.marshal(this).unmarshal(new Job());

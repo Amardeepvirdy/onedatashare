@@ -1,6 +1,6 @@
 'use strict';
 
-/** Module for controlling and monitoring transfers. */
+/* Module for controlling and monitoring transfers. */
 angular.module('stork.transfer', [
   'stork.transfer.browse', 'stork.transfer.queue', 'stork.credentials', 'stork'
 ])
@@ -78,11 +78,7 @@ angular.module('stork.transfer', [
       return false;
     if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
       return false;
-    if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
-      /*$modal({
-      title: 'ATTENTION',
-      contentTemplate: 'transfer-error.html',
-      });*/
+    if (dest.$selected[Object.keys(dest.$selected)[0]].file)
       return false;
     if(!$scope.flag)
       return false;

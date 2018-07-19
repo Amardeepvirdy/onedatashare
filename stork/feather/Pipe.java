@@ -153,6 +153,7 @@ public class Pipe {
       Bell bell = downstream().start();
       return (bell != null) ? bell.detach() : Bell.rungBell();
     } catch (Exception e) {
+      e.printStackTrace();
       return Bell.wrap(e);
     }
   }
@@ -195,6 +196,7 @@ public class Pipe {
       Bell bell = downstream().drain(slice);
       return (bell != null) ? bell.detach() : Bell.rungBell();
     } catch (Exception e) {
+      e.printStackTrace();
       return Bell.wrap(e);
     }
   }

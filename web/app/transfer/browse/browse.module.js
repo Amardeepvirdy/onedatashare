@@ -54,13 +54,11 @@ angular.module('stork.transfer.browse', [
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
-<<<<<<< HEAD
-=======
+
   $scope.end.$selectedPaths = [];
   $scope.end.$selected = [];
   $scope.end.selectedFolderIds = "";
 
->>>>>>> c7c7b40f3ad5ded56c041181ab215b723a69751f
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
     $scope.uri = {};
@@ -227,18 +225,6 @@ angular.module('stork.transfer.browse', [
     stork.get(end);
   };
 
-   $scope.upload = function (uris) {
-      if (uris == undefined || uris.length == 0)
-        return alert('You must select a file.');
-      else if (uris.length > 1)
-        return alert('You can only upload one file at a time.');
-      var end = {
-        uri: uris[0],
-        credential: $scope.end.credential
-      };
-      stork.get(end);
-    };
-
   // Share the selected file.
   $scope.share = function (uris) {
     if (uris == undefined || uris.length == 0)
@@ -291,68 +277,36 @@ angular.module('stork.transfer.browse', [
   $scope.select = function (e) {
     var scope = this;
     var u = this.path();
-<<<<<<< HEAD
-    // if dragging, dont select anything;
-    if($scope.dragO != null){return}
+
+    var event = e.type;
+    console.log(event);
 
     // Enable to choose mutiple files.
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
-    if ( (!mac && e.ctrlKey) || (mac && e.metaKey)) {
-      this.root.selected = !this.root.selected;
-      if (this.root.selected){
-        $scope.end.$selected[u] = this.root;
-      }
-      else
-=======
-      // Enable to choose mutiple files.
-    if (e.ctrlKey) {
-      // handle selection and deselection
-      this.root.selected = !this.root.selected;
-      if (this.root.selected){
-        $scope.end.$selected.push(this.root);
-        $scope.end.$selectedPaths.push(u.toString());
-        console.log($scope.end.$selected);
-        console.log($scope.end.$selectedPaths);
-      } else {
-        var index = $scope.end.$selected.indexOf(this.root);
-        $scope.end.$selected.splice(index, 1);
-        console.log($scope.end.$selected);
-        $scope.end.$selectedPaths.splice(index, 1);
-        console.log($scope.end.$selectedPaths);
-      }
-    } else if ($scope.end.$selected.length != 1) {
-      // Either nothing is selected, or multiple things are selected.
-      $scope.unselectAll();
-      this.root.selected = true;
-      $scope.end.$selected.push(this.root);
-      $scope.end.$selectedPaths.push(u.toString());
-    } else if ($scope.end.$selected.length = 1){
-      // Only one thing is selected.
-      var selected = this.root.selected;
-      $scope.unselectAll();
-      if (!selected) {
-        this.root.selected = true;
-        $scope.end.$selected.push(this.root);
-        $scope.end.$selectedPaths.push(u.toString());
-      }
-    }
-    /*if (e.ctrlKey) {
-      this.root.selected = !this.root.selected;
-      if (this.root.selected) {
-        $scope.end.$selected[u] = this.root;
-        console.log(this.root);
-        console.log($scope.end.$selected);
-      } else
->>>>>>> c7c7b40f3ad5ded56c041181ab215b723a69751f
-        delete $scope.end.$selected[u];
-    }else if (e.shiftKey) {
 
+    if ( ((!mac && e.ctrlKey) || (mac && e.metaKey)) ) {
+        if(event == "mousedown"){
+          $scope.cornerCase = this;
+          $scope.start_select = this;
+          this.root.selected = !this.root.selected;
+          if (this.root.selected){
+            $scope.end.$selected[u] = this.root;
+          }
+          else
+            delete $scope.end.$selected[u];
+        }
+    }else if (e.shiftKey ) {
+        if( event == "mouseup" ){
+            return;
+        }
+        $scope.cornerCase = this;
        if($scope.start_select && ($scope.start_select.parent().root == this.parent().root)){
         var target = this.root;
         var source = $scope.start_select;
-        var arrayOfSelects = [];
+        var arrayOfSelects = Object.keys($scope.end.$selected).map((v)=>{return {path: v, root: $scope.end.$selected[v]}});
+        console.log(arrayOfSelects);
 
-        while(source.$$nextSibling != null && source.root != target){
+        while(source != null && source.root != target){
             arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
             source = ((source.$index < this.$index) ? source.$$nextSibling : source.$$prevSibling);
         }
@@ -371,23 +325,28 @@ angular.module('stork.transfer.browse', [
         $scope.end.$selected[u] = this.root;
        }
      }
-     else if ($scope.selectedUris().length != 1) {
+     else if ($scope.selectedUris().length > 1 && event == "mouseup") {
+     if($scope.cornerCase == this){
+        return;
+     }
       $scope.start_select = this;
       // Either nothing is selected, or multiple things are selected.
 
       $scope.unselectAll();
       this.root.selected = true;
       $scope.end.$selected[u] = this.root;
-    }else if ($scope.selectedUris().length = 1){
+    }else if ($scope.selectedUris().length <= 1 && event == "mousedown"){
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
+      this.root.hoverOver = false;
+      this.$parent.root.hoverOver = false;
       if (!selected) {
         $scope.start_select = this;
         this.root.selected = true;
         $scope.end.$selected[u] = this.root;
       }
-    }*/
+    }
 
     // Unselect text.
     if (document.selection && document.selection.empty)
@@ -420,6 +379,8 @@ angular.module('stork.transfer.browse', [
     });
     $scope.end.$selected = {};*/
   };
+
+
 
   $scope.selectedUris = function () {
     if (!$scope.end.$selected)
@@ -495,7 +456,6 @@ angular.module('stork.transfer.browse', [
                 $scope.uri.text = readable;
                 uri = new URI(readable).normalize();
             }
-
             $scope.uri.parsed = uri;
             $scope.uri.text = readable;
             $scope.up_dir();
@@ -506,23 +466,26 @@ angular.module('stork.transfer.browse', [
   }
 
   $scope.storkDragStart = function (ele, scope) {
-    if(_.size($scope.end.$selected) == 0){
-      var u = $scope.genericPath(scope);
-      scope.root.select = true;
+
+
+    scope.root.hoverOver = false;
+    scope.$parent.root.hoverOver = false;
+    scope.resetDrag();
+    scope.end["dragStart"] = true;
+    if(_.size($scope.end.selected) == 0){
+        var u = $scope.genericPath(scope);
+        scope.root.select = true;
       $scope.end.$selected[u] = scope.root;
 
     }
-    $scope.dragO = _.size($scope.end.$selected);
-
-    $scope.$digest();
+    ele.dataTransfer.setData('text', ele.target.root);
 
   };
   $scope.storkDragEnd = function (e, scope) {
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
+
     $scope.clearTimeout($scope.timer);
-    $scope.dragO = null;
-    $scope.$digest();
   };
   $scope.storkDragOver = function (e, scope) {
     e.preventDefault();
@@ -532,7 +495,9 @@ angular.module('stork.transfer.browse', [
      }
   };
   $scope.storkDragEnter = function (e, scope) {
-    $scope.unHoverFriends(scope);
+    if(scope.end.dragStart){
+        return;
+    }
     if(scope.root.file){
           scope.$parent.root.hoverOver = true;
      }else{
@@ -556,18 +521,32 @@ angular.module('stork.transfer.browse', [
   };
   $scope.storkDrop = function (e, scope) {
     e.preventDefault();
-
-    scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
+    scope.root.hoverOver = false;
+    if($scope.end.dragStart){
+        alert("you cannot transfer file to yourself!");
+        return;
+    }
+
+    scope.unselectAll();
+    if(scope.root.file){
+        scope.$parent.root.selected = true;
+        $scope.end.$selected[this.$parent.path()] = this.$parent.root;
+    }else{
+        scope.root.selected = true;
+        $scope.end.$selected[this.path()] = this.root;
+    }
 
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
         $scope.transfer('left','right',false);
 
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
         $scope.transfer('right','left',false);
-    $scope.$digest();
   };
-
+  $scope.resetDrag = function(){
+       endpoints.get('right').dragStart = false;
+       endpoints.get('left').dragStart = false;
+  }
   /*Issue 10 changes starts here - Ahmad*/
   $scope.logoutDbx = function () {
     $scope.end.credential = undefined;
@@ -629,8 +608,6 @@ $scope.mkdir = function () {
 
     modal.$scope.uri.parsed = $scope.uri.parsed;
     // $scope.modal = modal;
-
-
       /*modalInstance.result.then(function (pn) {
         var u = new URI(pn[0]).segment(pn[1]);
         return stork.mkdir(u.href()).then(
@@ -655,7 +632,7 @@ $scope.mkdir = function () {
     //u = new URI(u);
     if (!u) return;
     var ep = angular.copy($scope.end);
-    ep.uri = u;
+    ep.uri = u.replace(" ", "%20");
 /*<<<<<<< HEAD
 =======*/
     if($scope.end.$selected.length > 1) {

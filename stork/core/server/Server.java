@@ -33,7 +33,7 @@ public class Server {
 
   /** ZL: for sending mails to multiple receipients */
   public String mailList = "";
-   
+
   /** ZL: Users wants to reset their passwords, one user, one token. */
   public Map<String, String> authTokens = new HashMap<String, String>();
 
@@ -114,8 +114,7 @@ public class Server {
     if (request.handler == null) {
       request.ring(new Exception("Invalid command."));
     } else try {
-      Log.fine("Enqueuing request: "+Ad.marshal(request));
-
+      //Log.fine("Enqueuing request: "+Ad.marshal(request));
       Bell.dispatch(request);
     } catch (Exception e) {
       // This can happen if the queue is full. Which right now it never should
@@ -230,6 +229,7 @@ public class Server {
     handlers.put("q",      QHandler.class);
     handlers.put("status", QHandler.class);
     handlers.put("submit", SubmitHandler.class);
+    handlers.put("upload", UploadHandler.class);
     handlers.put("user",   UserHandler.class);
 
     modules.populate();

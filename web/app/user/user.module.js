@@ -106,13 +106,13 @@ angular.module('stork.user', [
     });
     return stork.findPassword(u).then(function (d) {
       if(then)
-       then(d); 
+       then(d);
       $rootScope.account=u;
       $modal({
         title: 'Send link to reset your password',
         contentTemplate: '/app/user/sendPasswordReset.html',
         show: true
-      });      
+      });
     },function(e) {
        $modal({
         title: 'We could not find your account with that information',

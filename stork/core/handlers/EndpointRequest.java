@@ -1,5 +1,6 @@
 package stork.core.handlers;
 
+import io.netty.util.internal.StringUtil;
 import stork.core.server.*;
 import stork.feather.*;
 
@@ -15,6 +16,27 @@ public class EndpointRequest extends Request {
     public User user() { return EndpointRequest.this.user(); }
   }
 
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
+
+    buf.append("Endpoint Uri: ");
+    buf.append(uri);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("credential: ");
+    buf.append(credential);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Module: ");
+    buf.append(module);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
+
+  }
   /** Get the {@code Resource} identified by this request. */
   public Resource resolve() { return resolveAs(null); }
 
@@ -49,8 +71,8 @@ public class EndpointRequest extends Request {
       throw new RuntimeException("No URI scheme for "+name+"endpoint.");
     if (credential != null)
       result.credential = credential.resolve();
-    if (credential != null && result.credential == null)
-      throw new RuntimeException("Invalid credential for "+name+"endpoint.");
+    //if (credential != null && result.credential == null)
+      //throw new RuntimeException("Invalid credential for "+name+"endpoint.");
     if (module != null)
       result.module = server().modules.byHandle(module);
     else

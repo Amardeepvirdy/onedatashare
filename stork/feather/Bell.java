@@ -3,6 +3,7 @@ package stork.feather;
 import java.util.*;
 import java.util.concurrent.*;
 
+import io.netty.util.internal.StringUtil;
 import stork.feather.util.*;
 
 /**
@@ -148,6 +149,27 @@ public class Bell<T> implements Future<T> {
         }
       }
     });
+  }
+
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
+
+    buf.append("(");
+    buf.append(StringUtil.simpleClassName(this));
+    buf.append(')');
+    buf.append(StringUtil.NEWLINE);
+    buf.append("Object: ");
+    buf.append(this.object);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Promises: ");
+    buf.append(this.promises);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
   }
 
   /** Dispatch a promise to all promised bells. */
@@ -764,5 +786,7 @@ final class DispatchFail<B extends Bell<?>> implements Runnable {
   } public void run() {
     for (B b : bells) b.ring(error);
   }
+
+
 }
 
