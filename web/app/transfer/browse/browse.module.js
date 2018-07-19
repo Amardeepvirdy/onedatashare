@@ -262,6 +262,7 @@ angular.module('stork.transfer.browse', [
     if (root && root.dir && (scope.open = !scope.open) && !root.files) {
       scope.fetch(scope.path());
     }
+    $scope.unselectAll();
   };
 
   $scope.select = function (e) {
