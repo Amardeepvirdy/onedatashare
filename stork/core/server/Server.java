@@ -4,14 +4,9 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
-
 import stork.ad.*;
 import stork.core.*;
 import stork.core.handlers.*;
-import stork.cred.*;
 import stork.feather.*;
 import stork.module.*;
 import stork.scheduler.*;
@@ -41,7 +36,7 @@ public class Server {
 
   /** ZL: Users wants to reset their passwords, one user, one token. */
   public Map<String, String> authTokens = new HashMap<String, String>();
- 
+
   /** A user that knows it belongs to this server. */
   private class ServerUser extends User {
     public ServerUser() { super(); }
@@ -217,6 +212,7 @@ public class Server {
   public Server(Config config) {
     Log.info("Loading server...");
     Log.info("Server config: ", config);
+
 
     if (config.state_file != null)
       loadServerState(config.state_file);

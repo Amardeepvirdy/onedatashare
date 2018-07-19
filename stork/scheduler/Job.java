@@ -103,8 +103,10 @@ public class Job {
     if (this.status != null) switch (this.status) {
       case processing:
         if (transfer != null)
-          transfer.stop();
-        transfer = null;
+          if(status != removed) {
+            transfer.stop();
+            transfer = null;
+          }
     }
 
     // Handle entering the new state.
@@ -118,6 +120,7 @@ public class Job {
       case complete:
         if (transfer != null)
           transfer.cancel();
+          transfer = null;
         times.completed = now(); break;
     } return this;
   }
@@ -232,9 +235,14 @@ public class Job {
       } public void fail(Throwable t) {
         // There was some problem during the transfer. Reschedule if possible.
         Log.warning("Job failed: ", uuid(), " ", t);
-        status(failed, t.getMessage());
-        /*Delete: attempts++*/
-        reschedule();
+        if(t instanceof java.util.concurrent.CancellationException) {
+          System.out.println("Done Cancellation");
+          status(removed, t.getMessage());
+        }else {
+          status(failed, t.getMessage());
+          /*Delete: attempts++*/
+          reschedule();
+        }
       }
     };
 

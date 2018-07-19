@@ -56,3 +56,14 @@ Project Structure
   Gets included in the binary release tarfile.
 * `stork/` — Includes all the Java source files for Stork.
 * `web/` — Includes static web files for the browser client.
+
+
+API DOCS
+========
+The REST API for the stork server can be found at:
+
+https://documenter.getpostman.com/view/4583050/RWEduLbS
+
+https://documenter.getpostman.com/view/4583050/RWEduLfh
+
+https://documenter.getpostman.com/view/4583050/RWEduLfi

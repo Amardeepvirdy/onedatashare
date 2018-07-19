@@ -63,7 +63,7 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.reset();
-
+  $scope.timer = [];
   // Example display
   $scope.exDisplay = function (uri) {
     uri = new URI(uri).normalize();
@@ -271,11 +271,13 @@ angular.module('stork.transfer.browse', [
   $scope.select = function (e) {
     var scope = this;
     var u = this.path();
+
     var event = e.type;
     console.log(event);
-    // Enable to choose mutiple files.
 
+    // Enable to choose mutiple files.
     var mac = window.navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)? true: false;
+
 
     if ( ((!mac && e.ctrlKey) || (mac && e.metaKey)) ) {
         if(event == "mousedown"){
@@ -375,13 +377,29 @@ angular.module('stork.transfer.browse', [
     return _.keys($scope.end.$selected);
   };
 
+  /* canDownload(): Function is used to determine if download button should be enabled or disabled
+   * It returns true (download button will be enabled) when only one file is selected and
+   * false (download button will be disabled) when multiple files are selected or a folder is selected.
+   */
+  $scope.canDownload = function() {
+    var selectedItems = $scope.end.$selected;
+    if (!selectedItems || _.isEmpty(selectedItems) || _.size(selectedItems) > 1)
+        return false;
+    for (var i = 0; i < _.size(selectedItems); i++) {
+        if (_.values(selectedItems)[i].dir)
+            return false;
+    }
+    return true;
+  }
+
   /* Supported protocol to show in the dropdown box.ex.ftp://ftp.mozilla.org/,gsiftp://oasis-dm.sdsc.xsede.org/ */
   $scope.dropdownDbx = [
     ["fa-dropbox", "Dropbox", "dropbox://"],
   ];
 
   $scope.dropdownList = [
-    ["fa-globe", "FTP", "ftp:"], 
+    ["fa-globe", "FTP", "ftp:"],
+    ["fa-globe", "SFTP", "sftp:"],
     ["fa-globe", "SDSC Gordon (GridFTP)", "gsiftp:"],
     ["fa-globe", "HTTP", "http:"],
     ["fa-globe", "SCP","scp:"],
@@ -433,6 +451,7 @@ angular.module('stork.transfer.browse', [
 
   $scope.storkDragStart = function (ele, scope) {
 
+
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
     scope.resetDrag();
@@ -441,33 +460,47 @@ angular.module('stork.transfer.browse', [
         var u = $scope.genericPath(scope);
         scope.root.select = true;
       $scope.end.$selected[u] = scope.root;
-      $scope.$digest();
+
     }
     ele.dataTransfer.setData('text', ele.target.root);
   };
   $scope.storkDragEnd = function (e, scope) {
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
-    //scope.unselectAll();
+
+    $scope.clearTimeout($scope.timer);
   };
-  $scope.storkDragOver = function (e) {
+  $scope.storkDragOver = function (e, scope) {
     e.preventDefault();
+    if(scope.root.dir){
+          scope.root.hoverOver = true;
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
+     }
   };
   $scope.storkDragEnter = function (e, scope) {
     if(scope.end.dragStart){
         return;
     }
     if(scope.root.file){
-        scope.$parent.root.hoverOver = true;
-        $scope.$digest();
-    }else{
-        scope.root.hoverOver = true;
-        $scope.$digest();
-    }
+          scope.$parent.root.hoverOver = true;
+     }else{
+          scope.root.hoverOver = true;
+          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
+     }
+     $scope.$digest();
+     e.preventDefault();
   };
+  $scope.toggleOnLongHover = function(node){
+    if(node.root.hoverOver && !node.open){
+        node.toggle();
+    }
+  }
+
   $scope.storkDragLeave = function (e, scope) {
+
     scope.root.hoverOver = false;
     scope.$parent.root.hoverOver = false;
+    $scope.clearTimeout($scope.timer);
   };
   $scope.storkDrop = function (e, scope) {
     e.preventDefault();
@@ -499,17 +532,44 @@ angular.module('stork.transfer.browse', [
   }
   /*Issue 10 changes starts here - Ahmad*/
   $scope.logoutDbx = function () {
-    //console.log($scope.end);
     $scope.end.credential = undefined;
     $scope.refresh();
   }
+  // TODO: this function has bad algorithm
+  $scope.unHoverFriends = function(node){
+    if(node.$$nextSibling){
+        node.$$nextSibling.root.hoverOver = false;
 
+    }
+    if(node.$parent){
+        node.$parent.root.hoverOver = false;
+    }
+    if(node.$$prevSibling){
+        /*if(node.$$prevSibling.$$childTail && node.$$prevSibling.root.dir && node.$$prevSibling.root.files.map){
+            node.$$prevSibling.root.files.map((file)=>{
+                file.hoverOver = false;
+            });
+        }*/
+        node.$$prevSibling.root.hoverOver = false;
+    }
+    if(node.root.files && node.root.files.map && node.$$childHead){
+        node.root.files.map((file)=>{
+            file.hoverOver = false;
+        });
+    }
+  }
+  $scope.clearTimeout = function(timer){
+    timer.map((time)=>{
+        clearTimeout(time);
+    });
+    timer = [];
+  }
+
+  // TODO: this function does not work
   $scope.onThisSide = function (node) {
       while(node.$parent){
         node = node.$parent;
         if(node.root == $scope.root){
-            console.log(node.root);
-            console.log($scope.root);
             return true;
         }
       }
@@ -531,8 +591,6 @@ $scope.mkdir = function () {
 
     modal.$scope.uri.parsed = $scope.uri.parsed;
     // $scope.modal = modal;
-
-
       /*modalInstance.result.then(function (pn) {
         var u = new URI(pn[0]).segment(pn[1]);
         return stork.mkdir(u.href()).then(

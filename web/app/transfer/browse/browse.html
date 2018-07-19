@@ -1,4 +1,4 @@
-<div class="file-list panel panel-info" ng-class="state" >
+<div class="file-list panel panel-info"  ng-class="state" >
   <!-- Shown when the widget is disconnected. -->
   <div class="disconnected-icon">
     <span class="fa-stack fa-3x">
@@ -108,7 +108,6 @@
         </button>
       </div>
 
-
       <form  class="btn-group"ng-controller="FileUpload" name="form">
 
         <button class="btn btn-default" ngf-select="uploadFiles($files)" ng-model="files" ngf-multiple="true">
@@ -145,8 +144,11 @@
   </div>
 
   <!-- Where files are displayed and can be browsed. -->
+
+
   <div class="tree" ng-class="{'hide-dots': !showHidden}">
     <div>
+      
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
       </ul>

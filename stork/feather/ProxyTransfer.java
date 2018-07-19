@@ -113,7 +113,7 @@ extends Transfer<S,D> {
         }
         if (stat.file) {
           info.total = stat.size;
-          b = b.and(transferData(path));
+          b = b.and(cancelBell = transferData(path));
         }
         else
           transferEnded(path);

@@ -118,6 +118,7 @@
     <i class="fa text-muted toggle" ng-mousedown="root.dir && toggle()"
        ng-class="{'fa-minus-square-o': open, 'fa-plus-square-o': !open}"></i>
 
+
     <!-- Name, Indent and date and time of the file. -->
     <div ng-class="{'alert-info': (root.hoverOver || root.selected), 'alert-warning': !!error}"
          ng-dblclick="toggle()" ng-mousedown="select($event)" ng-mouseup="select($event)" draggable="true" droppable="true" li-drop="select($event)" >
@@ -128,8 +129,6 @@
       <!-- name and size of the files -->
       <span ng-bind-attr="{side}"></span>
       <span bo-bind="root.name"></span>
-      <span class="small text-muted" bo-if="!root.dir"
-            bo-bind="(root.size | size)+'B'"></span>
 
       <!-- if loading display an spinning icon -->
       <span class="fade fa fa-refresh text-muted" ng-class="loading && 'in fa-spin'"></span>
@@ -226,6 +225,10 @@
       <button ng-click="$hide()" type="button" class="btn btn-default">
         Cancel
       </button>
+        <!--Ideally we should add renaming functionality at some point, but we need a better approach-->
+     <!--<button ng-click = "rename(cred.name)" type="button" class="btn btn-default" >-->
+        <!--Rename-->
+     <!--</button>-->
     </div>
   </form>
 </script>
@@ -254,6 +257,25 @@
       </button>
     </div>
   </form>
+</script>
+
+<!-- Rename existing credential -->
+<script type="text/ng-template" id="rename-cred.html">
+    <form ng-controller="EnterCredential" ng-submit="saveCredential(cred)">
+        <div class="form-group col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control" ng-model="cred.name" required>
+        </div>
+        <div class="text-center modal-footer">
+            <button type="submit" class="btn btn-primary"
+                    ng-disabled="cred.$agreed === false">
+                OK
+            </button>
+            <button ng-click="$hide()" type="button" class="btn btn-default">
+                Cancel
+            </button>
+        </div>
+    </form>
 </script>
 
 <!-- Create new credential MyProxy credential. -->
