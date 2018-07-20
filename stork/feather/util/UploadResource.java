@@ -16,7 +16,7 @@ public class UploadResource extends Resource<UploadSession,UploadResource> {
     public UploadTap upt = new UploadTap(this);
 
     public UploadResource(UploadSession session, Path path) {
-        super(session, path);
+        super(session, path, null);
     }
     public Bell<Stat> stat() {
         final Throwable throwable = new RuntimeException();

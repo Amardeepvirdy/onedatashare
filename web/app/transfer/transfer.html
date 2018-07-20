@@ -111,10 +111,10 @@
   <!-- all nodes, Directories on the top, Accending order of name -->
   <li bindonce="root" ng-repeat="root in files | orderBy:['-dir','name']"
       bo-class="{ dir: root.dir, file: !root.dir, loading: loading,
-                  dot: root.name && root.name.charAt(0) == '.' }"
-    <!-- Sign in-front-of root node. +/- -->
-      ng-init="folder_id=root.id"
+                  dot: root.name && root.name.charAt(0) == '.' }"ng-init="folder_id=root.id"
       ng-class="{open:open}">
+
+    <!-- Sign in-front-of root node. +/- -->
     <i class="fa text-muted toggle" ng-mousedown="root.dir && toggle()"
        ng-class="{'fa-minus-square-o': open, 'fa-plus-square-o': !open}"></i>
 

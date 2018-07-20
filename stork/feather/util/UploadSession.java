@@ -76,7 +76,7 @@ public class UploadSession extends Session<UploadSession,UploadResource> {
         newSlice.ring(new UploadInfo(file, attributes));*/
     }
 
-    public UploadResource select(Path path) {
+    public UploadResource select(Path path, String id) {
         return _upr ;
     }
 

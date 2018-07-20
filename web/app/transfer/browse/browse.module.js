@@ -55,8 +55,7 @@ angular.module('stork.transfer.browse', [
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
 
-  $scope.end.$selectedPaths = [];
-  $scope.end.$selected = [];
+  $scope.end.$selected = {};
   $scope.end.selectedFolderIds = "";
 
   // Reset (or initialize) the browse pane.
@@ -315,14 +314,14 @@ angular.module('stork.transfer.browse', [
         $scope.unselectAll();
         arrayOfSelects.map((v)=>{
           v.root.selected = true;
-          $scope.end.$selected[v.path] = v.root;
+          $scope.end.$selected[v.path] =  v.root;
         });
        }else{
        // shift click without setting start point
         $scope.start_select = this;
         $scope.unselectAll();
         this.root.selected = true;
-        $scope.end.$selected[u] = this.root;
+        $scope.end.$selected.push(this.root);
        }
      }
      else if ($scope.selectedUris().length > 1 && event == "mouseup") {
@@ -335,7 +334,7 @@ angular.module('stork.transfer.browse', [
       $scope.unselectAll();
       this.root.selected = true;
       $scope.end.$selected[u] = this.root;
-    }else if ($scope.selectedUris().length <= 1 && event == "mousedown"){
+    }else if ($scope.selectedUris().length <= 1  && event == "mousedown"){
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
@@ -358,9 +357,9 @@ angular.module('stork.transfer.browse', [
   $scope.dragAndDrop = function (e) {
     var scope = this;
     var u = this.path();
-    $scope.end.$selected.push(this.root);
-    $scope.end.$selectedPaths.push(u.toString());
-    //$scope.end.$selected[u] = this.root;
+    //$scope.end.$selected.push(this.root);
+    //$scope.end.$selectedPaths.push(u.toString());
+    $scope.end.$selected[u] = this.root;
     if (document.selection && document.selection.empty)
       document.selection.empty();
     else if (window.getSelection)
@@ -368,16 +367,12 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.unselectAll = function () {
-    $scope.end.$selected.splice(0,$scope.end.$selected.length);
-    $scope.end.$selected = [];
-    $scope.end.$selectedPaths.splice(0,$scope.end.$selectedPaths.length);
-    $scope.end.$selectedPaths = [];
-    /*var s = $scope.end.$selected;
+    var s = $scope.end.$selected;
     if (s) _.each(s, function (f) {
       f.selected = false;
       delete f.selected;
     });
-    $scope.end.$selected = {};*/
+    $scope.end.$selected = {};
   };
 
 
@@ -429,7 +424,7 @@ angular.module('stork.transfer.browse', [
 
   $scope.openOAuth = function (url) {
     $window.oAuthCallback = function (uuid) {
-      $scope.end.credential = {uuid: uuid};
+      $scope.end.credential = {uuid: uuid}
       $scope.refresh();
       $scope.$apply();
     };
@@ -489,10 +484,6 @@ angular.module('stork.transfer.browse', [
   };
   $scope.storkDragOver = function (e, scope) {
     e.preventDefault();
-    if(scope.root.dir){
-          scope.root.hoverOver = true;
-          $scope.timer.push(setTimeout(function (){ $scope.toggleOnLongHover(scope)}, 2000));
-     }
   };
   $scope.storkDragEnter = function (e, scope) {
     if(scope.end.dragStart){
@@ -523,6 +514,8 @@ angular.module('stork.transfer.browse', [
     e.preventDefault();
     scope.$parent.root.hoverOver = false;
     scope.root.hoverOver = false;
+    console.log()
+
     if($scope.end.dragStart){
         alert("you cannot transfer file to yourself!");
         return;
@@ -542,6 +535,7 @@ angular.module('stork.transfer.browse', [
 
     else if($scope.end == endpoints.get('left') && $scope.canTransfer('right','left',false))
         $scope.transfer('right','left',false);
+
   };
   $scope.resetDrag = function(){
        endpoints.get('right').dragStart = false;
@@ -635,7 +629,7 @@ $scope.mkdir = function () {
     ep.uri = u.replace(" ", "%20");
 /*<<<<<<< HEAD
 =======*/
-    if($scope.end.$selected.length > 1) {
+    if(_.keys($scope.end.$selected).length > 1) {
 
     }else {
         ep.selectedFolderIds = $scope.end.$selected[0].id;
