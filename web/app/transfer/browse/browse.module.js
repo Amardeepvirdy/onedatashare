@@ -58,6 +58,9 @@ angular.module('stork.transfer.browse', [
   $scope.end.$selected = {};
   $scope.end.selectedFolderIds = "";
 
+  $scope.end.$selectedPaths = [];
+  $scope.end.$selectedItems = [];
+
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
     $scope.uri = {};
@@ -271,6 +274,7 @@ angular.module('stork.transfer.browse', [
     if (root && root.dir && (scope.open = !scope.open) && !root.files) {
       scope.fetch(scope.path());
     }
+    $scope.unselectAll();
   };
 
   $scope.select = function (e) {
@@ -289,42 +293,58 @@ angular.module('stork.transfer.browse', [
           $scope.start_select = this;
           this.root.selected = !this.root.selected;
           if (this.root.selected){
-            $scope.end.$selected[u] = this.root;
+            //$scope.end.$selected[u] = this.root;
+            $scope.end.$selectedItems.push(this.root);
+            $scope.end.$selectedPaths.push(u.toString());
+            //console.log(u.toString());
           }
-          else
-            delete $scope.end.$selected[u];
+          else {
+            //delete $scope.end.$selected[u];
+            var index = $scope.end.$selectedItems.indexOf(this.root);
+            $scope.end.$selectedItems.splice(index, 1);
+            $scope.end.$selectedPaths.splice(index, 1);
+          }
         }
     }else if (e.shiftKey ) {
         if( event == "mouseup" ){
             return;
         }
         $scope.cornerCase = this;
-       if($scope.start_select && ($scope.start_select.parent().root == this.parent().root)){
+        if($scope.start_select && ($scope.start_select.parent().root == this.parent().root)){
         var target = this.root;
         var source = $scope.start_select;
-        var arrayOfSelects = Object.keys($scope.end.$selected).map((v)=>{return {path: v, root: $scope.end.$selected[v]}});
-        console.log(arrayOfSelects);
+        //var arrayOfSelects = Object.keys($scope.end.$selected).map((v)=>{return {path: v, root: $scope.end.$selected[v]}});
+        //console.log(arrayOfSelects);
 
         while(source != null && source.root != target){
-            arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+            //arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+            source.root.selected = true;
+            $scope.end.$selectedItems.push(source.root);
+            $scope.end.$selectedPaths.push($scope.genericPath(source).toString());
             source = ((source.$index < this.$index) ? source.$$nextSibling : source.$$prevSibling);
         }
-        arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+        //arrayOfSelects.push({path: $scope.genericPath(source), root: source.root});
+        source.root.selected = true;
+        $scope.end.$selectedItems.push(source.root);
+        $scope.end.$selectedPaths.push($scope.genericPath(source).toString());
 
-        $scope.unselectAll();
+        /*$scope.unselectAll();
         arrayOfSelects.map((v)=>{
           v.root.selected = true;
           $scope.end.$selected[v.path] =  v.root;
-        });
+        });*/
        }else{
        // shift click without setting start point
         $scope.start_select = this;
         $scope.unselectAll();
         this.root.selected = true;
-        $scope.end.$selected.push(this.root);
+        //$scope.end.$selected.push(this.root);
+        $scope.end.$selectedItems.push(this.root);
+        $scope.end.$selectedPaths.push(u.toString());
        }
      }
-     else if ($scope.selectedUris().length > 1 && event == "mouseup") {
+     //else if ($scope.selectedUris().length > 1 && event == "mouseup") {
+     else if ($scope.end.$selectedItems.length > 1 && event == "mouseup") {
      if($scope.cornerCase == this){
         return;
      }
@@ -333,8 +353,11 @@ angular.module('stork.transfer.browse', [
 
       $scope.unselectAll();
       this.root.selected = true;
-      $scope.end.$selected[u] = this.root;
-    }else if ($scope.selectedUris().length <= 1  && event == "mousedown"){
+      //$scope.end.$selected[u] = this.root;
+      $scope.end.$selectedItems.push(this.root);
+      $scope.end.$selectedPaths.push(u.toString());
+    }//else if ($scope.selectedUris().length <= 1  && event == "mousedown"){
+     else if ($scope.end.$selectedItems.length <= 1  && event == "mousedown"){
       // Only one thing is selected.
       var selected = this.root.selected;
       $scope.unselectAll();
@@ -344,11 +367,17 @@ angular.module('stork.transfer.browse', [
         $scope.start_select = this;
         this.root.selected = true;
         $scope.end.$selected[u] = this.root;
+        $scope.end.$selectedItems.push(this.root);
+        $scope.end.$selectedPaths.push(u.toString());
       }
     }
 
+    console.log(document.selection);
+    //console.log(document.selection.empty);
+    console.log(window.getSelection);
     // Unselect text.
-    if (document.selection && document.selection.empty)
+    //if (document.selection && document.selection.empty)
+    if (document.selection)
       document.selection.empty();
     else if (window.getSelection)
       window.getSelection().removeAllRanges();
@@ -357,9 +386,9 @@ angular.module('stork.transfer.browse', [
   $scope.dragAndDrop = function (e) {
     var scope = this;
     var u = this.path();
-    //$scope.end.$selected.push(this.root);
-    //$scope.end.$selectedPaths.push(u.toString());
-    $scope.end.$selected[u] = this.root;
+    $scope.end.$selectedItems.push(this.root);
+    $scope.end.$selectedPaths.push(u.toString());
+    //$scope.end.$selected[u] = this.root;
     if (document.selection && document.selection.empty)
       document.selection.empty();
     else if (window.getSelection)
@@ -367,20 +396,31 @@ angular.module('stork.transfer.browse', [
   };
 
   $scope.unselectAll = function () {
-    var s = $scope.end.$selected;
+    /*var s = $scope.end.$selected;
     if (s) _.each(s, function (f) {
       f.selected = false;
       delete f.selected;
     });
-    $scope.end.$selected = {};
+    $scope.end.$selected = {};*/
+
+    for(var i = 0; i < $scope.end.$selectedItems.length; i++) {
+        $scope.end.$selectedItems[i].selected = false;
+    }
+    $scope.end.$selectedItems.splice(0,$scope.end.$selectedItems.length);
+    $scope.end.$selectedItems = [];
+    $scope.end.$selectedPaths.splice(0,$scope.end.$selectedPaths.length);
+    $scope.end.$selectedPaths = [];
   };
 
 
 
   $scope.selectedUris = function () {
-    if (!$scope.end.$selected)
+    /*if (!$scope.end.$selected)
       return [];
-    return _.keys($scope.end.$selected);
+    return _.keys($scope.end.$selected);*/
+    if ($scope.end.$selectedItems.length <= 0)
+      return [];
+    return $scope.end.$selectedPaths
   };
 
   /* canDownload(): Function is used to determine if download button should be enabled or disabled
@@ -388,13 +428,16 @@ angular.module('stork.transfer.browse', [
    * false (download button will be disabled) when multiple files are selected or a folder is selected.
    */
   $scope.canDownload = function() {
-    var selectedItems = $scope.end.$selected;
+    //var selectedItems = $scope.end.$selected;
+    var selectedItems = $scope.end.$selectedItems;
     if (!selectedItems || _.isEmpty(selectedItems) || _.size(selectedItems) > 1)
         return false;
-    for (var i = 0; i < _.size(selectedItems); i++) {
+    /*for (var i = 0; i < _.size(selectedItems); i++) {
         if (_.values(selectedItems)[i].dir)
             return false;
-    }
+    }*/
+    if(selectedItems[0].dir)
+        return false
     return true;
   }
 
@@ -434,8 +477,10 @@ angular.module('stork.transfer.browse', [
   };
 
   if ($scope.end.uri) {
-    if($scope.end.$selected) {
-      var fileUri = _.keys($scope.end.$selected)[0];
+    /*if($scope.end.$selected) {
+      var fileUri = _.keys($scope.end.$selected)[0];*/
+    if($scope.end.$selectedPaths) {
+      var fileUri = $scope.end.$selectedPaths[0];
       var ep = {uri: fileUri, credential: $scope.end.credential};
       stork.ls(ep, 1).then(
         function(d) {
@@ -467,11 +512,18 @@ angular.module('stork.transfer.browse', [
     scope.$parent.root.hoverOver = false;
     scope.resetDrag();
     scope.end["dragStart"] = true;
-    if(_.size($scope.end.selected) == 0){
+    /*if(_.size($scope.end.selected) == 0){
         var u = $scope.genericPath(scope);
         scope.root.select = true;
       $scope.end.$selected[u] = scope.root;
 
+    }*/
+
+    if(_.size($scope.end.selected) == 0){
+          var u = $scope.genericPath(scope);
+          scope.root.select = true;
+          $scope.end.$selectedItems.push(scope.root);
+          $scope.end.$selectedPaths.push(u.toString());
     }
     ele.dataTransfer.setData('text', ele.target.root);
 
@@ -524,10 +576,14 @@ angular.module('stork.transfer.browse', [
     scope.unselectAll();
     if(scope.root.file){
         scope.$parent.root.selected = true;
-        $scope.end.$selected[this.$parent.path()] = this.$parent.root;
+        //$scope.end.$selected[this.$parent.path()] = this.$parent.root;
+        $scope.end.$selectedItems.push(this.$parent.root);
+        $scope.end.$selectedPaths.push(this.$parent.path().toString());
     }else{
         scope.root.selected = true;
-        $scope.end.$selected[this.path()] = this.root;
+        //$scope.end.$selected[this.path()] = this.root;
+        $scope.end.$selectedItems.push(this.root);
+        $scope.end.$selectedPaths.push(this.path().toString());
     }
 
     if($scope.end == endpoints.get('right') && $scope.canTransfer('left','right',false))
@@ -629,11 +685,11 @@ $scope.mkdir = function () {
     ep.uri = u.replace(" ", "%20");
 /*<<<<<<< HEAD
 =======*/
-    if(_.keys($scope.end.$selected).length > 1) {
+    /*if(_.keys($scope.end.$selected).length > 1) {
 
     }else {
         ep.selectedFolderIds = $scope.end.$selected[0].id;
-    }
+    }*/
 //>>>>>>> mythri
     //u.segment(name);
     return stork.mkdir(ep).then(
