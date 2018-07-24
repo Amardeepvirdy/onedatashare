@@ -70,6 +70,8 @@ public class OAuthHandler extends Handler<OAuthRequest> {
     private OAuthSession newSession(String type) {
         if ("dropbox".equals(type))
             return new DbxOAuthSession();
+        else if("googledrive".equals(type))
+            return new GoogleDriveOAuthSession();
         throw new RuntimeException("Expecting OAuth type.");
     }
 
