@@ -84,6 +84,10 @@ public class DumpStateThread extends Thread {
       pw.close();
       pw = null;
       MethodLogs.storkMessages(Ad.marshal(object).toJSON());
+      MethodLogs.userInformation(Ad.marshal(object).toJSON());
+      MethodLogs.administrators(Ad.marshal(object).toJSON());
+      MethodLogs.mailList(Ad.marshal(object).toJSON());
+      MethodLogs.credentialMessages(Ad.marshal(object).toJSON());
       if (!temp_file.renameTo(state_file))
         throw new RuntimeException("Could not rename temp dump file.");
     } catch (Exception e) {

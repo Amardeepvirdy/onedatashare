@@ -9,7 +9,6 @@ import stork.feather.util.MethodLogs;
 /** Handles retrieving files. */
 public class GetHandler extends Handler<SharedEndpointRequest> {
   public void handle(final SharedEndpointRequest req) {
-    MethodLogs.logMessage("Info","Get Handler was invoked");
     req.assertLoggedIn();
 
     final Resource resource = req.user().sessions.take(req.resolve());

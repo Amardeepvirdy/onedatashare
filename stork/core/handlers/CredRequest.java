@@ -26,7 +26,6 @@ public class CredRequest extends Request {
   String myproxy_pass;  // For StorkGSSCred.
 
   public StorkCred resolve() {
-    MethodLogs.logMessage("Info","Cred Handler was invoked");
     if (uuid != null) {
       return user().credentials.get(uuid);
     } else if ("userinfo".equals(type)) {

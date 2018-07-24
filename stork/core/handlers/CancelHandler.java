@@ -1,17 +1,13 @@
 package stork.core.handlers;
 
-import java.util.*;
 
-import stork.ad.*;
 import stork.core.server.*;
-import stork.feather.util.MethodLogs;
 import stork.scheduler.*;
-import stork.util.*;
 
 /** Handle removal of a job. */
 public class CancelHandler extends Handler<CancelRequest> {
   public void handle(CancelRequest req) {
-    MethodLogs.logMessage("Info","Cancel Handler was invoked");
+
     req.assertLoggedIn();
     req.assertMayChangeState();
 

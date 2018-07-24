@@ -17,7 +17,7 @@ public class ListHandler extends Handler<ListRequest> {
     new ConcurrentHashMap<Resource, Bell<Stat>>();
 
   public void handle(final ListRequest req) {
-    MethodLogs.logMessage("Info","List Handler was invoked");
+    ;
     req.assertLoggedIn();
 
     final Resource resource;

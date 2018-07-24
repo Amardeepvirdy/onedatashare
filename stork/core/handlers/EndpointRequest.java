@@ -31,7 +31,6 @@ public class EndpointRequest extends Request {
 
   /** Validate the request using {@code name} in error messages. */
   public EndpointRequest validateAs(String name) {
-    MethodLogs.logMessage("Info","End point request was invoked");
     validateAndResolve(name);
     return this;
   }

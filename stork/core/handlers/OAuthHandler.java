@@ -14,7 +14,7 @@ public class OAuthHandler extends Handler<OAuthRequest> {
     new HashMap<String,OAuthSession>();
 
   public void handle(final OAuthRequest req) {
-    MethodLogs.logMessage("Info","OAuth Handler was invoked");
+
     req.assertLoggedIn();
 
     // Request state will only be given when we're finishing a handshake, so

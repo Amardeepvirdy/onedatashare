@@ -42,7 +42,7 @@ class JobRequest extends Request {
 
   /** Create a {@code Job} from this request. */
   public Job createJob() {
-      MethodLogs.logMessage("Info","Submit Handler was invoked");
+
     Job job = Ad.marshal(this).unmarshal(new Job());
     return job;
   }

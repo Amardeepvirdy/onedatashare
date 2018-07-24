@@ -19,8 +19,13 @@
       <root url="jar://$PROJECT_DIR$/lib/myproxy-2.1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jsse-2.1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/mongo-java-driver-2.10.1.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/bson-3.2.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/java-json.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/mongo-java-driver-3.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Desktop/java-json.jar!/" />
+    </SOURCES>
   </library>
 </component>

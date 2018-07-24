@@ -35,7 +35,6 @@ public class InfoHandler extends Handler<InfoRequest> {
   }
 
   public void handle(InfoRequest req) {
-    MethodLogs.logMessage("Info","Info Handler was invoked");
     if (req.action.equals("module"))
       sendModuleInfo(req);
     else if (req.action.equals("server"))

@@ -59,6 +59,36 @@
     {
       "owner": "vanditsa@buffalo.edu",
       "src": {
+        "uri": "dropbox:///chapter%201.zip",
+        "credential": {
+          "uuid": "221044fb-d4c3-4eda-8345-da809d2b2229"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Get%20Started%20with%20Dropbox.pdf",
+        "credential": {
+          "uuid": "ca7a35ff-6a34-4416-a2e4-67696ee34310"
+        }
+      },
+      "uuid": "e44dbf97-dde3-445d-8d6c-e72fb926d203",
+      "times": {
+        "started": 1531407216920,
+        "completed": 1531407219731
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 14629.0,
+        "inst": 28945.54,
+        "done": 29258
+      },
+      "job_id": 15,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
+    },
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
         "uri": "dropbox:///File%20Handling.zip",
         "credential": {
           "uuid": "a38deee1-4ab2-4a1d-b4e5-8f0816cb9df0"
@@ -82,6 +112,36 @@
         "done": 1860
       },
       "job_id": 11,
+      "max_attempts": 10,
+      "status": "complete",
+      "attempts": 1
+    },
+    {
+      "owner": "vanditsa@buffalo.edu",
+      "src": {
+        "uri": "dropbox:///chapter%201.zip",
+        "credential": {
+          "uuid": "221044fb-d4c3-4eda-8345-da809d2b2229"
+        }
+      },
+      "dest": {
+        "uri": "dropbox:///Get%20Started%20with%20Dropbox.pdf",
+        "credential": {
+          "uuid": "ca7a35ff-6a34-4416-a2e4-67696ee34310"
+        }
+      },
+      "uuid": "5906c588-11c3-473b-ae2c-60d9659d9898",
+      "times": {
+        "started": 1531407193936,
+        "completed": 1531407196544
+      },
+      "bytes": {
+        "total": 0,
+        "avg": 14629.0,
+        "inst": 28570.588,
+        "done": 29258
+      },
+      "job_id": 14,
       "max_attempts": 10,
       "status": "complete",
       "attempts": 1
@@ -343,18 +403,20 @@
       },
       "uuid": "488800ba-d82f-4e05-88e9-dec17a3f9752",
       "times": {
-        "started": 1527744159813
+        "scheduled": 1530204712505,
+        "started": 1530204712507,
+        "completed": 1530204716128
       },
       "bytes": {
         "total": 0,
-        "avg": 0.0,
-        "inst": 0.0,
-        "done": 0
+        "avg": 344.6666666666667,
+        "inst": 1034.0,
+        "done": 1034
       },
       "job_id": 13,
       "max_attempts": 10,
-      "status": "processing",
-      "attempts": 1
+      "status": "complete",
+      "attempts": 3
     },
     {
       "owner": "vanditsa@buffalo.edu",
@@ -460,6 +522,11 @@
           "type": "oauth",
           "token": "P5f0sjorqPAAAAAAAAAAzs3rMJ7HY65ByVpWk2enycfZhJV5ecc_W7fAumPCwol2"
         },
+        "221044fb-d4c3-4eda-8345-da809d2b2229": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "P5f0sjorqPAAAAAAAAABBXngLSxbcDoIqHGFqar19Ms8rpDWdFKorlkLZIpjlf07"
+        },
         "9c17c14d-7190-4644-954f-8db8901166fe": {
           "name": "Dropbox",
           "type": "oauth",
@@ -474,6 +541,11 @@
           "name": "Dropbox",
           "type": "oauth",
           "token": "P5f0sjorqPAAAAAAAAAA1vTIKf6lSwA_oPf4Ev6DZdGk2ov3m3LDgP1JMcB7Kjqj"
+        },
+        "ca7a35ff-6a34-4416-a2e4-67696ee34310": {
+          "name": "Dropbox",
+          "type": "oauth",
+          "token": "P5f0sjorqPAAAAAAAAABB_fq8-wNGAasclDkaVM1gQ17Zxw-6szv4B3x_k4HQ5fd"
         }
       },
       "jobs": [
@@ -489,7 +561,9 @@
         "abad5cae-d9a4-477a-9b2d-447774f9df87",
         "88ebafd2-cee3-4ed7-b0fe-c302df365242",
         "bd96028e-cba1-4f0f-9403-8f76d55e5b30",
-        "488800ba-d82f-4e05-88e9-dec17a3f9752"
+        "488800ba-d82f-4e05-88e9-dec17a3f9752",
+        "5906c588-11c3-473b-ae2c-60d9659d9898",
+        "e44dbf97-dde3-445d-8d6c-e72fb926d203"
       ],
       "history": [
         "dropbox:/",
