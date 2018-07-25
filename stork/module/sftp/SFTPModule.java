@@ -1,16 +1,19 @@
 package stork.module.sftp;
 
-import java.util.*;
-
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
-
-import stork.cred.*;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.SftpATTRS;
+import stork.cred.StorkUserinfo;
 import stork.feather.*;
-import stork.feather.Session;
-import stork.feather.util.*;
-import stork.feather.errors.*;
-import stork.module.*;
+import stork.feather.errors.AuthenticationRequired;
+import stork.feather.util.ThreadBell;
+import stork.module.Module;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
 
 /** A module for SFTP/SFTP file transfers. */
 public class SFTPModule extends Module<SFTPResource> {
@@ -141,11 +144,11 @@ class SFTPResource extends Resource<SFTPSession, SFTPResource> {
   }
 
   public Bell mkdir() {
-    return new ThreadBell<Void>() {
-      public Void run() throws Exception {
+    return new ThreadBell<SFTPResource>() {
+      public SFTPResource run() throws Exception {
         session.channel.mkdir(path.toString());
 
-        return null;
+        return session.root();
       }
     }.startOn(initialize());
   }
