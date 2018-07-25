@@ -67,10 +67,8 @@ public abstract class Log {
                 lr.setSourceClassName(st[i].getClassName());
                 lr.setSourceMethodName(st[i].getMethodName());
             }
-
             log.log(lr);
             fh.close();
-
         }
     } public static void finest(Object... o) {
         log(FINEST, o);
