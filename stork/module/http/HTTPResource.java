@@ -19,8 +19,8 @@ public class HTTPResource extends Resource<HTTPSession, HTTPResource> {
    * @param session the class where this request made from
    * @param path requested resource {@code path}
    */
-  protected HTTPResource(HTTPSession session, Path path) {
-    super(session, path);
+  protected HTTPResource(HTTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public HTTPTap tap() {
@@ -95,15 +95,15 @@ public class HTTPResource extends Resource<HTTPSession, HTTPResource> {
 
           synchronized (builder.getChannel()) {
             if (!builder.onCloseBell.isDone()) {
-              HTTPChannel ch = builder.getChannel();
+                HTTPChannel ch = builder.getChannel();
 
-              if (builder.isKeepAlive()) {
-                ch.addChannelTask(HTTPTap.this);
-                ch.writeAndFlush(
-                    builder.prepareGet(resourcePath));
-              } else {
-                builder.tryResetConnection(HTTPTap.this);
-              }
+                if (builder.isKeepAlive()) {
+                  ch.addChannelTask(HTTPTap.this);
+                  ch.writeAndFlush(
+                          builder.prepareGet(resourcePath));
+                } else {
+                  builder.tryResetConnection(HTTPTap.this);
+                }
             } else {
               onStartBell.ring(new HTTPException("HTTP session " +
                     builder.getHost() + " has been closed."));

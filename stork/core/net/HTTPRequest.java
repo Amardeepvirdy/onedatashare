@@ -21,11 +21,13 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
     super(URI.create(netty.getUri()));
     this.netty = netty;
 
-    if (isMultipart())
-      throw new RuntimeException("multipart is currently unsupported");
+
+    if (isMultipart()){
+      // set a flag abbout all the package decodin.
+    }
   }
 
-  public HTTPBody select(Path path) {
+  public HTTPBody select(Path path, String id) {
     return new HTTPBody(this, path);
   }
 
@@ -40,9 +42,13 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
     return t != null && t.startsWith("multipart/");
   }
 
+  @Override
+  public String toString(){
+      return this.netty.toString();
+  }
   /** Check for a header. */
   public String header(CharSequence name) {
-    return netty.headers().get(name);
+      return netty.headers().get(name);
   }
 
   /** Send something back to Netty. */
@@ -59,6 +65,7 @@ public abstract class HTTPRequest extends Session<HTTPRequest,HTTPBody> {
     if (tap != null)
       tap.finish(null);
   }
+
 
   /** Send an error to the requestor. */
   public void sendError(int code) {

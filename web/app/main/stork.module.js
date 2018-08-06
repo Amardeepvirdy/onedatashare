@@ -21,6 +21,11 @@ angular.module('stork', [
       templateUrl: '/app/queue/queue.html',
       controller: 'Transfer',
       requireLogin: true
+      }).when('/history',{
+      title: 'history',
+      templateUrl: '/app/admin/history.html',
+      controller: 'Transfer',
+      requiredLogin: true
     }).when('/user', {
       title: 'User Settings',
       controller: 'User',
@@ -34,9 +39,11 @@ angular.module('stork', [
     }).when('/validate', {
       title: 'Validation',
       templateUrl: '/app/user/validate.html',
+      requireLogin: true
     }).when('/validateError', {
       title: 'Error',
       templateUrl: '/app/user/validateError.html',
+      requiredLogin: true,
     }).when('/resetPassword', { //ZL
       title: 'Reset Password',
       controller: 'Account',
@@ -248,6 +255,10 @@ angular.module('stork', [
 
 .config(function ($locationProvider) {
   $locationProvider.html5Mode(true);
+})
+.config(function ($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
+    //rest of route code
 })
 
 .value('cgBusyDefaults',{

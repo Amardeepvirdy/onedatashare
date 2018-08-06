@@ -1,3 +1,5 @@
+@import "dropdown.css";
+
 html {
   overflow-y: scroll;
 }
@@ -403,7 +405,6 @@ body.logged-out .logged-in {
   margin-top: 0;
   height: 100%;
   position: absolute;
-  width: 12em;
 }.adminFont a {
   color: #AAAAAA;
 }.adminBar li a:hover {
@@ -526,6 +527,8 @@ body.logged-out .logged-in {
   text-align:center;
 }
 /*Ins End of ++ spu*/
+
+
 
 
 

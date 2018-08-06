@@ -1,5 +1,6 @@
 package stork.core.handlers;
 
+import io.netty.util.internal.StringUtil;
 import stork.core.server.*;
 import stork.feather.*;
 
@@ -8,12 +9,34 @@ public class EndpointRequest extends Request {
   public String uri;
   public InnerCredRequest credential;
   public String module;
+  public String selectedFolderIds;
 
   // Hack to get around marshalling badness.
   private class InnerCredRequest extends CredRequest {
     public User user() { return EndpointRequest.this.user(); }
   }
 
+  @Override
+  public String toString(){
+    StringBuilder buf = new StringBuilder();
+
+    buf.append("Endpoint Uri: ");
+    buf.append(uri);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("credential: ");
+    buf.append(credential);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append("Module: ");
+    buf.append(module);
+    buf.append(StringUtil.NEWLINE);
+
+    buf.append(super.toString());
+    buf.append(StringUtil.NEWLINE);
+    return buf.toString();
+
+  }
   /** Get the {@code Resource} identified by this request. */
   public Resource resolve() { return resolveAs(null); }
 
@@ -54,6 +77,7 @@ public class EndpointRequest extends Request {
       result.module = server().modules.byHandle(module);
     else
       result.module = server().modules.byProtocol(result.uri.scheme());
+    result.id = selectedFolderIds;
     return result;
   }
 
@@ -69,8 +93,9 @@ class RealEndpoint {
   URI uri;
   Credential credential;
   stork.module.Module module;
+  String id;
 
   public Resource resolve() {
-    return module.select(uri, credential);
+    return module.select(uri, credential, id);
   }
 }

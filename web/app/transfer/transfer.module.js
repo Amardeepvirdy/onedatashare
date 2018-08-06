@@ -22,6 +22,7 @@ angular.module('stork.transfer', [
 .controller('Transfer', function (
   $rootScope, $q, $timeout, $scope, user, stork, $modal, endpoints, fileService)
 {
+  $scope.flag = true;
   // Hardcoded options.
   $scope.optSet = [{
       'title': 'Use transfer optimization',
@@ -74,18 +75,24 @@ angular.module('stork.transfer', [
   $scope.canTransfer = function (srcName, destName, contents) {
     var src = endpoints.get(srcName);
     var dest = endpoints.get(destName);
-    if (!src || !dest || !src.uri || !dest.uri || dest.uri.indexOf("http://") == 0)
+    if (!src || !dest || !src.uri || !dest.uri)
       return false;
-    if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
-      return false;
-    if (!_.values(dest.$selected)[0].dir)
-      return false;
-    if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
+    /*if (_.size(src.$selected) < 1 || _.size(dest.$selected) != 1)
+      return false;*/
+    if (_.size(src.$selectedItems) < 1 || _.size(dest.$selectedItems) != 1)
+          return false;
+    /*if (!_.values(dest.$selected)[0].dir)
+      return false;*/
+    if (!dest.$selectedItems[0].dir)
+          return false;
+    //if (_.values(src.$selected)[0].dir && !_.values(dest.$selected)[0].dir)
       /*$modal({
       title: 'ATTENTION',
       contentTemplate: 'transfer-error.html',
       });*/
-      return false;
+      //return false;
+    /*if (src.$selectedItems[0].dir && dest.$selectedItems[0].dir)
+        return false;*/
     if(!$scope.flag)
       return false;
     return true;
@@ -103,16 +110,22 @@ angular.module('stork.transfer', [
     return res;
   }
 
-  function loadDestFiles(dest, key, srcFiles, src){
+  /*function loadDestFiles(dest, key, srcFiles, src){
     var ep = angular.copy(dest);
     ep.uri = key;
     fileService.getFiles(ep, 1).then(function (data){
       getDuplicates(data, srcFiles, src, dest);
     });
+  }*/
+
+  function loadDestFiles(dest, ep, srcFiles, src){
+      fileService.getFiles(ep, 1).then(function (data){
+        getDuplicates(data, srcFiles, src, dest);
+      });
   }
 
   function getDestDirFiles(dest, srcFiles, src){
-    var destSelected = dest.$selected;
+    /*var destSelected = dest.$selected;
     for (var key in destSelected) {
       if (destSelected.hasOwnProperty(key)) {
         if (destSelected[key].hasOwnProperty("files"))
@@ -120,6 +133,20 @@ angular.module('stork.transfer', [
         else {
           loadDestFiles(dest, key, srcFiles, src);
           //return destFiles;
+        }
+      }
+    }*/
+    for(var i = 0; i < dest.$selectedItems.length; i++) {
+      if(dest.$selectedItems[i].hasOwnProperty("files")){
+        getDuplicates(dest.$selectedItems[i]["files"], srcFiles, src, dest);
+      }else {
+        var ep = angular.copy(dest);
+        if(dest.$selectedItems[i].hasOwnProperty("id")) {
+          ep.selectedFolderIds = dest.$selectedItems[i].id;
+          loadDestFiles(dest, ep, srcFiles, src);
+        }else {
+          ep.uri = key;
+          loadDestFiles(dest, ep, srcFiles, src);
         }
       }
     }
@@ -154,21 +181,60 @@ angular.module('stork.transfer', [
     var job = angular.copy($scope.job);
     job.src = src;
     job.dest = dest;
-    var su = _.keys(src.$selected);//[0];
-    var du = _.keys(dest.$selected)[0];
+    /*var su = _.keys(src.$selected);
+    var du = _.keys(dest.$selected)[0];*/
+    var su = src.$selectedPaths;
+    var du = dest.$selectedPaths[0];
+
     var dest_uris = "";
     var src_uris = "";
-    for (var i = 0; i < _.keys(src.$selected).length; i++) {
-        if (dest.$selected[du].dir) {
+    /*_.keys(src.$selected).map((path)=>{
+        if(src.$selected[path].hasOwnProperty('id')) {
+            job.src.selectedFolderIds += src.$selected[path].id;
+        }
+        var n = new URI(path).segment(-1);
+        dest_uris += new URI(du).segment(n).toString().trim();
+        src_uris += path.trim();
+        dest_uris += ",";
+        src_uris += ",";
+        if(src.$selected[path].hasOwnProperty('id')) {
+            job.src.selectedFolderIds += ",";
+        }
+    });
+
+    dest_uris = dest_uris.substring(0, dest_uris.length - 1);
+    src_uris = src_uris.substring(0, src_uris.length - 1);*/
+
+    for(var i = 0; i < src.$selectedPaths.length; i++){
+        if(src.$selectedItems[i].hasOwnProperty('id')) {
+            job.src.selectedFolderIds += src.$selectedItems[i].id;
+        }
+        if(dest.$selectedItems[0].dir){
             var n = new URI(su[i]).segment(-1);
             dest_uris += new URI(du).segment(n).toString().trim();
         }
         src_uris += su[i].trim();
-        if (i + 1 != _.keys(src.$selected).length) {
+        if (i + 1 != src.$selectedPaths.length) {
             dest_uris += ",";
             src_uris += ",";
+            if(src.$selectedItems[i].hasOwnProperty('id')) {
+                job.src.selectedFolderIds += ",";
+            }
         }
     }
+
+    if(dest.$selectedItems[0].hasOwnProperty('id')) {
+        job.dest.selectedFolderIds += dest.$selectedItems[0].id;
+    }
+
+    if(job.src.selectedFolderIds === "") {
+        job.src.selectedFolderIds = null;
+    }
+
+    if(job.dest.selectedFolderIds === "") {
+        job.dest.selectedFolderIds = null;
+    }
+
     job.dest.uri = dest_uris.replace(/, /g, ",");
     job.src.uri = src_uris.replace(/, /g, ",");
     var modal = null;
@@ -189,6 +255,21 @@ angular.module('stork.transfer', [
     modal.$scope.srcUris = src_uris;
     modal.$scope.destUris = dest_uris;
     modal.$scope.duplicates = strDuplicates;
+    /*job.dest.uri = du = dest_uris;
+    job.src.uri = su = src_uris;
+    console.log("new dest_uris: "+job.dest.uri);
+    console.log("new src_uris: "+job.src.uri);
+
+    var modal = $modal({
+        title: 'Transfer',
+        contentTemplate: 'transfer-modal.html'
+    });
+
+    console.log("job.src.uri: " + job.src.uri);
+    console.log("job.dest.uri: " + job.dest.uri);
+
+    console.log(job);
+>>>>>>> mythri*/
     modal.$scope.job = job;
     modal.$scope.submit = $scope.submit;
 
@@ -204,15 +285,22 @@ angular.module('stork.transfer', [
     var src = endpoints.get(srcName);
     var dest = endpoints.get(destName);
     if(!$scope.job.options.overwrite) {
-      var srcFiles = getSourceFiles(src.$selected);
+      //var srcFiles = getSourceFiles(src.$selected);
+      var srcFiles = src.$selectedItems;
       getDestDirFiles(dest, srcFiles, src);
     }
     else{
       createJob(src, dest);
     }
   };
+  //Modal to prompt the user a credential rename
+  $scope.rename = function(credName) {
+  $modal({
+        title: 'Rename',
+        contentTemplate: 'app/transfer/parts/renameCred.html'
 
-  
+    });
+  }
 
   $scope.submit = function (job, then) {
     return stork.submit(job).then(

@@ -18,10 +18,8 @@ angular.module('stork.credentials', [])
   };
 })
 
-/** Controller for selecting credentials. */
 .controller('SelectCredential', function ($scope) {
   $scope.cred = angular.copy($scope.end.credential);
-
   if ($scope.cred)
     $scope.selected = $scope.cred.uuid || $scope.cred.type;
 
@@ -42,7 +40,7 @@ angular.module('stork.credentials', [])
 })
 
 /** Controller for entering credentials. */
-.controller('EnterCredential', function ($scope) {
+.controller('EnterCredential', function ($scope, $modal) {
   $scope.cred = angular.copy($scope.end.credential);
 
   if ($scope.cred)
@@ -53,6 +51,7 @@ angular.module('stork.credentials', [])
     $scope.$hide();
     $scope.refresh();
   };
+
 })
 
 .controller('OAuth', function ($routeParams, $window) {

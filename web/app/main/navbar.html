@@ -5,11 +5,11 @@
         <i class="collapsed fa fa-reorder" ></i>
       </button>
 
-      <a class="navbar-brand" href="/#/" ng-click = chageAdBack()>
+      <a class="navbar-brand" href="/#/" ng-click = changeAdBack()>
         OneDataShare
       </a>
 
-      <a id="user-button" class="btn btn-default navbar-toggle logged-in" href="#/user" ng-click = chageAdBack()>
+      <a id="user-button" class="btn btn-default navbar-toggle logged-in" href="#/user" ng-click = changeAdBack()>
         <i class="fa fa-user"></i>
         <span ng-bind="$user.email">
           <em class="text-muted">Loading...</em>
@@ -25,6 +25,7 @@
             <span>Transfer</span>
           </a>
         </li>
+
         <li bs-route="/queue">
           <a href="/#/queue" ng-click="changeAdBack()">
             <i class="fa fa-list-ol"></i>
@@ -32,29 +33,36 @@
           </a>
         </li>
       </ul>
-    
-      <ul class="nav navbar-nav logged-in" ng-cloak>
-        <li bs-route="/admin">
-          <a href="/" ng-click="isAdmin($user)">
-            <i class="fa fa-laptop"></i>
-            <span>Admin</span>
-          </a>
-        </li>
-      </ul>
+
+      <!--New Admin Button with dropdown menu-->
+
+      <div class="navbar-collapse collapse" >
+        <ul class="nav navbar-nav logged-in" ng-cloak>
+      <div class="dropdown">
+        <button class="dropbtn"> <i class="fa fa-laptop"> <span>Admin</span></i></button>
+        <div class="dropdown-content">
+          <a ng-click="isAdmin($user)" href="/#/userLs">Clients Information</a>
+          <a ng-click= "isAdmin($user)" href="/#/history">History</a>
+          <a href="#">Management</a>
+          <a href ="#"> Data</a>
+        </div>
+      </div>
+        </ul>
+
 
       <ul ng-controller="User" class="nav navbar-nav navbar-right">
-        <li class="hidden-xs" bs-route="/user">
-          <a id="user-button" class="logged-in" href="/#/user" ng-cloak>
+        <li class="hidden-xs" bs-route="/user" >
+          <a id="user-button" class="logged-in" href="/#/user" ng-cloak ng-click="changeAdBack()">
             <i class="fa fa-user"></i>
             <span ng-bind="$user.email"></span>
           </a>
         </li>
         <li>
-          <a class="logged-out" href="#/" ng-click="login()" ng-click = chageAdBack()>
+          <a class="logged-out" href="#/" ng-click="login()" ng-click =changeAdBack()>
             <i class="fa fa-sign-in"></i>
             <span>Log in</span>
           </a>
-          <a class="logged-in" ng-click="logout()" href="/#/" ng-cloak ng-click = chageAdBack()>
+          <a class="logged-in" ng-click="logout()" href="/#/" ng-cloak ng-click = changeAdBack()>
             <i class="fa fa-sign-out"></i>
             <span>Log out</span>
           </a>

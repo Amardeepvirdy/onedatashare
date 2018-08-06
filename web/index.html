@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="stork">
+<html lang="en" ng-app="stork" >
 
 <head>
   <title>OneDataShare</title>
@@ -20,6 +20,7 @@
   <link href="/app/transfer/browse/browse.css" rel="stylesheet">
   <link href="/app/queue/queue.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
+
   
   <!-- Temporary hack for ngAnimate delay... -->
   <style>
@@ -43,10 +44,8 @@
 
   <!--ZL: float menu bar -->
   <div ng-controller="User" ng-show = "ad">
-    </br>
-    </br>
-    </br>
-    <div ng-include="'/app/user/adminManageBar.html'"></div>
+    <br><br><br><br>
+    <div  ng-include="'/app/user/adminManageBar.html'"></div>
   </div>
 
   <!-- This is where page content will be loaded. -->
@@ -76,6 +75,7 @@
         subsets : ['latin', 'greek']
       }
     }
+
   </script>
 
   <!-- Load 3rd party dependencies. -->
@@ -125,4 +125,8 @@
   <script src="/app/transfer/transfer.module.js"></script>
   <script src="/app/user/user.module.js"></script>
   <script src="/app/credentials/credentials.module.js"></script>
+
+  <script src="/app/transfer/upload/upload-shim.module.js"></script>
+  <script src="/app/transfer/upload/upload.module.js"></script>
+
 </body>

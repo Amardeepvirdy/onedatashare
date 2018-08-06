@@ -80,7 +80,7 @@ public abstract class Session<S extends Session<S,R>, R extends Resource<S,R>> {
    * @param path the {@code Path} to the {@code Resource} being selected.
    */
   public final R select(String path) {
-    return select(Path.create(path));
+    return select(Path.create(path), null);
   }
 
   /**
@@ -89,14 +89,14 @@ public abstract class Session<S extends Session<S,R>, R extends Resource<S,R>> {
    *
    * @param path the {@code Path} to the {@code Resource} being selected.
    */
-  public abstract R select(Path path);
+  public abstract R select(Path path, String id);
 
   /**
    * Return the root {@code Resource} of this {@code Session}.
    *
    * @return The root {@code Resource} of this {@code Session}.
    */
-  public final R root() { return select(Path.ROOT); }
+  public final R root() { return select(Path.ROOT, null); }
 
   /**
    * This is what actually gets called and returned when {@code

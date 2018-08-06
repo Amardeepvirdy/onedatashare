@@ -2,8 +2,11 @@
 
 /** Module for monitoring transfers. */
 angular.module('stork.transfer.queue', [])
-
+//in the main/stork.module.js: q->backend, backend handled inside the......
+//Adding the user column, sort the user, sort the job ID in both ways.
+//Separate, for user-admin interface.
 .controller('Queue', function ($scope, $filter, $rootScope, stork, $timeout, $modal) {
+  //$scope.showColumn == false;
   $scope.filters = {
     all: function (j) {
       return true
@@ -98,8 +101,10 @@ angular.module('stork.transfer.queue', [])
   $scope.showJobs=false;
   $scope.close = function (i, j) {
   if (confirm("Are you sure you want to close job " + j.job_id + "?"))
-          //$scope.showJobs=true;
-      $scope.jobs.splice($scope.jobs.indexOf(j),1);
+
+//        delete $scope.jobs[j.job_id];
+     $scope.jobs.splice($scope.jobs[j.job_id]);
+
   };
 
   $scope.set_filter = function (f) {

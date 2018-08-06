@@ -1,16 +1,19 @@
 package stork.module.sftp;
 
-import java.util.*;
-
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
-
-import stork.cred.*;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.SftpATTRS;
+import stork.cred.StorkUserinfo;
 import stork.feather.*;
-import stork.feather.Session;
-import stork.feather.util.*;
-import stork.feather.errors.*;
-import stork.module.*;
+import stork.feather.errors.AuthenticationRequired;
+import stork.feather.util.ThreadBell;
+import stork.module.Module;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
 
 /** A module for SFTP/SFTP file transfers. */
 public class SFTPModule extends Module<SFTPResource> {
@@ -20,9 +23,9 @@ public class SFTPModule extends Module<SFTPResource> {
     description("A module for SFTP/SCP file transfers.");
   }
 
-  public SFTPResource select(URI uri, Credential credential) {
+  public SFTPResource select(URI uri, Credential credential, String id) {
     URI ep = uri.endpointURI();
-    return new SFTPSession(ep, credential).select(uri.path());
+    return new SFTPSession(ep, credential).select(uri.path(), id);
   }
 }
 
@@ -39,8 +42,8 @@ class SFTPSession extends Session<SFTPSession, SFTPResource> {
   }
 
   /** Get an SFTPResource. */
-  public SFTPResource select(Path path) {
-    return new SFTPResource(this, path);
+  public SFTPResource select(Path path, String id) {
+    return new SFTPResource(this, path, id);
   }
 
   /** Connect to the remote server. */
@@ -95,8 +98,8 @@ class SFTPSession extends Session<SFTPSession, SFTPResource> {
 }
 
 class SFTPResource extends Resource<SFTPSession, SFTPResource> {
-  public SFTPResource(SFTPSession session, Path path) {
-    super(session, path);
+  public SFTPResource(SFTPSession session, Path path, String id) {
+    super(session, path, id);
   }
 
   public Bell<Stat> stat() {
@@ -141,19 +144,27 @@ class SFTPResource extends Resource<SFTPSession, SFTPResource> {
   }
 
   public Bell mkdir() {
-    return new ThreadBell<Void>() {
-      public Void run() throws Exception {
+    return new ThreadBell<SFTPResource>() {
+      public SFTPResource run() throws Exception {
         session.channel.mkdir(path.toString());
-        return null;
+
+        return session.root();
       }
     }.startOn(initialize());
   }
 
+  //removes file or directory
   public Bell delete() {
-    return new ThreadBell<Void>() {
-      public Void run() throws Exception {
-        session.channel.rm(path.toString());
-        return null;
+    if (!isSingleton())
+      throw new UnsupportedOperationException();
+    return new ThreadBell<SFTPResource>()  {
+      public SFTPResource run() throws Exception {
+        if(session.channel.stat(path.toString()).isDir())
+            session.channel.rmdir(path.toString());
+
+        else
+            session.channel.rm(path.toString());
+        return session.root();
       }
     }.startOn(initialize());
   }

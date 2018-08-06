@@ -161,10 +161,10 @@ angular.module('stork.util', [
   return {   
     /** link to add event listener */
     link: function (scope, element, attrs) {
-      element[0].addEventListener("dragstart",scope.storkDragStart,false);
-      element[0].addEventListener("dragend",scope.storkDragEnd,false);
-      element[0].addEventListener("dragenter", scope.storkDragEnter, false);
-      element[0].addEventListener("dragleave",scope.storkDragLeave, false);
+      element[0].addEventListener("dragstart",(e)=>{scope.storkDragStart(e, scope)},false);
+      element[0].addEventListener("dragend",(e)=>{ scope.storkDragEnd(e, scope)},false);
+      element[0].addEventListener("dragenter",(e)=>{ scope.storkDragEnter(e, scope)}, false);
+      element[0].addEventListener("dragleave",(e)=>{ scope.storkDragLeave(e, scope) }, false);
     }
   };
 })
@@ -173,8 +173,8 @@ angular.module('stork.util', [
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      element[0].addEventListener("drop",scope.storkDrop,false);
-      element[0].addEventListener("dragover", scope.storkDragOver,false);
+      element[0].addEventListener("drop",(e)=>{ scope.storkDrop(e, scope)},false);
+      element[0].addEventListener("dragover", (e)=>{ scope.storkDragOver(e, scope)} ,false);
     }    
   };
 })

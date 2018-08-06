@@ -7,8 +7,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import io.netty.buffer.*;
+import io.netty.handler.codec.http.multipart.DiskAttribute;
 import io.netty.util.*;
 
+import jdk.nashorn.internal.parser.JSONParser;
+import stork.ad.Ad;
+import stork.ad.AdParser;
 import stork.feather.*;
 
 /**
@@ -121,6 +125,9 @@ public final class Pipes {
       list.add(slice.asByteBuf());
       return null;
     }
+    /**
+     * Get an {@code AggregatorSink} for an anonymous {@code Resource}.
+     */
 
     public void finish(Throwable t) {
       ByteBuf[] array = list.toArray(new ByteBuf[0]);
@@ -128,13 +135,78 @@ public final class Pipes {
       bell.ring(new Slice(buf));
     }
   }
-
   /**
    * Get an {@code AggregatorSink} for an anonymous {@code Resource}.
    */
   public static AggregatorSink aggregatorSink() {
     return new AggregatorSink(Resources.anonymous());
   }
+
+  /**
+   * A {@code Sink} used by MultiPart Request {@code Slice}.
+   */
+  public static class MultipartSink extends Sink {
+    private Bell<ArrayList<Object>> bell = new Bell<ArrayList<Object>>();
+    private Ad list = new Ad();
+    private Slice file;
+
+    public MultipartSink(Resource r) { super(r); }
+
+    public Bell<ArrayList<Object>> bell() { return bell; }
+
+    public Bell drain(Ad slice) {
+      list = list.merge(slice);
+      return null;
+    }
+    public Bell drain(Slice slice) {
+      if (slice instanceof AttributeSlice){
+        this.drain(Ad.parse(new ByteBufInputStream(slice.asByteBuf())));
+      }else{
+        this.file = slice;
+      }
+      return null;
+    }
+    // avoid hardcode much?
+    public void finish(Throwable t) {
+      Ad ad = new Ad("attributes", list);
+
+      Ad tempad = new Ad();
+      if(list.containsKey("uri[credential][uuid]")) {
+        tempad.put("uuid", list.get("uri[credential][uuid]"));
+      }
+      if(list.containsKey("uri[credential][type]")) {
+        tempad.put("type", list.get("uri[credential][type]"));
+      }
+      if(list.containsKey("uri[credential][username]")) {
+        tempad.put("username", list.get("uri[credential][username]"));
+      }
+      if(list.containsKey("uri[credential][password]")) {
+        tempad.put("password", list.get("uri[credential][password]"));
+      }
+
+      ad.put("credential", tempad);
+      ad.put("uri", list.get("uri[uri]"));
+      list.remove("uri[credential][uuid]");
+      list.remove("uri[credential][type]");
+      list.remove("uri[credential][username]");
+      list.remove("uri[credential][password]");
+      ad.put("attributes", list);
+
+      ArrayList<Object> slices = new ArrayList<Object>();
+      System.out.println("file Size" + file.length() + "chunk# "+list.get("_chunkNumber"));
+      slices.add(file);
+      slices.add(ad);
+      bell.ring(slices);
+    }
+  }
+  /**
+   * Get an {@code MultipartSink} for an anonymous {@code Resource}.
+   */
+  public static MultipartSink MultipartSink() {
+    return new MultipartSink(Resources.anonymous());
+  }
+
+
 
   /**
    * View {@code pipe} as an {@code InputStream}. This will attach to {@code

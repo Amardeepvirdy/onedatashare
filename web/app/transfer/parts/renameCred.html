@@ -1,0 +1,18 @@
+<!--Displays a modal with a text prompt asking for rename, needs some work-->
+
+<form class="rename-form" ng-controller="User" ng-submit="cred.name">
+    <div class="form-group">
+        <label for="login-email" class="sr-only">Enter a new name</label>
+        <input id="login-email" class="form-control" ng-model="cred.name" type="text" placeholder="unnamed" focus-me>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary"  ng-model="cred.name">
+            OK
+        </button>
+        <button ng-click="$hide()" type="button" class="btn btn-default">
+            Cancel
+        </button>
+    </div>
+</form>
+
+

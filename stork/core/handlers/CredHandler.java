@@ -20,9 +20,13 @@ public class CredHandler extends Handler<ActionCredRequest> {
     } else if (req.action.equals("create")) {
       req.assertMayChangeState();
       StorkCred<?> cred = req.resolve();
-      final String _uuid = req.user().addCredential(cred);
-      req.ring(new Object() { String uuid = _uuid; });
-      server.dumpState();
+      req.user().credentialList().clear();
+        final String _uuid = req.user().addCredential(cred);
+        req.ring(new Object() {
+          String uuid = _uuid;
+        });
+        server.dumpState();
+
     } else {
       throw new RuntimeException("Invalid action.");
     }

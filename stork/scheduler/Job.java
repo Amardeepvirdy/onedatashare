@@ -151,7 +151,6 @@ public class Job {
    * system. This should only ever be called as a result of a user request.
    */
   public synchronized Job restart() {
-    // TODO
     return this;
   }
 
