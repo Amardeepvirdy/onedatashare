@@ -48,7 +48,7 @@ gss-2.1.0.jar:
 	$g https://search.maven.org/remotecontent?filepath=org/jglobus/gss/2.1.0/gss-2.1.0.jar
 myproxy-2.1.0.jar:
 	$g https://search.maven.org/remotecontent?filepath=org/jglobus/myproxy/2.1.0/myproxy-2.1.0.jar
-ssl-proxies-2.1.0.jar: bcprov-jdk15on-1.50.jar
+ssl-proxies-2.1.0.jar:
 	$g https://search.maven.org/remotecontent?filepath=org/jglobus/ssl-proxies/2.1.0/ssl-proxies-2.1.0.jar
 jsse-2.1.0.jar:
 	$g https://search.maven.org/remotecontent?filepath=org/jglobus/jsse/2.1.0/jsse-2.1.0.jar

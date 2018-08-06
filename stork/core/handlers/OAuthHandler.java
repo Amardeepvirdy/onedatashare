@@ -58,7 +58,7 @@ public class OAuthHandler extends Handler<OAuthRequest> {
         for(Map.Entry<UUID, StorkCred> val: req.user().credentials.entrySet()){
 
             if (val.getValue().userID.equals(cred.userID)){
-                throw new Redirect("/oauth/" + val.getKey());
+                req.user().credentials.remove(val.getKey());
             }
         }
         String uuid = req.user().addCredential(cred);
