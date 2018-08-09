@@ -1,14 +1,8 @@
 package stork.module.ftp;
 
-import io.netty.buffer.*;
-import stork.cred.*;
 import stork.feather.*;
-import stork.feather.errors.*;
-import stork.module.*;
-import stork.scheduler.*;
-import stork.util.*;
-
-import static stork.module.ftp.FTPListCommand.*;
+import stork.feather.errors.NotFound;
+import stork.util.Log;
 
 public class FTPResource extends Resource<FTPSession, FTPResource> {
   FTPResource(FTPSession session, Path path, String id) {
@@ -235,17 +229,17 @@ public class FTPResource extends Resource<FTPSession, FTPResource> {
 
   // Remove a file or directory.
   public Bell<FTPResource> delete() {
-    if (!isSingleton())
-      throw new UnsupportedOperationException();
-    return stat().new AsBell<FTPChannel.Reply>() {
-      public Bell<FTPChannel.Reply> convert(Stat stat) {
-        if (stat.dir)
-          return session.channel.new Command("RMD", makePath());
-        else
-          return session.channel.new Command("DELE", makePath());
-      }
-    }.as(this);
-  }
+      if (!isSingleton())
+        throw new UnsupportedOperationException();
+      return initialize().new AsBell<FTPChannel.Reply>()  {
+        public Bell<FTPChannel.Reply> convert(FTPResource r) {
+          if (r.stat().sync().dir)
+            return session.channel.new Command("RMD", makePath());
+          else
+            return session.channel.new Command("DELE", makePath());
+        }
+      }.as(this);
+    }
 
   public Sink<FTPResource> sink() {
     return new FTPSink(this);

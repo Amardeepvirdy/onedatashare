@@ -1,9 +1,5 @@
 package stork.feather;
 
-import java.util.*;
-
-import stork.feather.util.*;
-
 /**
  * A virtual representation of a physical resource. The resource(s) represented
  * by a {@code Resource} object may be a single resource (such as a file or
@@ -166,6 +162,11 @@ public class Resource<S extends Session<S,R>, R extends Resource<S,R>> {
    * operate on this {@code Resource}.
    */
   public final Bell<R> initialize() {
+    if(session.isClosed()) {
+      try{
+        session.initialize();
+      }catch (Exception e){}
+    }
     return session.mediatedInitialize().as((R)this);
   }
 
