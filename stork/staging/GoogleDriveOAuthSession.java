@@ -95,7 +95,7 @@ public class GoogleDriveOAuthSession extends OAuthSession {
 
     private static String storeCredential(String code) {
         String accessToken;
-        String userId = "user";
+        //String userId = "user";
         try {
             // Build flow and trigger user authorization request.
             GoogleAuthorizationCodeFlow flow =
@@ -106,8 +106,9 @@ public class GoogleDriveOAuthSession extends OAuthSession {
 
             TokenResponse response = flow.newTokenRequest(code).setRedirectUri(finishURI).execute();
 
-            flow.createAndStoreCredential(response, userId);
             accessToken = response.getAccessToken();
+
+            flow.createAndStoreCredential(response, accessToken);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -119,13 +120,14 @@ public class GoogleDriveOAuthSession extends OAuthSession {
     public StorkOAuthCred finish(String token){
         String accessToken = storeCredential(token);
         try {
-            Drive service = GoogleDriveSession.getDriveService();
+            Drive service = GoogleDriveSession.getDriveService(accessToken);
             String userId = service.about().get().setFields("user").execute().getUser().getEmailAddress();
             StorkOAuthCred cred = new StorkOAuthCred(accessToken);
             cred.name = "GoogleDrive";
             cred.userID = userId;
             return cred;
         } catch (Exception e) {
+            System.out.println("Runtime exception occurred while finishing initializing Google drive oauth session");
             throw new RuntimeException(e);
         }
     }

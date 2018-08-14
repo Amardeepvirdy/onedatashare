@@ -77,7 +77,7 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
     }
   }
 
-  public static com.google.api.client.auth.oauth2.Credential authorize() throws IOException {
+  public static com.google.api.client.auth.oauth2.Credential authorize(String token) throws IOException {
     // Load client secrets.
     initGoogle();
 
@@ -88,7 +88,7 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
                     .setDataStoreFactory(DATA_STORE_FACTORY)
                     .build();
 
-    com.google.api.client.auth.oauth2.Credential credential = flow.loadCredential("user");
+    com.google.api.client.auth.oauth2.Credential credential = flow.loadCredential(token);
 //            new AuthorizationCodeInstalledApp(
 //            flow, new LocalServerReceiver()).authorize("user");
 //    System.out.println(
@@ -108,8 +108,8 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
     };
   }
 
-  public static Drive getDriveService() throws IOException {
-    com.google.api.client.auth.oauth2.Credential credential = authorize();
+  public static Drive getDriveService(String token) throws IOException {
+    com.google.api.client.auth.oauth2.Credential credential = authorize(token);
 
     //service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, setHttpTimeout(credential)).build();
     /*return new Drive.Builder(
@@ -126,7 +126,7 @@ public class GoogleDriveSession extends Session<GoogleDriveSession, GoogleDriveR
     // If an OAuth token is provided, use it.
     if (credential instanceof StorkOAuthCred) {
       try {
-        service = getDriveService();
+        service = getDriveService(((StorkOAuthCred)credential).token);
       } catch (IOException e) {
         e.printStackTrace();
       }
