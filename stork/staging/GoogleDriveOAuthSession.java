@@ -2,13 +2,10 @@ package stork.staging;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
@@ -18,7 +15,8 @@ import stork.core.Config;
 import stork.cred.StorkOAuthCred;
 import stork.module.googleDrive.GoogleDriveSession;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /** OAuth wrapper for googledrive. */
 
@@ -122,7 +120,7 @@ public class GoogleDriveOAuthSession extends OAuthSession {
             Drive service = GoogleDriveSession.getDriveService();
             String userId = service.about().get().setFields("user").execute().getUser().getEmailAddress();
             StorkOAuthCred cred = new StorkOAuthCred(accessToken);
-            cred.name = "GoogleDrive";
+            cred.name = "GoogleDrive: " + userId;
             cred.userID = userId;
             return cred;
         } catch (Exception e) {
