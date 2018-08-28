@@ -18,6 +18,7 @@ extends Transfer<S,D> {
   private LinkedList<Pending> queue = new LinkedList<Pending>();
   private Throwable error = null;
   private boolean isfirst = true;
+  private HashMap<String, HashMap<String,Path>> renamedDirectories = new HashMap<>();
 
   // A pending transfer and a bell to ring when it starts.
   private static class Pending {
@@ -115,11 +116,16 @@ extends Transfer<S,D> {
             totalSize += stat.files[fileIndex].size;
           }
           info.total = totalSize;
-          b = b.and(dest.mkdir()).and(transferList(stat, path));
+          D newDest = dest;
+          if(renamedDirectories.get(path.toString()) != null) {
+            HashMap<String,Path> temp = renamedDirectories.get(path.toString());
+            newDest = destination.select(temp.get(stat.id));
+          }
+          b = b.and(newDest.mkdir()).and(transferList(stat, path));
         }
         if (stat.file) {
           info.total = stat.size;
-          b = b.and(cancelBell = transferData(path));
+          b = b.and(cancelBell = transferData(path, stat.id));
         }
 /*=======
         if (stat.dir)
@@ -157,7 +163,13 @@ extends Transfer<S,D> {
   }
 
   // Transfer a resource once we know it's a data resource.
-  private synchronized Bell transferData(final Path path) {
+  private synchronized Bell transferData(final Path path, String id) {
+
+    D newDest = destination.select(path);
+    if(renamedDirectories.get(path.toString()) != null) {
+      HashMap<String,Path> temp = renamedDirectories.get(path.toString());
+      newDest = destination.select(temp.get(id));
+    }
     return source.select(path).tap().attach(new Pipe() {
       protected Bell start() throws Exception {
         return super.start();
@@ -170,7 +182,7 @@ extends Transfer<S,D> {
           stop(t);
         transferEnded(path);
       }
-    }).attach(destination.select(path).sink()).tap().start();
+    }).attach(newDest.sink()).tap().start();
   }
 
   // Transfer directory listing.
@@ -191,6 +203,7 @@ extends Transfer<S,D> {
   // Transfer directory listing.
   private synchronized Bell transferList(final Stat stat, final Path path){
     listingStarted(path);
+    int count = 1;
     for(Stat file: stat.files){
 //<<<<<<< HEAD
       //Ignore current (".") and parent ("..") directories present in stat.files
@@ -199,6 +212,37 @@ extends Transfer<S,D> {
 /*=======
       enqueueTransfer(path.appendLiteral(file.name), true, file.id);
 >>>>>>> mythri*/
+
+      if(file.id == null) {
+        continue;
+      }
+
+      Path currPath = path.appendLiteral(file.name);
+      if(renamedDirectories.get(currPath.up().toString()) != null) {
+        HashMap<String, Path> temp1 = renamedDirectories.get(currPath.up().toString());
+        Path parent = temp1.get(stat.id);
+        Path child = parent.appendLiteral(file.name);
+        if(renamedDirectories.get(child.toString()) != null) {
+          HashMap<String, Path> temp2 = renamedDirectories.get(child.toString());
+          String newName = file.name + "(" + count++ + ")";
+          Path newPath = parent.appendLiteral(newName);
+          temp2.put(file.id, newPath);
+        }else {
+          HashMap<String, Path> temp2 = new HashMap<>();
+          temp2.put(file.id, child);
+          renamedDirectories.put(currPath.toString(), temp2);
+        }
+      }else {
+        if(renamedDirectories.get(currPath.toString()) != null){
+          HashMap<String, Path> temp1 = renamedDirectories.get(currPath.toString());
+          String newName = file.name + "(" + count++ + ")";
+          temp1.put(file.id, path.appendLiteral(newName));
+        }else {
+          HashMap<String, Path> temp2 = new HashMap<>();
+          temp2.put(file.id, currPath);
+          renamedDirectories.put(currPath.toString(), temp2);
+        }
+      }
     }
     listingEnded(path);
     return Bell.rungBell();

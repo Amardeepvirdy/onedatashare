@@ -45,6 +45,7 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
   }
 
   public synchronized Bell<GoogleDriveResource> mkdir() {
+    session.mkdirQueue.offer(path);
     return new ThreadBell<GoogleDriveResource>() {
       @Override
       public GoogleDriveResource run() throws Exception {
@@ -73,7 +74,7 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
 
         return new GoogleDriveResource(session, path, file.getId());*/
 
-        synchronized (session.Lock) {
+        /*synchronized (session.Lock) {
           if(session.pathToParentIdMap.get(path.up().toString()) == null) {
             session.pathToParentIdMap.put(path.up().toString(), id);
           }else {
@@ -97,8 +98,33 @@ public class GoogleDriveResource extends Resource<GoogleDriveSession, GoogleDriv
           }
 
           return new GoogleDriveResource(session, path, file.getId());
-        }
+        }*/
+        synchronized (session.Lock) {
+          Path currpath = session.mkdirQueue.take();
+          if(session.pathToParentIdMap.isEmpty()) {
+            session.pathToParentIdMap.put(currpath.up().toString(), id);
+          }else {
+            id = session.pathToParentIdMap.get(currpath.up().toString());
+          }
 
+          File fileMetadata = new File();
+          fileMetadata.setName(currpath.name());
+          fileMetadata.setMimeType("application/vnd.google-apps.folder");
+          fileMetadata.setParents(Collections.singletonList(id));
+
+          File file = session.service.files().create(fileMetadata)
+                  .setFields("id")
+                  .execute();
+//        path.
+          System.out.println("Folder ID: " + file.getId());
+          id = file.getId();
+
+          if(!session.pathToParentIdMap.isEmpty()) {
+            session.pathToParentIdMap.put(currpath.toString(), id);
+          }
+
+          return new GoogleDriveResource(session, currpath, file.getId());
+        }
       }
     }.startOn(initialize());
   }
