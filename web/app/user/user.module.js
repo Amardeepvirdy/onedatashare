@@ -56,7 +56,6 @@ angular.module('stork.user', [
     this.forgetLogin();
 })
 
-
 .controller('User', function ($scope, $modal, $location, user, stork, $rootScope) {
   /* If info is given, log the user in. Otherwise show modal. */
   $rootScope.ad = false;
@@ -351,7 +350,19 @@ angular.module('stork.user', [
 
 .controller('Register', function ($scope, $modal, user, stork) {
 /**ZL: if passwords do not match, report error*/
+   var loginModal = $modal({
+            title: 'Register User',
+            container: 'body',
+            contentTemplate: '/app/user/registerModal.html',
+            show: false
+          });
+    $scope.registerNew = function() {
+    loginModal.$promise.then(loginModal.show);
+  }
+
   $scope.register = function (u) {
+    this.$hide();
+    loginModal.$promise.then(loginModal.hide);
     if(u.password != u.passwordConfirm) {
       $modal({
         title: "Error",

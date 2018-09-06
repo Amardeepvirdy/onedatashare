@@ -8,7 +8,6 @@ angular.module('stork.transfer.browse', [
 .service('history', function (stork) {
   var history = [];
   var listeners = [];
-
   this.history = history;
 
   this.fetch = function (uri) {
@@ -40,12 +39,19 @@ angular.module('stork.transfer.browse', [
   };
 })
 
-.controller('History', function (history) {
+.controller('History', function (history, $scope) {
   var me = this;
+  $scope.filterList = [];
   this.list = [];
   history.listen(function (history) {
     me.list = history;
   });
+
+  $scope.$watch('filterList.length', function() {
+    if($scope.filterList.length === 0)
+      $scope.history.show = false;
+
+  })
 })
 
 .controller('Browse', function (
@@ -54,12 +60,23 @@ angular.module('stork.transfer.browse', [
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
-
   $scope.end.$selected = {};
   $scope.end.selectedFolderIds = "";
 
   $scope.end.$selectedPaths = [];
   $scope.end.$selectedItems = [];
+  $scope.protocolsVisible = true;
+  $scope.isHistoryAvailable = true;
+
+  $scope.enableProtocolVisibility = function() {
+    $scope.protocolsVisible = true;
+  }
+
+  $scope.startsWith = function (actual, expected) {
+      var lowerStr = (actual + "").toLowerCase();
+      return lowerStr.indexOf(expected.toLowerCase()) === 0;
+  }
+
 
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
@@ -76,6 +93,7 @@ angular.module('stork.transfer.browse', [
     uri = new URI(uri).normalize();
     var readable = uri.readable();
     $scope.uri.text = readable;
+    $scope.protocolsVisible = false;
     if ($scope.history)
       $scope.history.show = false;
     delete $scope.root;
@@ -116,7 +134,6 @@ angular.module('stork.transfer.browse', [
     $scope.state.loading = true;
 
     history.fetch(readable);
-
     $scope.fetch(uri).then(function (list) {
       delete $scope.state.loading;
       $scope.root = list;
@@ -454,7 +471,7 @@ angular.module('stork.transfer.browse', [
   $scope.dropdownList = [
     ["fa-globe", "FTP", "ftp:"],
     ["fa-globe", "SFTP", "sftp:"],
-    ["fa-globe", "SDSC Gordon (GridFTP)", "gsiftp:"],
+    ["fa-globe", "GridFTP", "gsiftp:"],
     ["fa-globe", "HTTP", "http:"],
     ["fa-globe", "SCP","scp:"],
   ];
