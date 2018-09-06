@@ -132,6 +132,23 @@ angular.module('stork.util', [
   };
 })
 
+/** Directive that focuses something when value of the directive is set to true **/
+.directive('focusWhen', function($timeout) {
+  return {
+    scope: { trigger: '=focusWhen' },
+    link: function(scope, element) {
+      scope.$watch('trigger', function(value) {
+        if(value === false) {
+          //console.log('trigger',value);
+          $timeout(function() {
+            element[0].focus();
+          });
+        }
+      });
+    }
+  };
+})
+
 /** Automatically make anything with a title use tooltips. */
 .directive('title', function ($tooltip, $interpolate) {
   return {
