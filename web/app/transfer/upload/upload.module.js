@@ -2472,8 +2472,11 @@ ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize
 
   return upload;
 }]);
+
 //--------------- End of library, Start of uploading controller. Uploading component is located in browse.module ---------------//
-ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',  function ($scope, Upload, stork, endpoints, $attrs) {
+ngFileUpload.controller('FileUpload', ['$scope', 'Upload','$rootScope', 'stork', 'endpoints',  function ($scope, Upload, stork, $rootScope, endpoints, $attrs) {
+
+    $rootScope.progress = false;
     // upload later on form submit or something similar
     $scope.submit = function() {
       if ($scope.form.file.$valid && $scope.file) {
@@ -2483,14 +2486,16 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
 
     // upload on file select or drop
     $scope.upload = function (file) {
+
         console.log(file);
         if(!$scope.end.uri){
             alert('You need to Log in to Upload files.');
+            return;
         }
         var u = $scope.uri.parsed;
         u = u._string+"/"+file.name;
         var ep = angular.copy($scope.end);
-        ep.uri = u.replace(new RegExp(' ', 'g'), "%20");
+        ep.uri = encodeURI(u);
         Upload.upload({
             url: "/api/stork/upload",
             headers : {
@@ -2498,7 +2503,7 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
               },                               // resolved to the upload file size on the server.
             resumeChunkSize: '100KB',
             method: 'POST',
-            timeout: 100000,
+            timeout: 3000,
             resumeSizeResponseReader: (data) => {
                 console.log(data)
             },
@@ -2507,16 +2512,22 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload', 'stork', 'endpoints',
                 file: file,
             }
         }).then(function (resp) {
-            console.log('Success ' + resp.config.data.src.file.name + 'uploaded. Response: ' + resp.config.data);
+           progress = false;
         }, function (resp) {
             console.log('Error:' +resp.data);
             console.log(resp);
         }, function (evt) {
-            console.log(evt);
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+
+            $scope.updateProgress(true, progressPercentage, $scope.cancelPic);
+           // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name,  $rootScope.progress, "<- rootscope.progress value");
         });
     };
+
+    $scope.cancelPic = function(index) {
+       $scope.files.splice(index,1);
+       $scope.files = $scope.files.slice(0);
+    }
     // for multiple files:
     $scope.uploadFiles = function (files) {
       if (files && files.length) {

@@ -1,3 +1,5 @@
+
+
 <div class="file-list panel panel-info"  ng-class="state" >
   <!-- Shown when the widget is disconnected. -->
   <div class="disconnected-icon">
@@ -117,7 +119,8 @@
         </button>
       </div>
 
-      <form  class="btn-group"ng-controller="FileUpload" name="form">
+      <form  class="btn-group" ng-controller="FileUpload"  name="form">
+
 
         <button class="btn btn-default" ngf-select="uploadFiles($files)" ng-model="files" ngf-multiple="true">
           <span class="fa fa-upload"></span>
@@ -157,18 +160,35 @@
 
 
   <div class="tree" ng-class="{'hide-dots': !showHidden}">
+
     <div>
-      
+
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
       </ul>
+
       <div ng-if="error && error.type != 'AuthenticationRequired'"
            class="alert alert-danger" style="overflow-x: auto">
         <strong>Error:</strong> <span ng-bind="error.error"></span>
       </div>
+
+
       <div ng-if="error.type == 'AuthenticationRequired'"
            ng-include="'/app/transfer/parts/authenticationRequired.html'">
       </div>
     </div>
   </div>
+  <div class="alert alert-info" ng-if="progress" >
+    <span ng-bind="filename"></span>
+    <div style="display: flex; flex-direction: "row"; width: 100%;>
+    <div class="progress" style="flex-grow: 5">
+      <div class="progress-bar bg-info" role="progressbar"
+           ng-style="{width: progressPercentage}" aria-valuenow="50"
+           aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
+    <input class="btn btn-danger" id="cancel" value="cancel" type="button" ng-click="cancelUpload()" style="flex-grow: 1; padding-right: 10"" />
+  </div>
+</div>
+
 </div>

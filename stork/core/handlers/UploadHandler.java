@@ -30,6 +30,7 @@ public class UploadHandler extends Handler<MultipartRequest> {
         final UploadResource s;
         if(sessions.get(req.uri) == null) {
             System.out.println("before Start1");
+            System.out.println(req.attributes);
             s = new UploadSession(req.file, req.attributes).root();
             final Resource d = req.resolveAs("destination");
             final Transfer t = s.transferTo(d);

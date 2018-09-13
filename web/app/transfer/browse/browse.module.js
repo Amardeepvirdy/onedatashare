@@ -56,7 +56,7 @@ angular.module('stork.transfer.browse', [
 
 .controller('Browse', function (
   $scope, $q, $modal, $window, $attrs,
-  stork, user, history, endpoints, $location)
+  stork, user, history, endpoints, $location, $rootScope)
 {
   // Restore a saved endpoint. side should already be in scope.
   $scope.end = endpoints.get($attrs.side);
@@ -76,7 +76,38 @@ angular.module('stork.transfer.browse', [
       var lowerStr = (actual + "").toLowerCase();
       return lowerStr.indexOf(expected.toLowerCase()) === 0;
   }
+    console.log($rootScope.progress);
 
+  $scope.progress = false;
+  $scope.progressValue = 0;
+  $scope.progressPercentage = "0%";
+  $scope.filename="";
+
+  $scope.cancel = ()=>{console.log("nan")}
+  $scope.cancelUpload= ()=>{
+    $scope.progress = false;
+     $scope.cancel();
+     $scope.cancel = ()=>{console.log("nan")}
+
+     $scope.progressPercentage = "0%";
+     $scope.progressValue = 0;
+     $scope.filename="";
+  }
+  $scope.updateProgress = function (progress, percentage, filename, cancel) {
+    if(percentage >= 100){
+      $scope.progress = false;
+      $scope.filename="";
+      $scope.progressPercentage = "0%";
+      $scope.progressValue = 0;
+      $scope.cancel = ()=>{console.log("nan")}
+    }else{
+      $scope.progress = progress;
+      $scope.filename=filename;
+      $scope.progressPercentage = percentage+"%";
+      $scope.progressValue = percentage;
+      $scope.cancel = cancel
+    }
+  };
 
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
