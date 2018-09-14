@@ -2483,7 +2483,7 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload','$rootScope', 'stork',
         $scope.upload($scope.file);
       }
     };
-
+    $scope.uploadRef = "";
     // upload on file select or drop
     $scope.upload = function (file) {
 
@@ -2496,7 +2496,9 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload','$rootScope', 'stork',
         u = u._string+"/"+file.name;
         var ep = angular.copy($scope.end);
         ep.uri = encodeURI(u);
-        Upload.upload({
+        var flag = 0;
+        $scope.cancelRef = false;
+        $scope.uploadRef = Upload.upload({
             url: "/api/stork/upload",
             headers : {
                 'Content-Type': file.type
@@ -2504,29 +2506,31 @@ ngFileUpload.controller('FileUpload', ['$scope', 'Upload','$rootScope', 'stork',
             resumeChunkSize: '100KB',
             method: 'POST',
             timeout: 3000,
-            resumeSizeResponseReader: (data) => {
-                console.log(data)
-            },
             data: {
                 uri: ep,
                 file: file,
             }
-        }).then(function (resp) {
+        });
+
+        $scope.uploadRef.then(function (resp) {
            progress = false;
         }, function (resp) {
-            console.log('Error:' +resp.data);
+            console.log('Error:',resp);
             console.log(resp);
         }, function (evt) {
+            
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-
-            $scope.updateProgress(true, progressPercentage, $scope.cancelPic);
+            if(!$scope.cancelRef)
+              $scope.updateProgress(true, progressPercentage, file.name, $scope.abortion);
            // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name,  $rootScope.progress, "<- rootscope.progress value");
         });
     };
 
-    $scope.cancelPic = function(index) {
-       $scope.files.splice(index,1);
-       $scope.files = $scope.files.slice(0);
+    $scope.abortion = function() {
+
+      console.log("aborting");
+      $scope.cancelRef = true;
+       $scope.uploadRef.abort();
     }
     // for multiple files:
     $scope.uploadFiles = function (files) {

@@ -162,6 +162,18 @@
   <div class="tree" ng-class="{'hide-dots': !showHidden}">
 
     <div>
+      <div class="alert alert-info" ng-if="progress" >
+        <span ng-bind="filename"></span>
+        <div style="display: flex; flex-direction: "row"; width: 100%;>
+          <div class="progress" style="flex-grow: 5">
+            <div class="progress-bar bg-info" role="progressbar"
+                 ng-style="{width: progressPercentage}" aria-valuenow="50"
+                 aria-valuemin="0" aria-valuemax="100">
+            </div>
+          </div>
+          <input class="btn btn-danger" id="cancel" value="cancel" type="button" ng-click="cancelUpload()" style="flex-grow: 1; padding-right: 10"/>
+        </div>
+      </div>
 
       <ul class="stork-list" ng-if="root && !error" ng-init="files = [root]"
           ng-include="'browse-node.html'">
@@ -178,17 +190,5 @@
       </div>
     </div>
   </div>
-  <div class="alert alert-info" ng-if="progress" >
-    <span ng-bind="filename"></span>
-    <div style="display: flex; flex-direction: "row"; width: 100%;>
-    <div class="progress" style="flex-grow: 5">
-      <div class="progress-bar bg-info" role="progressbar"
-           ng-style="{width: progressPercentage}" aria-valuenow="50"
-           aria-valuemin="0" aria-valuemax="100">
-      </div>
-    </div>
-    <input class="btn btn-danger" id="cancel" value="cancel" type="button" ng-click="cancelUpload()" style="flex-grow: 1; padding-right: 10"" />
-  </div>
-</div>
 
 </div>

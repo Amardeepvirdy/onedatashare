@@ -81,34 +81,32 @@ angular.module('stork.transfer.browse', [
   $scope.progress = false;
   $scope.progressValue = 0;
   $scope.progressPercentage = "0%";
-  $scope.filename="";
-
+  $scope.filename = "";
   $scope.cancel = ()=>{console.log("nan")}
-  $scope.cancelUpload= ()=>{
+  $scope.cancelUpload = function(){
+    $scope.cancel();
     $scope.progress = false;
-     $scope.cancel();
-     $scope.cancel = ()=>{console.log("nan")}
-
-     $scope.progressPercentage = "0%";
-     $scope.progressValue = 0;
-     $scope.filename="";
+    $scope.progressPercentage = "0%";
+    $scope.progressValue = 0;
+    $scope.filename = "";
+    $scope.cancel = ()=>{console.log("nan")}
   }
-  $scope.updateProgress = function (progress, percentage, filename, cancel) {
+  $scope.updateProgress = function (progress, percentage,name,  cancel) {
     if(percentage >= 100){
       $scope.progress = false;
-      $scope.filename="";
       $scope.progressPercentage = "0%";
       $scope.progressValue = 0;
+
+      $scope.filename = "";
       $scope.cancel = ()=>{console.log("nan")}
     }else{
       $scope.progress = progress;
-      $scope.filename=filename;
       $scope.progressPercentage = percentage+"%";
       $scope.progressValue = percentage;
-      $scope.cancel = cancel
+      $scope.cancel = cancel;
+      $scope.filename = name;
     }
   };
-
   // Reset (or initialize) the browse pane.
   $scope.reset = function () {
     $scope.uri = {};
